@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="电气图纸设计">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect x="1262.4" y="728.6" width="205.9" height="258.5" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="1118.8" y="509.1" width="262.9" height="245.9" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="1400.6" y="779.9" width="323.2" height="223.7" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="253.3" y="396.7" width="147.0" height="222.2" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1"/><rect x="1136.6" y="796.9" width="95.9" height="177.4" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><rect x="963.9" y="486.8" width="163.4" height="166.8" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1394.2" y="597.2" width="184.6" height="98.3" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="129.2" y="901.5" width="332.3" height="70.6" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="573.3" y="826.0" width="311.2" height="257.3" fill="none" stroke="rgba(34,224,255,0.06)" stroke-width="1"/><rect x="948.7" y="831.6" width="197.5" height="229.1" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="1224.9" y="482.6" width="93.0" height="154.0" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="119.6" y="859.6" width="239.7" height="101.1" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="1113.9" y="535.7" width="192.2" height="241.6" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="1401.5" y="159.1" width="271.6" height="169.2" fill="none" stroke="rgba(34,224,255,0.05)" stroke-width="1"/><rect x="572.3" y="758.1" width="121.0" height="110.6" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><rect x="362.9" y="184.5" width="121.5" height="195.4" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="887.9" y="32.1" width="228.0" height="190.7" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="112.5" y="452.8" width="202.8" height="99.8" fill="none" stroke="rgba(34,224,255,0.06)" stroke-width="1"/><rect x="782.6" y="378.5" width="188.5" height="68.2" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="847.4" y="109.9" width="267.3" height="159.6" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1106.1" y="407.2" width="175.9" height="197.3" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><rect x="1188.8" y="481.0" width="113.0" height="93.6" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="599.9" y="841.6" width="209.5" height="234.7" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="1426.9" y="532.5" width="303.3" height="116.0" fill="none" stroke="rgba(34,224,255,0.05)" stroke-width="1"/><rect x="486.5" y="793.6" width="145.9" height="249.6" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="861.5" y="446.0" width="174.7" height="190.3" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><line x1="0" y1="245.5" x2="1600" y2="260.4" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="883.8" x2="1600" y2="895.0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="705.8" x2="1600" y2="758.4" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="126.6" x2="1600" y2="111.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="390.9" x2="1600" y2="351.9" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="23.7" x2="1600" y2="-27.3" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="179.3" x2="1600" y2="148.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="948.5" x2="1600" y2="931.1" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">IMG-08</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">电气图纸设计</text>
+  
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

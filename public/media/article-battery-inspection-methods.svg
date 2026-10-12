@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="锂电池检测方法选型">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <circle cx="639.2" cy="571.3" r="160.4" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><circle cx="185.3" cy="249.8" r="161.4" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><circle cx="1073.0" cy="42.2" r="342.0" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><circle cx="242.0" cy="241.6" r="201.9" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><circle cx="762.7" cy="943.0" r="294.8" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><circle cx="268.8" cy="153.9" r="200.4" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><circle cx="704.6" cy="582.3" r="112.2" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><circle cx="1011.0" cy="304.8" r="165.5" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><circle cx="375.6" cy="767.0" r="350.5" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">NOTE-03</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">锂电池检测方法选型</text>
+  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">TECHNICAL</text>
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

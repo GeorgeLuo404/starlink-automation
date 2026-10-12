@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="模组 PACK 线数据采集">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect x="20.4" y="48.9" width="343.5" height="229.7" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1"/><rect x="55.0" y="141.9" width="248.7" height="254.6" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="100.7" y="101.2" width="153.4" height="125.5" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="911.3" y="628.8" width="291.0" height="209.4" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="741.1" y="450.7" width="232.1" height="250.6" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="1047.8" y="34.9" width="306.0" height="139.7" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="1441.7" y="887.3" width="310.7" height="177.5" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="1303.0" y="183.8" width="210.4" height="152.8" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="252.8" y="900.5" width="90.8" height="95.9" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="605.2" y="661.9" width="166.4" height="103.8" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="877.0" y="250.9" width="345.2" height="230.1" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="880.5" y="621.7" width="300.9" height="115.1" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="1204.6" y="471.8" width="160.3" height="211.9" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1"/><rect x="647.4" y="585.1" width="184.8" height="114.4" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><rect x="1450.4" y="74.8" width="192.8" height="181.8" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="572.1" y="300.1" width="124.7" height="217.9" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="152.9" y="805.1" width="229.1" height="230.6" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="1306.9" y="199.6" width="320.1" height="257.6" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="1120.2" y="159.9" width="325.4" height="207.3" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="1240.5" y="386.1" width="276.0" height="254.0" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="425.5" y="344.8" width="263.2" height="163.8" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="1459.1" y="887.9" width="129.4" height="201.3" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="701.2" y="228.4" width="224.9" height="145.7" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="951.7" y="259.8" width="290.1" height="250.8" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="1524.3" y="455.9" width="240.1" height="137.2" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="1385.7" y="4.2" width="134.7" height="81.4" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><line x1="0" y1="349.7" x2="1600" y2="293.7" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="451.7" x2="1600" y2="408.1" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="829.4" x2="1600" y2="809.8" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="816.4" x2="1600" y2="827.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="870.2" x2="1600" y2="919.0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="995.2" x2="1600" y2="957.6" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="479.8" x2="1600" y2="469.3" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="764.2" x2="1600" y2="793.9" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">CASE-05</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">模组 PACK 线数据采集</text>
+  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">PACK LINE DATA &amp; MES</text>
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

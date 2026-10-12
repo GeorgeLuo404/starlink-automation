@@ -1,0 +1,257 @@
+// 深圳市星链自动化有限公司 — 数据模型
+// Shenzhen Starlink Automation Co., Ltd. — Data model
+
+// Prisma 7: the generated client lives in the repo (src/generated/prisma) and
+// the connection URL is supplied by prisma.config.ts, not by the schema.
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  runtime  = "nodejs"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CategoryKind {
+  ARTICLE
+  CASE
+  DOWNLOAD
+  GALLERY
+}
+
+enum MediaKind {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  DONE
+  SPAM
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ADMIN)
+  avatarUrl    String?
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  articles Article[]
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  slug      String
+  nameZh    String
+  nameEn    String
+  kind      CategoryKind @default(ARTICLE)
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  articles  Article[]
+  downloads DownloadFile[]
+
+  @@unique([kind, slug])
+}
+
+model Article {
+  id         String        @id @default(cuid())
+  slug       String        @unique
+  titleZh    String
+  titleEn    String?
+  excerptZh  String?
+  excerptEn  String?
+  contentZh  String        @db.Text
+  contentEn  String?       @db.Text
+  coverUrl   String?
+  tags       String[]      @default([])
+  status     PublishStatus @default(DRAFT)
+  featured   Boolean       @default(false)
+  pinned     Boolean       @default(false)
+  viewCount  Int           @default(0)
+  readMinutes Int          @default(3)
+  seoTitle   String?
+  seoDesc    String?
+  publishedAt DateTime?
+  authorId   String?
+  categoryId String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  author   User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+model Project {
+  id         String        @id @default(cuid())
+  slug       String        @unique
+  titleZh    String
+  titleEn    String?
+  clientZh   String?
+  clientEn   String?
+  industryZh String?
+  industryEn String?
+  summaryZh  String?       @db.Text
+  summaryEn  String?       @db.Text
+  contentZh  String?       @db.Text
+  contentEn  String?       @db.Text
+  coverUrl   String?
+  gallery    String[]      @default([])
+  videoUrl   String?
+  tags       String[]      @default([])
+  scope      String[]      @default([])
+  metrics    Json?
+  year       Int?
+  location   String?
+  status     PublishStatus @default(DRAFT)
+  featured   Boolean       @default(false)
+  sortOrder  Int           @default(0)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([status, sortOrder])
+}
+
+model Service {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  titleZh   String
+  titleEn   String?
+  summaryZh String?  @db.Text
+  summaryEn String?  @db.Text
+  contentZh String?  @db.Text
+  contentEn String?  @db.Text
+  icon         String?
+  coverUrl     String?
+  videoUrl     String?
+  features     Json?
+  deliverables Json?
+  faq          Json?
+  published    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MediaAsset {
+  id           String    @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  kind         MediaKind
+  size         Int
+  width        Int?
+  height       Int?
+  duration     Float?
+  url          String
+  storageKey   String    @unique
+  folder       String    @default("general")
+  alt          String?
+  createdAt    DateTime  @default(now())
+
+  @@index([kind, folder])
+}
+
+model DownloadFile {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  titleZh       String
+  titleEn       String?
+  descriptionZh String?       @db.Text
+  descriptionEn String?       @db.Text
+  fileUrl       String
+  storageKey    String?
+  fileType      String
+  fileSize      Int
+  version       String?
+  downloadCount Int           @default(0)
+  requiresForm  Boolean       @default(false)
+  status        PublishStatus @default(PUBLISHED)
+  sortOrder     Int           @default(0)
+  categoryId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status, sortOrder])
+}
+
+model GalleryItem {
+  id        String        @id @default(cuid())
+  titleZh   String
+  titleEn   String?
+  captionZh String?
+  captionEn String?
+  url       String
+  thumbUrl  String?
+  mediaKind MediaKind     @default(IMAGE)
+  videoUrl  String?
+  album     String        @default("general")
+  width     Int?
+  height    Int?
+  status    PublishStatus @default(PUBLISHED)
+  sortOrder Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([album, sortOrder])
+}
+
+model Inquiry {
+  id        String        @id @default(cuid())
+  name      String
+  company   String?
+  phone     String?
+  email     String?
+  service   String?
+  message   String        @db.Text
+  locale    String        @default("zh")
+  source    String        @default("contact")
+  status    InquiryStatus @default(NEW)
+  note      String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Partner {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String?
+  url       String?
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}

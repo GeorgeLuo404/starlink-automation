@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="电芯装配线整线调试">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1240 80 H1040 V720" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="1040" cy="720" r="3.4" fill="rgba(34,224,255,0.45)"/><path d="M800 240 H600 V360" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1.2"/><circle cx="600" cy="360" r="5.0" fill="rgba(34,224,255,0.45)"/><path d="M80 160 H520 V880" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="520" cy="880" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M1160 760 H1400 V840" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="1400" cy="840" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M960 520 H480 V920" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="480" cy="920" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M1200 520 H1000 V960" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="1000" cy="960" r="3.9" fill="rgba(34,224,255,0.45)"/><path d="M1440 160 H1240 V640" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="1240" cy="640" r="3.8" fill="rgba(34,224,255,0.45)"/><path d="M1480 80 H1280 V600" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="1280" cy="600" r="2.7" fill="rgba(34,224,255,0.45)"/><path d="M1200 880 H680 V480" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1.2"/><circle cx="680" cy="480" r="5.0" fill="rgba(34,224,255,0.45)"/><path d="M0 200 H160 V640" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="160" cy="640" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M280 640 H640 V840" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="640" cy="840" r="2.8" fill="rgba(34,224,255,0.45)"/><path d="M120 80 H200 V320" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="200" cy="320" r="2.5" fill="rgba(34,224,255,0.45)"/><path d="M1040 600 H0 V280" fill="none" stroke="rgba(34,224,255,0.23)" stroke-width="1.2"/><circle cx="0" cy="280" r="2.4" fill="rgba(34,224,255,0.45)"/><path d="M1000 840 H360 V480" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="360" cy="480" r="2.8" fill="rgba(34,224,255,0.45)"/><path d="M120 480 H200 V280" fill="none" stroke="rgba(34,224,255,0.23)" stroke-width="1.2"/><circle cx="200" cy="280" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M760 80 H1400 V480" fill="none" stroke="rgba(34,224,255,0.20)" stroke-width="1.2"/><circle cx="1400" cy="480" r="4.7" fill="rgba(34,224,255,0.45)"/><path d="M320 560 H920 V920" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="920" cy="920" r="4.4" fill="rgba(34,224,255,0.45)"/><path d="M720 40 H1240 V440" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="1240" cy="440" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M960 480 H960 V920" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="960" cy="920" r="2.6" fill="rgba(34,224,255,0.45)"/><path d="M40 720 H800 V480" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="800" cy="480" r="5.0" fill="rgba(34,224,255,0.45)"/><path d="M1080 760 H840 V760" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1.2"/><circle cx="840" cy="760" r="2.7" fill="rgba(34,224,255,0.45)"/><path d="M400 560 H1600 V320" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="1600" cy="320" r="2.0" fill="rgba(34,224,255,0.45)"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">IMG-01</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">电芯装配线整线调试</text>
+  
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

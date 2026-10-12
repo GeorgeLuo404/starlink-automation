@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="PLC 程序调试">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1000 1000 H840 V680" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="840" cy="680" r="3.0" fill="rgba(34,224,255,0.45)"/><path d="M600 800 H360 V40" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="360" cy="40" r="3.6" fill="rgba(34,224,255,0.45)"/><path d="M760 720 H520 V600" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="520" cy="600" r="3.5" fill="rgba(34,224,255,0.45)"/><path d="M1560 440 H960 V360" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="960" cy="360" r="4.9" fill="rgba(34,224,255,0.45)"/><path d="M640 80 H480 V680" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="480" cy="680" r="3.3" fill="rgba(34,224,255,0.45)"/><path d="M1520 160 H1080 V760" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1.2"/><circle cx="1080" cy="760" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M280 160 H680 V80" fill="none" stroke="rgba(34,224,255,0.20)" stroke-width="1.2"/><circle cx="680" cy="80" r="4.1" fill="rgba(34,224,255,0.45)"/><path d="M280 400 H40 V280" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="40" cy="280" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M240 600 H720 V1000" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="720" cy="1000" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M1240 760 H960 V0" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1.2"/><circle cx="960" cy="0" r="3.9" fill="rgba(34,224,255,0.45)"/><path d="M280 560 H1120 V800" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="1120" cy="800" r="3.6" fill="rgba(34,224,255,0.45)"/><path d="M1560 120 H1120 V920" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="1120" cy="920" r="4.8" fill="rgba(34,224,255,0.45)"/><path d="M1040 640 H960 V0" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1.2"/><circle cx="960" cy="0" r="3.5" fill="rgba(34,224,255,0.45)"/><path d="M1320 920 H1520 V480" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="1520" cy="480" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M1280 840 H1080 V280" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="1080" cy="280" r="3.6" fill="rgba(34,224,255,0.45)"/><path d="M1400 960 H760 V80" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="760" cy="80" r="3.6" fill="rgba(34,224,255,0.45)"/><path d="M320 760 H960 V360" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1.2"/><circle cx="960" cy="360" r="2.1" fill="rgba(34,224,255,0.45)"/><path d="M480 360 H880 V960" fill="none" stroke="rgba(34,224,255,0.21)" stroke-width="1.2"/><circle cx="880" cy="960" r="2.2" fill="rgba(34,224,255,0.45)"/><path d="M680 800 H200 V160" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="200" cy="160" r="4.0" fill="rgba(34,224,255,0.45)"/><path d="M280 80 H280 V640" fill="none" stroke="rgba(34,224,255,0.21)" stroke-width="1.2"/><circle cx="280" cy="640" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M640 80 H360 V520" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1.2"/><circle cx="360" cy="520" r="3.0" fill="rgba(34,224,255,0.45)"/><path d="M920 240 H1200 V480" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="1200" cy="480" r="2.5" fill="rgba(34,224,255,0.45)"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">SVC-01</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">PLC 程序调试</text>
+  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">PLC PROGRAMMING &amp; COMMISSIONING</text>
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

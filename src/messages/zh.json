@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "siteName": "深圳市星链自动化有限公司",
+    "siteShort": "星链自动化",
+    "siteNameEn": "Shenzhen Starlink Automation Co., Ltd.",
+    "tagline": "以自动化，链接智能制造",
+    "description": "深圳市星链自动化有限公司专注 PLC 程序调试、机器人调试、电气图纸设计、锂电池检测与热压机产线交付，为锂电、3C、汽车零部件行业提供从电气设计到整线联调的一站式自动化服务。",
+    "keywords": "PLC程序调试,机器人调试,电气图纸设计,锂电池检测,热压机,深圳自动化公司,产线集成,锂电设备",
+    "ogAlt": "星链自动化 — 工业自动化整线交付"
+  },
+  "nav": {
+    "home": "首页",
+    "services": "业务能力",
+    "cases": "项目案例",
+    "news": "新闻动态",
+    "gallery": "现场图库",
+    "downloads": "资料下载",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "cta": "获取方案",
+    "admin": "后台管理",
+    "language": "语言",
+    "menu": "菜单",
+    "close": "关闭"
+  },
+  "common": {
+    "readMore": "阅读全文",
+    "viewAll": "查看全部",
+    "viewDetail": "查看详情",
+    "backToList": "返回列表",
+    "backHome": "返回首页",
+    "loading": "加载中",
+    "empty": "暂无内容",
+    "emptyHint": "内容正在整理中，敬请期待。",
+    "search": "搜索",
+    "searchPlaceholder": "搜索标题、关键词…",
+    "filter": "筛选",
+    "all": "全部",
+    "category": "分类",
+    "publishedAt": "发布时间",
+    "updatedAt": "更新时间",
+    "views": "阅读",
+    "tags": "标签",
+    "share": "分享",
+    "relatedTitle": "相关内容",
+    "prev": "上一篇",
+    "next": "下一篇",
+    "download": "下载",
+    "downloads": "次下载",
+    "fileSize": "文件大小",
+    "fileType": "文件类型",
+    "version": "版本",
+    "page": "第",
+    "of": "页，共",
+    "pages": "页",
+    "notFoundTitle": "页面不存在",
+    "notFoundDesc": "您访问的页面可能已被移动或删除。",
+    "errorTitle": "出现了一点问题",
+    "errorDesc": "请稍后重试，或直接联系我们。",
+    "retry": "重试",
+    "required": "必填",
+    "optional": "选填",
+    "submit": "提交",
+    "submitting": "提交中…",
+    "success": "提交成功",
+    "copied": "已复制",
+    "copy": "复制"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "深圳市星链自动化有限公司",
+      "titleTop": "以自动化",
+      "titleBottom": "链接智能制造",
+      "subtitle": "从电气图纸设计到整线联调，我们为锂电、3C、汽车零部件行业提供可落地、可验收、可持续运行的自动化交付。",
+      "ctaPrimary": "免费获取方案",
+      "ctaSecondary": "查看项目案例",
+      "scroll": "向下滚动",
+      "badge": "工业自动化整线交付",
+      "ticker": [
+        "PLC 程序调试",
+        "机器人调试",
+        "电气图纸设计",
+        "锂电池检测",
+        "热压机",
+        "产线集成"
+      ]
+    },
+    "statement": {
+      "eyebrow": "我们的方法",
+      "text": "我们把复杂的产线逻辑拆解成可验证的模块，让每一台设备在节拍内稳定运行，让每一次交付都能被测量。"
+    },
+    "stats": {
+      "eyebrow": "交付数据",
+      "title": "用结果说话",
+      "items": [
+        {
+          "value": 120,
+          "suffix": "+",
+          "label": "累计交付项目",
+          "desc": "覆盖锂电、3C、汽车零部件"
+        },
+        {
+          "value": 12,
+          "suffix": " 年",
+          "label": "行业深耕",
+          "desc": "核心团队平均从业年限"
+        },
+        {
+          "value": 98,
+          "suffix": "%",
+          "label": "交付准时率",
+          "desc": "按合同节点交付并验收"
+        },
+        {
+          "value": 24,
+          "suffix": "h",
+          "label": "响应承诺",
+          "desc": "7×24 小时现场支援"
+        }
+      ]
+    },
+    "services": {
+      "eyebrow": "业务能力",
+      "title": "五项核心能力",
+      "desc": "从图纸到程序、从单机到整线，星链自动化提供一条完整的交付链路。",
+      "cta": "了解服务详情"
+    },
+    "process": {
+      "eyebrow": "服务流程",
+      "title": "六步交付，环环可验",
+      "desc": "每个阶段都有明确的输入、输出与验收标准，进度与风险对客户完全透明。"
+    },
+    "cases": {
+      "eyebrow": "项目案例",
+      "title": "在真实产线上验证过",
+      "desc": "我们只展示自己交付并陪产过的项目。"
+    },
+    "news": {
+      "eyebrow": "新闻动态",
+      "title": "公司动态与技术分享"
+    },
+    "gallery": {
+      "eyebrow": "现场图库",
+      "title": "走进作业现场",
+      "desc": "设备实拍、调试现场与团队作业记录。"
+    },
+    "integration": {
+      "eyebrow": "集成能力",
+      "title": "跨品牌 · 跨协议 · 一站式集成",
+      "desc": "无论既有设备来自哪个品牌，星链自动化都能让它们在同一套控制逻辑下协同工作。",
+      "centerLabel": "星链集成",
+      "centerSub": "控制中枢",
+      "nodes": [
+        "PLC 控制",
+        "工业机器人",
+        "机器视觉",
+        "伺服驱动",
+        "传感检测",
+        "安全系统",
+        "上位机 / MES",
+        "数据采集"
+      ],
+      "footnote": "支持主流工业总线：Profinet · EtherCAT · EtherNet/IP · Modbus TCP · CC-Link IE"
+    },
+    "why": {
+      "eyebrow": "为什么选择星链",
+      "title": "六条让项目更稳的理由"
+    },
+    "partners": {
+      "eyebrow": "合作伙伴与技术平台",
+      "title": "我们熟悉的品牌与平台"
+    },
+    "cta": {
+      "eyebrow": "开始合作",
+      "title": "把您的产线难题交给我们",
+      "desc": "告诉我们工艺目标与现有设备情况，我们会在 1 个工作日内给出初步评估与实施建议。",
+      "primary": "免费获取方案",
+      "secondary": "下载公司资料",
+      "note": "我们承诺对您提供的技术资料严格保密。"
+    }
+  },
+  "services": {
+    "title": "业务能力",
+    "eyebrow": "服务",
+    "lead": "五项核心业务，覆盖从电气设计到整线联调的完整交付链路。",
+    "detailCta": "咨询此项服务",
+    "capabilities": "服务内容",
+    "deliverables": "交付物",
+    "faqTitle": "常见问题"
+  },
+  "cases": {
+    "title": "项目案例",
+    "eyebrow": "案例",
+    "lead": "以下项目均由星链自动化团队独立或主导交付。",
+    "detail": "项目详情",
+    "client": "客户",
+    "industry": "行业",
+    "year": "交付年份",
+    "location": "项目地点",
+    "scope": "服务范围",
+    "results": "项目成果",
+    "gallery": "现场影像",
+    "related": "相关案例"
+  },
+  "news": {
+    "title": "新闻动态",
+    "eyebrow": "资讯",
+    "lead": "公司新闻、行业观察与技术分享。",
+    "featured": "置顶",
+    "pinned": "推荐",
+    "minRead": "分钟阅读",
+    "toc": "目录"
+  },
+  "gallery": {
+    "title": "现场图库",
+    "eyebrow": "影像",
+    "lead": "设备实拍、调试现场与团队作业记录。",
+    "albums": "全部相册",
+    "playVideo": "播放视频",
+    "close": "关闭",
+    "prev": "上一张",
+    "next": "下一张"
+  },
+  "downloads": {
+    "title": "资料下载",
+    "eyebrow": "资料中心",
+    "lead": "宣传册、技术白皮书、设备参数表与交付清单，可免费下载。",
+    "downloadNow": "立即下载",
+    "requestTitle": "下载前请留下联系方式",
+    "requestDesc": "留下信息后即可开始下载，我们也会把相关资料同步发送给您。",
+    "allTypes": "全部类型",
+    "mostDownloaded": "热门下载",
+    "emptyHint": "资料正在上传中，如需特定文档请联系我们。"
+  },
+  "about": {
+    "title": "关于我们",
+    "eyebrow": "公司",
+    "lead": "一支以工程师为主体的自动化交付团队。",
+    "introTitle": "公司简介",
+    "intro": "深圳市星链自动化有限公司是一家专注于工业自动化系统集成与技术服务的企业。我们围绕 PLC 程序调试、机器人调试、电气图纸设计、锂电池检测与热压机设备，为新能源锂电、3C 电子、汽车零部件等行业客户提供从方案设计、电气设计、程序开发到现场调试与陪产爬坡的一站式交付。",
+    "intro2": "公司核心团队来自自动化设备与系统集成行业，平均从业年限超过十年，熟悉西门子、三菱、欧姆龙、汇川、台达、倍福等主流控制平台，以及发那科、ABB、库卡、安川、爱普生、优傲等机器人品牌。我们相信，好的自动化不是堆砌设备，而是让工艺、节拍与可靠性同时达标。",
+    "valuesTitle": "我们的做事方式",
+    "milestonesTitle": "发展历程",
+    "teamTitle": "团队构成",
+    "certificationsTitle": "资质与认证",
+    "contactTitle": "联系我们",
+    "stats": [
+      {
+        "value": 120,
+        "suffix": "+",
+        "label": "交付项目"
+      },
+      {
+        "value": 35,
+        "suffix": "+",
+        "label": "工程师团队"
+      },
+      {
+        "value": 12,
+        "suffix": " 年",
+        "label": "行业经验"
+      },
+      {
+        "value": 8,
+        "suffix": " 个",
+        "label": "服务行业"
+      }
+    ]
+  },
+  "contact": {
+    "title": "联系我们",
+    "eyebrow": "联系",
+    "lead": "把您的工艺目标、现有设备与节拍要求告诉我们，我们会给出可执行的建议。",
+    "formTitle": "提交需求",
+    "formDesc": "填写以下信息，我们会在 1 个工作日内回复。",
+    "fields": {
+      "name": "您的姓名",
+      "namePlaceholder": "请输入姓名",
+      "company": "公司名称",
+      "companyPlaceholder": "请输入公司名称",
+      "phone": "联系电话",
+      "phonePlaceholder": "请输入手机或固话",
+      "email": "电子邮箱",
+      "emailPlaceholder": "name@company.com",
+      "service": "咨询业务",
+      "servicePlaceholder": "请选择您关注的业务",
+      "message": "需求描述",
+      "messagePlaceholder": "请简要描述工艺场景、设备现状、节拍要求或需要解决的问题…"
+    },
+    "submit": "提交需求",
+    "submitting": "提交中…",
+    "successTitle": "提交成功",
+    "successDesc": "我们已收到您的需求，会在 1 个工作日内与您联系。",
+    "errorTitle": "提交失败",
+    "errorDesc": "请检查表单内容后重试，或直接拨打电话联系我们。",
+    "validation": {
+      "nameRequired": "请填写您的姓名",
+      "contactRequired": "请至少填写电话或邮箱",
+      "phoneInvalid": "联系电话格式不正确",
+      "emailInvalid": "电子邮箱格式不正确",
+      "messageRequired": "请填写需求描述",
+      "messageShort": "需求描述至少 10 个字"
+    },
+    "infoTitle": "联系方式",
+    "address": "公司地址",
+    "addressValue": "广东省深圳市宝安区（详细地址请来电确认）",
+    "phoneLabel": "业务咨询",
+    "phoneValue": "138-0000-0000",
+    "emailLabel": "邮箱",
+    "emailValue": "info@starlink-auto.com",
+    "hoursLabel": "工作时间",
+    "hoursValue": "周一至周六 09:00 - 18:00",
+    "urgentLabel": "紧急支援",
+    "urgentValue": "7×24 小时电话响应",
+    "mapTitle": "位置"
+  },
+  "footer": {
+    "desc": "深圳市星链自动化有限公司 — 专注 PLC 程序调试、机器人调试、电气图纸设计、锂电池检测与热压机产线交付。",
+    "quickLinks": "快速导航",
+    "servicesTitle": "业务能力",
+    "contactTitle": "联系方式",
+    "subscribe": "订阅动态",
+    "subscribeDesc": "订阅后我们会不定期发送公司动态与技术资料，不做商业骚扰。",
+    "subscribePlaceholder": "请输入您的邮箱",
+    "subscribeButton": "订阅",
+    "subscribeSuccess": "订阅成功，感谢关注！",
+    "rights": "保留所有权利",
+    "icp": "粤ICP备00000000号",
+    "police": "粤公网安备 00000000000000号",
+    "sitemap": "网站地图",
+    "privacy": "隐私政策",
+    "terms": "服务条款"
+  },
+  "admin": {
+    "brand": "星链自动化 · 管理后台",
+    "login": "登录后台",
+    "loginDesc": "请输入管理员账号与密码",
+    "email": "邮箱",
+    "password": "密码",
+    "signIn": "登录",
+    "signingIn": "登录中…",
+    "signOut": "退出登录",
+    "invalidCredentials": "邮箱或密码不正确",
+    "dashboard": "概览",
+    "content": "内容管理",
+    "articles": "文章 / 新闻",
+    "cases": "项目案例",
+    "services": "业务能力",
+    "gallery": "图库",
+    "media": "媒体库",
+    "downloads": "下载资料",
+    "inquiries": "客户询盘",
+    "partners": "合作伙伴",
+    "users": "用户",
+    "settings": "站点设置",
+    "new": "新建",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存",
+    "cancel": "取消",
+    "confirmDelete": "确定要删除吗？此操作不可撤销。",
+    "upload": "上传文件",
+    "uploadHint": "支持图片、视频与文档，单个文件不超过 200MB",
+    "uploading": "上传中",
+    "copied": "已复制到剪贴板",
+    "saved": "保存成功",
+    "deleted": "删除成功",
+    "published": "已发布",
+    "draft": "草稿",
+    "archived": "已归档",
+    "status": "状态"
+  }
+}

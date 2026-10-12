@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="热压机产线顺利交付">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <circle cx="638.0" cy="389.9" r="362.2" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><circle cx="1252.6" cy="754.4" r="205.5" fill="none" stroke="rgba(34,224,255,0.06)" stroke-width="1"/><circle cx="1045.1" cy="927.3" r="371.6" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><circle cx="316.1" cy="338.0" r="375.8" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><circle cx="272.6" cy="912.6" r="103.7" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><circle cx="1257.3" cy="28.2" r="91.5" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><circle cx="328.9" cy="698.7" r="368.7" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><circle cx="19.5" cy="70.2" r="109.4" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><circle cx="493.0" cy="554.2" r="96.2" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">NOTE-01</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">热压机产线顺利交付</text>
+  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">NEWS</text>
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

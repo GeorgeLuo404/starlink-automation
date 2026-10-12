@@ -1,0 +1,30 @@
+# 本地开发用 PostgreSQL / Local PostgreSQL for development
+#
+#   docker compose up -d db     启动
+#   docker compose logs -f db   查看日志
+#   docker compose down         停止（保留数据卷）
+#   docker compose down -v      停止并删除数据
+#
+# 生产环境建议使用阿里云 RDS for PostgreSQL，而不是容器内的数据库。
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: starlink-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-starlink}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-starlink}
+      POSTGRES_DB: ${POSTGRES_DB:-starlink}
+      TZ: Asia/Shanghai
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - starlink-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-starlink} -d ${POSTGRES_DB:-starlink}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  starlink-db-data:

@@ -1,0 +1,70 @@
+# 生产编排 / Production compose (阿里云 ECS)
+#
+#   cp .env.production.example .env.production
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+#
+# 数据库建议使用阿里云 RDS PostgreSQL；下方 db 服务仅用于单机小规模部署。
+services:
+  web:
+    build:
+      context: .
+      target: runner
+    image: starlink-web:latest
+    container_name: starlink-web
+    restart: unless-stopped
+    env_file: [.env.production]
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      # Only needed when STORAGE_DRIVER=local. With OSS this can be removed.
+      - starlink-uploads:/app/storage/uploads
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    build:
+      context: .
+      target: migrator
+    image: starlink-migrator:latest
+    env_file: [.env.production]
+    restart: "no"
+
+  # Single-box PostgreSQL. Skip this if you use Aliyun RDS.
+  db:
+    image: postgres:16-alpine
+    container_name: starlink-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-starlink}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.production}
+      POSTGRES_DB: ${POSTGRES_DB:-starlink}
+      TZ: Asia/Shanghai
+    volumes:
+      - starlink-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-starlink}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: starlink-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./deploy/certs:/etc/nginx/certs:ro
+      - starlink-uploads:/var/www/uploads:ro
+    depends_on: [web]
+
+volumes:
+  starlink-db-data:
+  starlink-uploads:

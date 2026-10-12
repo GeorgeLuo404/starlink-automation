@@ -1,0 +1,38 @@
+# dependencies
+node_modules
+.pnpm-store
+.pnpm-cache
+.npmcache
+.pnpm
+.xdg
+
+# next.js
+.next
+out
+build
+dist
+next-env.d.ts
+*.tsbuildinfo
+
+# prisma — generated client (recreated by `prisma generate` on install)
+src/generated
+
+# environment
+.env
+.env*.local
+.env.production
+
+# local storage driver output
+storage
+public/uploads
+
+# deploy artefacts
+.vercel
+deploy/certs
+
+# misc
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json

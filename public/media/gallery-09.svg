@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="产线节拍验证">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect x="1263.0" y="819.3" width="123.9" height="65.9" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="715.1" y="940.2" width="241.1" height="147.6" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><rect x="526.6" y="464.7" width="317.2" height="214.0" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="999.1" y="549.8" width="151.0" height="81.9" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><rect x="642.4" y="359.7" width="270.2" height="191.7" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="70.8" y="86.2" width="102.9" height="128.8" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="734.4" y="752.4" width="175.0" height="219.6" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="5.6" y="758.1" width="286.0" height="250.3" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="145.3" y="715.6" width="196.7" height="168.7" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="947.3" y="228.6" width="130.4" height="88.7" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1532.6" y="342.4" width="106.1" height="110.3" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="777.5" y="824.8" width="126.4" height="162.2" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="549.1" y="94.4" width="192.1" height="72.6" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="854.7" y="885.8" width="331.2" height="123.9" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="51.8" y="273.2" width="212.6" height="243.6" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><rect x="1268.7" y="649.8" width="343.8" height="197.0" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="507.2" y="111.1" width="260.7" height="116.5" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="18.4" y="213.2" width="134.4" height="221.1" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="100.3" y="422.5" width="207.6" height="227.3" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="761.7" y="239.5" width="159.8" height="129.0" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="108.7" y="924.5" width="282.7" height="244.0" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="573.6" y="803.9" width="176.7" height="138.3" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="1464.2" y="542.9" width="208.9" height="197.0" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><rect x="1013.4" y="107.3" width="315.2" height="192.1" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="401.4" y="81.8" width="97.0" height="254.9" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="17.7" y="332.9" width="314.3" height="237.6" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><line x1="0" y1="490.6" x2="1600" y2="533.3" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="321.9" x2="1600" y2="350.7" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="775.7" x2="1600" y2="777.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="713.4" x2="1600" y2="762.1" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="188.4" x2="1600" y2="172.0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="377.2" x2="1600" y2="327.6" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="964.4" x2="1600" y2="981.6" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="216.7" x2="1600" y2="167.6" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">IMG-09</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">产线节拍验证</text>
+  
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

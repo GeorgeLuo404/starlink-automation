@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="热压机温控柜">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <rect x="1258.7" y="184.3" width="177.7" height="214.1" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="340.8" y="922.9" width="133.7" height="235.4" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><rect x="244.9" y="671.1" width="99.3" height="81.5" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><rect x="578.8" y="477.7" width="123.3" height="63.9" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="902.2" y="419.9" width="90.3" height="91.3" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1522.6" y="890.9" width="266.8" height="195.0" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1"/><rect x="553.2" y="666.5" width="241.8" height="170.6" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1"/><rect x="870.8" y="762.1" width="350.0" height="192.4" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="1541.3" y="488.2" width="218.3" height="189.5" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/><rect x="957.3" y="449.7" width="340.1" height="71.7" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="978.6" y="323.6" width="274.3" height="216.0" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><rect x="972.6" y="68.6" width="139.0" height="134.5" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1302.7" y="183.6" width="192.9" height="255.2" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1"/><rect x="1482.4" y="798.9" width="173.8" height="241.0" fill="none" stroke="rgba(34,224,255,0.05)" stroke-width="1"/><rect x="495.0" y="667.7" width="91.3" height="112.2" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="1328.5" y="393.1" width="347.4" height="185.9" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1"/><rect x="1571.8" y="558.1" width="291.7" height="235.9" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><rect x="676.8" y="889.8" width="93.6" height="171.8" fill="none" stroke="rgba(34,224,255,0.06)" stroke-width="1"/><rect x="76.7" y="114.2" width="334.5" height="113.6" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="1361.4" y="331.9" width="132.2" height="143.2" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="690.3" y="303.7" width="315.2" height="117.5" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><rect x="80.1" y="544.2" width="250.6" height="225.6" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="214.4" y="634.1" width="213.5" height="60.9" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1"/><rect x="708.2" y="83.9" width="231.6" height="259.3" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1"/><rect x="997.7" y="64.2" width="179.0" height="217.5" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><rect x="1124.3" y="124.6" width="117.4" height="106.6" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><line x1="0" y1="775.0" x2="1600" y2="742.9" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="255.5" x2="1600" y2="280.8" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="286.8" x2="1600" y2="285.4" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="606.0" x2="1600" y2="566.4" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="605.5" x2="1600" y2="551.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="902.8" x2="1600" y2="843.6" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="468.2" x2="1600" y2="508.2" stroke="rgba(255,255,255,0.05)" stroke-width="1"/><line x1="0" y1="339.4" x2="1600" y2="392.3" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">IMG-02</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">热压机温控柜</text>
+  
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>

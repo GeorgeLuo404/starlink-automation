@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.github
+.pnpm-store
+.pnpm-cache
+.npmcache
+.xdg
+.pnpm
+storage
+public/uploads
+docs
+*.md
+!README.md
+.env
+.env*.local
+.DS_Store

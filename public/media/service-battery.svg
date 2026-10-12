@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="锂电池检测">
+  <defs>
+    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1000 240 H920 V800" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="920" cy="800" r="3.7" fill="rgba(34,224,255,0.45)"/><path d="M1080 560 H1200 V200" fill="none" stroke="rgba(34,224,255,0.22)" stroke-width="1.2"/><circle cx="1200" cy="200" r="3.8" fill="rgba(34,224,255,0.45)"/><path d="M640 560 H40 V0" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1.2"/><circle cx="40" cy="0" r="3.7" fill="rgba(34,224,255,0.45)"/><path d="M1400 80 H1080 V40" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="1080" cy="40" r="2.5" fill="rgba(34,224,255,0.45)"/><path d="M1200 400 H160 V1000" fill="none" stroke="rgba(34,224,255,0.20)" stroke-width="1.2"/><circle cx="160" cy="1000" r="2.9" fill="rgba(34,224,255,0.45)"/><path d="M1120 600 H920 V600" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1.2"/><circle cx="920" cy="600" r="2.4" fill="rgba(34,224,255,0.45)"/><path d="M1200 640 H200 V520" fill="none" stroke="rgba(34,224,255,0.23)" stroke-width="1.2"/><circle cx="200" cy="520" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M1360 40 H1320 V280" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="1320" cy="280" r="3.8" fill="rgba(34,224,255,0.45)"/><path d="M80 680 H40 V560" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="40" cy="560" r="3.3" fill="rgba(34,224,255,0.45)"/><path d="M240 1000 H760 V720" fill="none" stroke="rgba(34,224,255,0.15)" stroke-width="1.2"/><circle cx="760" cy="720" r="3.7" fill="rgba(34,224,255,0.45)"/><path d="M160 200 H1120 V280" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="1120" cy="280" r="3.5" fill="rgba(34,224,255,0.45)"/><path d="M240 800 H40 V960" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1.2"/><circle cx="40" cy="960" r="3.5" fill="rgba(34,224,255,0.45)"/><path d="M1120 600 H640 V720" fill="none" stroke="rgba(34,224,255,0.17)" stroke-width="1.2"/><circle cx="640" cy="720" r="2.2" fill="rgba(34,224,255,0.45)"/><path d="M1360 400 H400 V720" fill="none" stroke="rgba(34,224,255,0.18)" stroke-width="1.2"/><circle cx="400" cy="720" r="2.8" fill="rgba(34,224,255,0.45)"/><path d="M1520 680 H1520 V480" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1.2"/><circle cx="1520" cy="480" r="3.7" fill="rgba(34,224,255,0.45)"/><path d="M960 80 H1120 V480" fill="none" stroke="rgba(34,224,255,0.19)" stroke-width="1.2"/><circle cx="1120" cy="480" r="3.1" fill="rgba(34,224,255,0.45)"/><path d="M960 520 H200 V280" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1.2"/><circle cx="200" cy="280" r="3.7" fill="rgba(34,224,255,0.45)"/><path d="M880 40 H240 V800" fill="none" stroke="rgba(34,224,255,0.20)" stroke-width="1.2"/><circle cx="240" cy="800" r="4.4" fill="rgba(34,224,255,0.45)"/><path d="M120 440 H1200 V280" fill="none" stroke="rgba(34,224,255,0.09)" stroke-width="1.2"/><circle cx="1200" cy="280" r="2.3" fill="rgba(34,224,255,0.45)"/><path d="M1520 320 H1440 V760" fill="none" stroke="rgba(34,224,255,0.24)" stroke-width="1.2"/><circle cx="1440" cy="760" r="5.0" fill="rgba(34,224,255,0.45)"/><path d="M400 920 H1080 V600" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1.2"/><circle cx="1080" cy="600" r="4.3" fill="rgba(34,224,255,0.45)"/><path d="M360 880 H720 V360" fill="none" stroke="rgba(34,224,255,0.08)" stroke-width="1.2"/><circle cx="720" cy="360" r="4.6" fill="rgba(34,224,255,0.45)"/>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
+    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
+    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  </g>
+  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">SVC-04</text>
+  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">锂电池检测</text>
+  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">LITHIUM BATTERY INSPECTION</text>
+  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+</svg>
