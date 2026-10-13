@@ -190,8 +190,8 @@ async function main() {
   const settings: Record<string, string> = {
     contactPhone: "138-0000-0000",
     contactEmail: "info@starlink-auto.com",
-    contactAddressZh: "广东省深圳市宝安区",
-    contactAddressEn: "Bao'an District, Shenzhen, Guangdong, China",
+    contactAddressZh: "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区",
+    contactAddressEn: "Zone E, 9th Floor, Lilan Technology Building, Jiazitang Community, Fenghuang Subdistrict, Guangming District, Shenzhen, Guangdong, China",
     icp: "粤ICP备00000000号",
   };
   for (const [key, value] of Object.entries(settings)) {

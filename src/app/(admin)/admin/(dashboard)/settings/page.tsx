@@ -66,8 +66,16 @@ export default async function AdminSettingsPage({
             <FormField label="业务电话" name="contactPhone" defaultValue={read("contactPhone", "138-0000-0000")} />
             <FormField label="业务邮箱" name="contactEmail" defaultValue={read("contactEmail", "info@starlink-auto.com")} />
           </div>
-          <FormField label="公司地址（中文）" name="contactAddressZh" defaultValue={read("contactAddressZh", "广东省深圳市宝安区")} />
-          <FormField label="公司地址（英文）" name="contactAddressEn" defaultValue={read("contactAddressEn", "Bao'an District, Shenzhen, Guangdong, China")} />
+          <FormField
+            label="公司地址（中文）"
+            name="contactAddressZh"
+            defaultValue={read("contactAddressZh", "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区")}
+          />
+          <FormField
+            label="公司地址（英文）"
+            name="contactAddressEn"
+            defaultValue={read("contactAddressEn", "Zone E, 9th Floor, Lilan Technology Building, Jiazitang Community, Fenghuang Subdistrict, Guangming District, Shenzhen, Guangdong, China")}
+          />
         </FormSection>
 
         <FormSection title="合规与统计" description="域名备案通过后，把备案号填在这里，会显示在网站页脚。">

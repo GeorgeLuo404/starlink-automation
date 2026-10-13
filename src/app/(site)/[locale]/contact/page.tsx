@@ -43,7 +43,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     {
       icon: MapPin,
       label: t.address,
-      value: locale === "zh" ? t.addressValue : t.addressValue,
+      value: t.addressValue,
       href: undefined as string | undefined,
     },
     { icon: Phone, label: t.phoneLabel, value: company.phone, href: `tel:${company.phone}` },
