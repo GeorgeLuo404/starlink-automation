@@ -167,7 +167,7 @@ async function main() {
     written.push(file);
   }
 
-  await writeFile(path.join(OUT, "hero-poster.svg"), svg({ label: "自动化产线", subtitle: "TURNKEY AUTOMATION", index: "HERO", kind: "circuit", seed: 777 }));
+  await writeFile(path.join(OUT, "hero-poster.svg"), svg({ label: "自动化产线", subtitle: "AUTOMATIC PRODUCTION LINE", index: "HERO", kind: "circuit", seed: 777 }));
   await writeFile(path.join(OUT, "factory.svg"), svg({ label: "作业现场", subtitle: "ON THE SHOP FLOOR", index: "SITE", kind: "grid", seed: 888 }));
   await writeFile(path.join(OUT, "og.svg"), svg({ label: "以自动化，链接智能制造", subtitle: "深圳市星链自动化有限公司", index: "STARLINK", kind: "rings", seed: 999 }));
 
