@@ -11,6 +11,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import {
+  Fragment,
   useEffect,
   useMemo,
   useRef,
@@ -125,8 +126,34 @@ export function StaggerItem({
 
 const TOKEN_RE = /[A-Za-z0-9][A-Za-z0-9'’\-.]*|\s+|./gu;
 
-function tokenize(text: string) {
-  return text.match(TOKEN_RE) ?? [];
+/** CJK ideographs, kana and full-width punctuation. */
+const CJK_RE = /[\u2e80-\u303f\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff00-\uffef]/;
+
+type TextToken = { value: string; isSpace: boolean; index: number; prev: string };
+
+/**
+ * Split text into words, whitespace runs and individual characters.
+ *
+ * Whitespace is kept as a distinct token so the renderer can emit it as a real
+ * text node rather than an animated box — see ScrollHighlightText below.
+ */
+function tokenize(text: string): { tokens: TextToken[]; wordCount: number } {
+  const raw = text.match(TOKEN_RE) ?? [];
+  const isWord = (value: string) => !/^\s+$/.test(value);
+  const wordCount = raw.filter(isWord).length;
+  let wordIndex = 0;
+
+  const tokens = raw.map((value, i) => {
+    const isSpace = !isWord(value);
+    return {
+      value,
+      isSpace,
+      index: isSpace ? -1 : wordIndex++,
+      prev: raw[i - 1] ?? "",
+    };
+  });
+
+  return { tokens, wordCount };
 }
 
 function HighlightToken({
@@ -168,7 +195,7 @@ export function ScrollHighlightText({
     offset: offset as unknown as ["start end", "end start"],
   });
   const smooth = useSpring(scrollYProgress, { stiffness: 180, damping: 32, restDelta: 0.001 });
-  const tokens = useMemo(() => tokenize(text), [text]);
+  const { tokens, wordCount } = useMemo(() => tokenize(text), [text]);
 
   if (reduced) {
     return (
@@ -181,18 +208,31 @@ export function ScrollHighlightText({
   return (
     <p ref={ref} className={className}>
       {tokens.map((token, i) => {
-        const total = tokens.length;
-        const start = total <= 1 ? 0 : (i / total) * 0.92;
+        // Whitespace MUST be a real text node. An animated box is
+        // `display: inline-block`; a box whose entire content is collapsible
+        // whitespace collapses to zero width, which silently glued every
+        // English word together. A real space also gives the browser its
+        // normal soft-wrap opportunity.
+        if (token.isSpace) return token.value;
+
+        const total = Math.max(wordCount, 1);
+        const start = (token.index / total) * 0.92;
         const end = Math.min(start + 0.22, 1);
+
+        // Chinese has no spaces, so adjacent ideographs would form one
+        // unbreakable run of inline-block boxes. <wbr> restores the break
+        // opportunity without adding any visible width.
+        const prevIsSpace = token.prev === "" || /^\s+$/.test(token.prev);
+        const needsBreak =
+          !prevIsSpace && (CJK_RE.test(token.value) || CJK_RE.test(token.prev));
+
         return (
-          <HighlightToken
-            key={`${i}-${token}`}
-            progress={smooth}
-            range={[start, end]}
-            className={wordClassName}
-          >
-            {token}
-          </HighlightToken>
+          <Fragment key={i}>
+            {needsBreak ? <wbr /> : null}
+            <HighlightToken progress={smooth} range={[start, end]} className={wordClassName}>
+              {token.value}
+            </HighlightToken>
+          </Fragment>
         );
       })}
     </p>
