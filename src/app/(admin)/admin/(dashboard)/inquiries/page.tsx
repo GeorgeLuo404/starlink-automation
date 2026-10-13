@@ -50,7 +50,7 @@ export default async function AdminInquiriesPage({
           href="/admin/inquiries"
           className={cn(
             "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-            !filter ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+            !filter ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground hover:text-white"
           )}
         >
           全部
@@ -61,7 +61,7 @@ export default async function AdminInquiriesPage({
             href={`/admin/inquiries?status=${entry}`}
             className={cn(
               "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-              filter === entry ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+              filter === entry ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground hover:text-white"
             )}
           >
             {entry === "NEW" ? "新询盘" : entry === "IN_PROGRESS" ? "跟进中" : entry === "DONE" ? "已完成" : "垃圾信息"}
@@ -86,7 +86,7 @@ export default async function AdminInquiriesPage({
                     </span>
                   </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#8a929e]">
+                  <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
                     {row.company ? (
                       <span className="inline-flex items-center gap-1.5">
                         <Building2 className="size-3.5" />
@@ -110,7 +110,7 @@ export default async function AdminInquiriesPage({
                     ) : null}
                   </div>
 
-                  <p className="mt-4 rounded-[var(--radius)] border border-[#1b1f27] bg-[#0a0b0e] p-4 text-sm leading-relaxed whitespace-pre-wrap text-[#c3c9d4]">
+                  <p className="mt-4 rounded-(--radius) border border-[#1b1f27] bg-ink-900 p-4 text-sm leading-relaxed whitespace-pre-wrap text-[#c3c9d4]">
                     {row.message}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default async function AdminInquiriesPage({
                     <input type="hidden" name="id" value={row.id} />
                     <button
                       type="submit"
-                      className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-[var(--radius)] border border-[#1b1f27] text-xs text-[#8a929e] transition-colors hover:border-[#ff4d4f]/40 hover:text-[#ff8a8c]"
+                      className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-[#1b1f27] text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
                     >
                       <Trash2 className="size-3.5" />
                       删除

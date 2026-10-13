@@ -35,7 +35,7 @@ export default async function AdminDownloadEditorPage({ params }: { params: Prom
 
   return (
     <>
-      <Link href="/admin/downloads" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#8a929e] transition-colors hover:text-white">
+      <Link href="/admin/downloads" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-white">
         <ArrowLeft className="size-3.5" />
         返回资料列表
       </Link>

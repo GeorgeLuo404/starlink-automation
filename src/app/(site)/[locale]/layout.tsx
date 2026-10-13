@@ -62,10 +62,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={localeHtmlLang[typedLocale]} className="dark" suppressHydrationWarning>
-      <body className="min-h-screen bg-[#08090b] antialiased">
+      <body className="min-h-screen bg-background antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded focus:bg-[#22e0ff] focus:px-3 focus:py-2 focus:text-sm focus:text-[#04141a]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded focus:bg-[#22e0ff] focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
         >
           {typedLocale === "zh" ? "跳到主要内容" : "Skip to content"}
         </a>

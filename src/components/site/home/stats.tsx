@@ -4,7 +4,7 @@ import { Counter, Stagger, StaggerItem } from "@/components/motion";
 export function HomeStats({ dict }: { dict: Dictionary }) {
   const t = dict.home.stats;
   return (
-    <section className="relative overflow-hidden border-y border-[#1b1f27] bg-[#0a0b0e]">
+    <section className="relative overflow-hidden border-y border-[#1b1f27] bg-ink-900">
       <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="container-x relative py-16 md:py-20">
         <div className="flex items-center gap-3">
@@ -22,7 +22,7 @@ export function HomeStats({ dict }: { dict: Dictionary }) {
                   <span className="text-[#22e0ff]">{item.suffix}</span>
                 </div>
                 <p className="mt-4 text-sm font-medium text-[#e8ebf0]">{item.label}</p>
-                <p className="mt-1.5 text-xs leading-relaxed text-[#8a929e]">{item.desc}</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{item.desc}</p>
               </div>
             </StaggerItem>
           ))}

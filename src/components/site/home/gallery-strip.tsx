@@ -32,7 +32,7 @@ export async function HomeGallery({ locale, dict }: { locale: Locale; dict: Dict
             <StaggerItem key={`${item.title.zh}-${i}`} className={i === 0 ? "col-span-2 row-span-2" : ""}>
               <Link
                 href={localeHref(locale, "/gallery")}
-                className="group relative block size-full overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]"
+                className="group relative block size-full overflow-hidden rounded-(--radius) border border-[#1b1f27]"
               >
                 <div className={i === 0 ? "aspect-square" : "aspect-4/3"}>
                   <Image
@@ -43,7 +43,7 @@ export async function HomeGallery({ locale, dict }: { locale: Locale; dict: Dict
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/90 via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-95" />
+                <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-95" />
                 {item.mediaKind === "VIDEO" ? (
                   <span className="absolute top-3 right-3 inline-flex size-8 items-center justify-center rounded-full border border-white/20 bg-black/50 backdrop-blur-sm">
                     <Play className="size-3 text-white" />

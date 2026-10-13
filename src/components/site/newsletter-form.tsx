@@ -28,7 +28,7 @@ export function NewsletterForm({ dict, className }: { dict: Dictionary; classNam
 
   if (status === "done") {
     return (
-      <p className={cn("flex items-center gap-2 text-sm text-[#35d07f]", className)}>
+      <p className={cn("flex items-center gap-2 text-sm text-success", className)}>
         <Check className="size-4" />
         {dict.footer.subscribeSuccess}
       </p>
@@ -49,7 +49,7 @@ export function NewsletterForm({ dict, className }: { dict: Dictionary; classNam
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex size-10 shrink-0 items-center justify-center rounded-[var(--radius)] bg-[#22e0ff] text-[#04141a] transition-colors hover:bg-white disabled:opacity-50"
+        className="inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius) bg-[#22e0ff] text-primary-foreground transition-colors hover:bg-white disabled:opacity-50"
         aria-label={dict.footer.subscribeButton}
       >
         <ArrowRight className="size-4" />

@@ -63,7 +63,7 @@ export default async function GalleryPage({
               "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
               !album
                 ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+                : "border-[#1b1f27] text-muted-foreground hover:text-white"
             )}
           >
             {dict.gallery.albums}
@@ -76,7 +76,7 @@ export default async function GalleryPage({
                 "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
                 album === name
                   ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                  : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+                  : "border-[#1b1f27] text-muted-foreground hover:text-white"
               )}
             >
               {name}
@@ -87,8 +87,8 @@ export default async function GalleryPage({
 
       <div className="container-x py-16 md:py-20">
         {items.length === 0 ? (
-          <div className="rounded-[var(--radius)] border border-dashed border-[#1b1f27] py-24 text-center">
-            <p className="text-sm text-[#8a929e]">{dict.common.emptyHint}</p>
+          <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-24 text-center">
+            <p className="text-sm text-muted-foreground">{dict.common.emptyHint}</p>
           </div>
         ) : (
           <GalleryGrid items={items} locale={locale} />

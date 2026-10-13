@@ -76,7 +76,7 @@ export default async function NewsPage({
                 "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
                 !category
                   ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                  : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+                  : "border-[#1b1f27] text-muted-foreground hover:text-white"
               )}
             >
               {dict.common.all}
@@ -89,7 +89,7 @@ export default async function NewsPage({
                   "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
                   category === cat.slug
                     ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                    : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+                    : "border-[#1b1f27] text-muted-foreground hover:text-white"
                 )}
               >
                 {locale === "zh" ? cat.nameZh : cat.nameEn}
@@ -115,9 +115,9 @@ export default async function NewsPage({
 
       <div className="container-x py-16 md:py-24">
         {items.length === 0 ? (
-          <div className="rounded-[var(--radius)] border border-dashed border-[#1b1f27] py-24 text-center">
+          <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-24 text-center">
             <p className="text-sm font-medium text-[#e8ebf0]">{dict.common.empty}</p>
-            <p className="mt-2 text-sm text-[#8a929e]">{dict.common.emptyHint}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{dict.common.emptyHint}</p>
           </div>
         ) : (
           <>
@@ -143,7 +143,7 @@ export default async function NewsPage({
                   {dict.common.prev}
                 </Link>
 
-                <span className="font-mono text-xs tracking-wider text-[#8a929e]">
+                <span className="font-mono text-xs tracking-wider text-muted-foreground">
                   {dict.common.page} {page} / {totalPages} · {total} {locale === "zh" ? "条" : "items"}
                 </span>
 

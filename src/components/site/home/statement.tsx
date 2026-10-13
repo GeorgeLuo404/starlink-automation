@@ -4,7 +4,7 @@ import type { Dictionary } from "@/lib/i18n";
 export function HomeStatement({ dict }: { dict: Dictionary }) {
   const t = dict.home.statement;
   return (
-    <section className="section-y relative overflow-hidden border-y border-[#1b1f27] bg-[#0a0b0e]">
+    <section className="section-y relative overflow-hidden border-y border-[#1b1f27] bg-ink-900">
       <div className="grid-blueprint-fine absolute inset-0 opacity-50" aria-hidden="true" />
       <div className="container-x relative">
         <div className="flex items-center gap-3">

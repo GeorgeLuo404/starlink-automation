@@ -68,7 +68,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             <Reveal>
               <div className="card-industrial p-7 lg:p-9">
                 <h2 className="text-display text-2xl text-white">{t.formTitle}</h2>
-                <p className="mt-3 text-sm text-[#8a929e]">{t.formDesc}</p>
+                <p className="mt-3 text-sm text-muted-foreground">{t.formDesc}</p>
                 <div className="mt-8">
                   <ContactForm locale={locale} dict={dict} services={serviceNames} />
                 </div>
@@ -83,19 +83,19 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                 const Icon = row.icon;
                 const content = (
                   <div className="flex items-start gap-4 py-5">
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
                       <Icon className="size-4" strokeWidth={1.5} />
                     </span>
                     <div className="min-w-0">
                       <div className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
                         {row.label}
                       </div>
-                      <div className="mt-1.5 text-sm break-words text-[#e8ebf0]">{row.value}</div>
+                      <div className="mt-1.5 text-sm wrap-break-word text-[#e8ebf0]">{row.value}</div>
                     </div>
                   </div>
                 );
                 return row.href ? (
-                  <a key={row.label} href={row.href} className="block transition-colors hover:bg-white/[0.02]">
+                  <a key={row.label} href={row.href} className="block transition-colors hover:bg-white/2">
                     {content}
                   </a>
                 ) : (
@@ -104,7 +104,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               })}
             </div>
 
-            <div className="mt-8 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+            <div className="mt-8 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
               <div className="relative flex aspect-4/3 items-center justify-center bg-[#0d0f13]">
                 <div className="grid-blueprint absolute inset-0 opacity-60" aria-hidden="true" />
                 <div className="relative text-center">

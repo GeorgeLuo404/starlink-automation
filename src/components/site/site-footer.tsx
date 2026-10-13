@@ -10,13 +10,13 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-[#1b1f27] bg-[#0a0b0e]">
+    <footer className="relative border-t border-[#1b1f27] bg-ink-900">
       <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="container-x relative py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Logo size="md" />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-[#8a929e]">{dict.footer.desc}</p>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{dict.footer.desc}</p>
             <div className="mt-6 space-y-2.5 text-sm">
               <a
                 href={`tel:${company.phone}`}
@@ -32,7 +32,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
                 <Mail className="size-3.5 text-[#22e0ff]" />
                 {company.email}
               </a>
-              <p className="flex items-start gap-2.5 text-[#8a929e]">
+              <p className="flex items-start gap-2.5 text-muted-foreground">
                 <MapPin className="mt-0.5 size-3.5 shrink-0 text-[#22e0ff]" />
                 {locale === "zh" ? company.addressZh : company.addressEn}
               </p>
@@ -46,7 +46,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
                 <li key={key}>
                   <Link
                     href={localeHref(locale, key === "about" ? "/about" : `/${key}`)}
-                    className="text-[#8a929e] transition-colors hover:text-white"
+                    className="text-muted-foreground transition-colors hover:text-white"
                   >
                     {dict.nav[key]}
                   </Link>
@@ -62,7 +62,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
                 <li key={service.slug}>
                   <Link
                     href={localeHref(locale, `/services/${service.slug}`)}
-                    className="text-[#8a929e] transition-colors hover:text-white"
+                    className="text-muted-foreground transition-colors hover:text-white"
                   >
                     {service.title[locale]}
                   </Link>
@@ -73,7 +73,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
 
           <div className="lg:col-span-3">
             <h3 className="text-eyebrow">{dict.footer.subscribe}</h3>
-            <p className="mt-5 text-sm leading-relaxed text-[#8a929e]">{dict.footer.subscribeDesc}</p>
+            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{dict.footer.subscribeDesc}</p>
             <NewsletterForm dict={dict} className="mt-5" />
           </div>
         </div>
@@ -89,13 +89,13 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
               href="https://beian.miit.gov.cn"
               target="_blank"
               rel="noreferrer noopener"
-              className="transition-colors hover:text-[#8a929e]"
+              className="transition-colors hover:text-muted-foreground"
             >
               {dict.footer.icp}
             </a>
             <span className="hidden md:inline">|</span>
             <span>{dict.footer.police}</span>
-            <Link href={localeHref(locale, "/contact")} className="transition-colors hover:text-[#8a929e]">
+            <Link href={localeHref(locale, "/contact")} className="transition-colors hover:text-muted-foreground">
               {dict.nav.contact}
             </Link>
           </div>

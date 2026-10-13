@@ -14,7 +14,7 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
       <div className="flex flex-col items-center text-center">
         <Logo size="lg" />
         <h1 className="mt-8 text-xl font-semibold tracking-tight text-white">{dict.admin.login}</h1>
-        <p className="mt-2 text-sm text-[#8a929e]">{dict.admin.loginDesc}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{dict.admin.loginDesc}</p>
       </div>
 
       <form action={formAction} className="mt-9 space-y-5">
@@ -50,8 +50,8 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
         </div>
 
         {state.error ? (
-          <div className="flex items-start gap-2.5 rounded-[var(--radius)] border border-[#ff4d4f]/30 bg-[#ff4d4f]/6 p-3.5">
-            <AlertCircle className="mt-0.5 size-4 shrink-0 text-[#ff4d4f]" />
+          <div className="flex items-start gap-2.5 rounded-(--radius) border border-destructive/30 bg-destructive/6 p-3.5">
+            <AlertCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
             <p className="text-sm text-[#ff8a8c]">
               {state.error === "invalid" ? dict.admin.invalidCredentials : state.error}
             </p>

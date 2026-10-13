@@ -28,7 +28,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
           scrolled
-            ? "border-b border-[#1b1f27] bg-[#08090b]/85 backdrop-blur-xl"
+            ? "border-b border-[#1b1f27] bg-background/85 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
         )}
       >
@@ -51,7 +51,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                     href={localeHref(locale, item.href)}
                     className={cn(
                       "inline-flex items-center gap-1 rounded px-3 py-2 text-sm transition-colors",
-                      isActive(item.href) ? "text-white" : "text-[#8a929e] hover:text-white"
+                      isActive(item.href) ? "text-white" : "text-muted-foreground hover:text-white"
                     )}
                   >
                     {dict.nav[item.key]}
@@ -66,9 +66,9 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 4 }}
                         transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute top-full left-1/2 w-[34rem] -translate-x-1/2 pt-2"
+                        className="absolute top-full left-1/2 w-136 -translate-x-1/2 pt-2"
                       >
-                        <div className="grid grid-cols-2 gap-1 rounded-[var(--radius)] border border-[#1b1f27] bg-[#0a0b0e]/97 p-2 backdrop-blur-xl">
+                        <div className="grid grid-cols-2 gap-1 rounded-(--radius) border border-[#1b1f27] bg-ink-900/97 p-2 backdrop-blur-xl">
                           {services.map((service) => (
                             <Link
                               key={service.slug}
@@ -79,14 +79,14 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                                 {service.title[locale]}
                                 <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
                               </span>
-                              <span className="line-clamp-1 text-xs text-[#8a929e]">
+                              <span className="line-clamp-1 text-xs text-muted-foreground">
                                 {service.summary[locale]}
                               </span>
                             </Link>
                           ))}
                           <Link
                             href={localeHref(locale, "/services")}
-                            className="col-span-2 mt-1 rounded border border-dashed border-[#1b1f27] p-2.5 text-center text-xs text-[#8a929e] transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
+                            className="col-span-2 mt-1 rounded border border-dashed border-[#1b1f27] p-2.5 text-center text-xs text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
                           >
                             {dict.home.services.cta} →
                           </Link>
@@ -101,7 +101,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                   href={localeHref(locale, item.href)}
                   className={cn(
                     "relative rounded px-3 py-2 text-sm transition-colors",
-                    isActive(item.href) ? "text-white" : "text-[#8a929e] hover:text-white"
+                    isActive(item.href) ? "text-white" : "text-muted-foreground hover:text-white"
                   )}
                 >
                   {dict.nav[item.key]}
@@ -141,7 +141,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[70] bg-[#08090b]/97 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-70 bg-background/97 backdrop-blur-xl lg:hidden"
           >
             <div className="container-x flex h-16 items-center justify-between">
               <Logo size="sm" />
@@ -169,7 +169,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                       className="flex items-center justify-between border-b border-[#1b1f27] py-4 text-lg text-white"
                     >
                       {dict.nav[item.key]}
-                      <ArrowUpRight className="size-4 text-[#8a929e]" />
+                      <ArrowUpRight className="size-4 text-muted-foreground" />
                     </Link>
                   </motion.div>
                 )

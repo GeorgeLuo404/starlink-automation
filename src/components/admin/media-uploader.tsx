@@ -87,7 +87,7 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
         }}
         onClick={() => inputRef.current?.click()}
         className={cn(
-          "flex cursor-pointer flex-col items-center justify-center rounded-[var(--radius)] border border-dashed px-6 py-12 text-center transition-colors",
+          "flex cursor-pointer flex-col items-center justify-center rounded-(--radius) border border-dashed px-6 py-12 text-center transition-colors",
           dragging ? "border-[#22e0ff]/60 bg-[#22e0ff]/6" : "border-[#1b1f27] hover:border-[#22e0ff]/40"
         )}
       >
@@ -115,7 +115,7 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
           {queue.map((item) => (
             <li
               key={item.name}
-              className="flex items-center gap-3 rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] px-3 py-2.5"
+              className="flex items-center gap-3 rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] px-3 py-2.5"
             >
               <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#c3c9d4]">{item.name}</span>
               {item.status === "uploading" ? (
@@ -129,9 +129,9 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
                   <Loader2 className="size-3.5 animate-spin text-[#22e0ff]" />
                 </>
               ) : item.status === "done" ? (
-                <span className="font-mono text-[0.625rem] text-[#35d07f]">完成</span>
+                <span className="font-mono text-[0.625rem] text-success">完成</span>
               ) : (
-                <span className="font-mono text-[0.625rem] text-[#ff4d4f]">失败</span>
+                <span className="font-mono text-[0.625rem] text-destructive">失败</span>
               )}
             </li>
           ))}

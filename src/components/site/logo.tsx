@@ -46,7 +46,7 @@ export function Logo({
       {showWordmark ? (
         <span className="flex flex-col leading-none">
           <span className={cn("font-semibold tracking-tight text-white", title[size])}>星链自动化</span>
-          <span className="mt-1 font-mono text-[0.5rem] tracking-[0.28em] text-[#8a929e] uppercase">
+          <span className="mt-1 font-mono text-[0.5rem] tracking-[0.28em] text-muted-foreground uppercase">
             Starlink Automation
           </span>
         </span>

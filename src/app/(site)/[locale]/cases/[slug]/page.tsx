@@ -71,7 +71,7 @@ export default async function CaseDetailPage({
 
       <div className="container-x py-16 md:py-24">
         <Reveal>
-          <div className="relative aspect-21/9 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+          <div className="relative aspect-21/9 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
             <Image
               src={`/media/case-${item.slug}.svg`}
               alt={item.title[locale]}
@@ -121,7 +121,7 @@ export default async function CaseDetailPage({
                   <div className="mt-5 space-y-4">
                     {item.metrics.map((metric) => (
                       <div key={metric.value} className="flex items-baseline justify-between gap-4">
-                        <span className="text-sm text-[#8a929e]">{metric.label[locale]}</span>
+                        <span className="text-sm text-muted-foreground">{metric.label[locale]}</span>
                         <span className="text-xl font-semibold text-[#22e0ff] tabular-nums">{metric.value}</span>
                       </div>
                     ))}
@@ -134,7 +134,7 @@ export default async function CaseDetailPage({
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-[#8a929e]"
+                      className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                     >
                       {tag}
                     </span>
@@ -142,7 +142,7 @@ export default async function CaseDetailPage({
                 </div>
               ) : null}
 
-              <div className="rounded-[var(--radius)] border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
+              <div className="rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
                 <h2 className="text-sm font-semibold text-white">{dict.home.cta.title}</h2>
                 <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-5 w-full">
                   {dict.home.cta.primary}
@@ -163,7 +163,7 @@ export default async function CaseDetailPage({
                   href={localeHref(locale, `/cases/${other.slug}`)}
                   className="card-industrial corner-ticks group flex gap-4 p-5"
                 >
-                  <div className="relative size-20 shrink-0 overflow-hidden rounded-[var(--radius)]">
+                  <div className="relative size-20 shrink-0 overflow-hidden rounded-(--radius)">
                     <Image src={`/media/case-${other.slug}.svg`} alt={other.title[locale]} fill sizes="80px" className="object-cover" />
                   </div>
                   <div className="min-w-0">

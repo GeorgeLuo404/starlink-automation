@@ -55,7 +55,7 @@ export default async function AdminPartnersPage() {
               <li key={row.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
                 <div className="flex min-w-0 items-center gap-4">
                   <span className="font-mono text-sm tracking-wide text-[#e8ebf0]">{row.name}</span>
-                  {row.url ? <span className="text-xs text-[#8a929e]">{row.url}</span> : null}
+                  {row.url ? <span className="text-xs text-muted-foreground">{row.url}</span> : null}
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-[0.625rem] text-[#5c6472]">#{row.sortOrder}</span>
@@ -63,7 +63,7 @@ export default async function AdminPartnersPage() {
                     <input type="hidden" name="id" value={row.id} />
                     <button
                       type="submit"
-                      className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-[#8a929e] transition-colors hover:border-[#ff4d4f]/40 hover:text-[#ff8a8c]"
+                      className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
                       aria-label="删除"
                     >
                       <Trash2 className="size-3.5" />

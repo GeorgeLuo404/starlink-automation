@@ -37,7 +37,7 @@ export default async function AdminSettingsPage({
       <AdminPageHeader title="站点设置" description="首页视频、联系方式与备案信息。保存后前台会自动刷新。" />
 
       {saved ? (
-        <div className="mb-6 rounded-[var(--radius)] border border-[#35d07f]/30 bg-[#35d07f]/8 px-4 py-3 text-sm text-[#35d07f]">
+        <div className="mb-6 rounded-(--radius) border border-success/30 bg-success/8 px-4 py-3 text-sm text-success">
           设置已保存。
         </div>
       ) : null}

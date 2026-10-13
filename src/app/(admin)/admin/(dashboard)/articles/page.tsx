@@ -70,7 +70,7 @@ export default async function AdminArticlesPage() {
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/[0.02]">
+                  <tr key={article.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/2">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="line-clamp-1 font-medium text-[#e8ebf0]">{article.titleZh}</span>
@@ -85,15 +85,15 @@ export default async function AdminArticlesPage() {
                     <td className="px-4 py-3">
                       <StatusPill status={article.status} />
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#8a929e]">
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                       {article.publishedAt ? formatDate(article.publishedAt) : "—"}
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#8a929e]">{article.viewCount}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{article.viewCount}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
                         <Link
                           href={`/admin/articles/${article.id}`}
-                          className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-[#8a929e] transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
+                          className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
                           aria-label="编辑"
                         >
                           <Edit3 className="size-3.5" />
@@ -108,7 +108,7 @@ export default async function AdminArticlesPage() {
                           />
                           <button
                             type="submit"
-                            className="rounded border border-[#1b1f27] px-2.5 py-1.5 font-mono text-[0.625rem] text-[#8a929e] transition-colors hover:border-[#35d07f]/40 hover:text-[#35d07f]"
+                            className="rounded border border-[#1b1f27] px-2.5 py-1.5 font-mono text-[0.625rem] text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
                           >
                             {article.status === "PUBLISHED" ? "下架" : "发布"}
                           </button>
@@ -118,7 +118,7 @@ export default async function AdminArticlesPage() {
                           <input type="hidden" name="id" value={article.id} />
                           <button
                             type="submit"
-                            className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-[#8a929e] transition-colors hover:border-[#ff4d4f]/40 hover:text-[#ff8a8c]"
+                            className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
                             aria-label="删除"
                           >
                             <Trash2 className="size-3.5" />

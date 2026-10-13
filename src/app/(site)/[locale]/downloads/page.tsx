@@ -47,8 +47,8 @@ export default async function DownloadsPage({ params }: { params: Promise<{ loca
 
       <div className="container-x py-16 md:py-20">
         {items.length === 0 ? (
-          <div className="rounded-[var(--radius)] border border-dashed border-[#1b1f27] py-24 text-center">
-            <p className="text-sm text-[#8a929e]">{dict.downloads.emptyHint}</p>
+          <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-24 text-center">
+            <p className="text-sm text-muted-foreground">{dict.downloads.emptyHint}</p>
           </div>
         ) : (
           <DownloadList items={items} locale={locale} dict={dict} />

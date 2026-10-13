@@ -12,9 +12,9 @@ export function FormSection({
   className?: string;
 }) {
   return (
-    <section className={cn("rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] p-6", className)}>
+    <section className={cn("rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-6", className)}>
       <h2 className="text-sm font-semibold text-white">{title}</h2>
-      {description ? <p className="mt-1.5 text-xs text-[#8a929e]">{description}</p> : null}
+      {description ? <p className="mt-1.5 text-xs text-muted-foreground">{description}</p> : null}
       <div className="mt-6 space-y-5">{children}</div>
     </section>
   );
@@ -42,7 +42,7 @@ export function FormField({
   return (
     <div className={className}>
       <label className="field-label" htmlFor={name}>
-        {label} {required ? <span className="text-[#ff4d4f]">*</span> : null}
+        {label} {required ? <span className="text-destructive">*</span> : null}
       </label>
       <input
         id={name}
@@ -80,7 +80,7 @@ export function FormTextarea({
   return (
     <div>
       <label className="field-label" htmlFor={name}>
-        {label} {required ? <span className="text-[#ff4d4f]">*</span> : null}
+        {label} {required ? <span className="text-destructive">*</span> : null}
       </label>
       <textarea
         id={name}
@@ -158,7 +158,7 @@ export function FormCheckbox({
 
 export function FormActions({ cancelHref, submitLabel = "保存" }: { cancelHref: string; submitLabel?: string }) {
   return (
-    <div className="sticky bottom-0 -mx-5 flex items-center justify-end gap-3 border-t border-[#1b1f27] bg-[#08090b]/95 px-5 py-4 backdrop-blur-xl lg:-mx-8 lg:px-8">
+    <div className="sticky bottom-0 -mx-5 flex items-center justify-end gap-3 border-t border-[#1b1f27] bg-background/95 px-5 py-4 backdrop-blur-xl lg:-mx-8 lg:px-8">
       <a href={cancelHref} className="btn btn-ghost h-10 px-4">
         取消
       </a>

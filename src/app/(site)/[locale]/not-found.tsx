@@ -9,7 +9,7 @@ export default function LocaleNotFound() {
       <div className="container-x relative text-center">
         <p className="font-mono text-[0.6875rem] tracking-[0.3em] text-[#22e0ff] uppercase">Error 404</p>
         <h1 className="text-display mt-6 text-[5rem] leading-none text-white sm:text-[8rem]">404</h1>
-        <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-[#8a929e]">
+        <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
           您访问的页面可能已被移动或删除。
           <br />
           The page you requested may have been moved or removed.

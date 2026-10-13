@@ -21,7 +21,7 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
   const step = 360 / nodes.length;
 
   return (
-    <section className="section-y relative overflow-hidden border-y border-[#1b1f27] bg-[#0a0b0e]">
+    <section className="section-y relative overflow-hidden border-y border-[#1b1f27] bg-ink-900">
       <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="container-x relative">
         <div className="grid items-center gap-16 lg:grid-cols-2">
@@ -34,7 +34,7 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
               <h2 className="text-display mt-5 text-3xl text-white sm:text-4xl">{t.title}</h2>
             </Reveal>
             <Reveal delay={0.12}>
-              <p className="mt-5 max-w-lg text-[0.9375rem] leading-relaxed text-[#8a929e]">{t.desc}</p>
+              <p className="mt-5 max-w-lg text-[0.9375rem] leading-relaxed text-muted-foreground">{t.desc}</p>
             </Reveal>
 
             <Reveal delay={0.18}>
@@ -47,13 +47,13 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
                     onMouseLeave={() => setActive(null)}
                     className={cn(
                       "flex items-center gap-2.5 py-1 text-left text-sm transition-colors",
-                      active === i ? "text-[#22e0ff]" : "text-[#8a929e]"
+                      active === i ? "text-[#22e0ff]" : "text-muted-foreground"
                     )}
                   >
                     <span
                       className={cn(
                         "size-1.5 rounded-full transition-colors",
-                        active === i ? "bg-[#22e0ff]" : "bg-[#2a303b]"
+                        active === i ? "bg-[#22e0ff]" : "bg-ink-500"
                       )}
                     />
                     {node}
@@ -70,7 +70,7 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
           </div>
 
           {/* Diagram ------------------------------------------------- */}
-          <div className="relative mx-auto aspect-square w-full max-w-[34rem]">
+          <div className="relative mx-auto aspect-square w-full max-w-136">
             {/* Static rings */}
             <div className="absolute inset-0 rounded-full border border-[#1b1f27]" aria-hidden="true" />
             <div className="absolute inset-[12%] rounded-full border border-[#1b1f27]" aria-hidden="true" />
@@ -131,7 +131,7 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
                             "rounded-full border px-2.5 py-1.5 font-mono text-[0.5625rem] tracking-wide whitespace-nowrap transition-all duration-300 sm:px-3 sm:text-[0.625rem]",
                             active === i
                               ? "border-[#22e0ff]/60 bg-[#22e0ff]/15 text-[#22e0ff]"
-                              : "border-[#1b1f27] bg-[#0a0b0e]/92 text-[#8a929e]"
+                              : "border-[#1b1f27] bg-ink-900/92 text-muted-foreground"
                           )}
                         >
                           {node}
@@ -145,7 +145,7 @@ export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
 
             {/* Centre */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="relative flex size-32 flex-col items-center justify-center rounded-full border border-[#22e0ff]/30 bg-[#08090b] text-center lg:size-36">
+              <div className="relative flex size-32 flex-col items-center justify-center rounded-full border border-[#22e0ff]/30 bg-background text-center lg:size-36">
                 <span className="absolute inset-0 animate-pulse-ring rounded-full border border-[#22e0ff]/30" />
                 <LogoMark className="size-8" />
                 <span className="mt-2 text-xs font-semibold text-white">{t.centerLabel}</span>

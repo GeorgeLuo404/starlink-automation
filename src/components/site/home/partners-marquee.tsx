@@ -13,7 +13,7 @@ export async function HomePartners({ dict }: { dict: Dictionary }) {
     items.map((partner) => (
       <div
         key={partner.name}
-        className="group mx-4 flex min-w-[11rem] flex-col items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0a0b0e] px-6 py-5 transition-colors hover:border-[#22e0ff]/30"
+        className="group mx-4 flex min-w-44 flex-col items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-ink-900 px-6 py-5 transition-colors hover:border-[#22e0ff]/30"
       >
         <span className="font-mono text-sm tracking-[0.12em] text-[#c3c9d4] transition-colors group-hover:text-white">
           {partner.name}
@@ -23,7 +23,7 @@ export async function HomePartners({ dict }: { dict: Dictionary }) {
     ));
 
   return (
-    <section className="section-y relative overflow-hidden bg-[#0a0b0e]">
+    <section className="section-y relative overflow-hidden bg-ink-900">
       <div className="container-x relative">
         <div className="flex items-center gap-3">
           <span className="h-px w-8 bg-[#22e0ff]" />

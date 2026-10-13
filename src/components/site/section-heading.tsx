@@ -38,7 +38,7 @@ export function SectionHeading({
         </Reveal>
         {description ? (
           <Reveal delay={0.12}>
-            <p className="mt-5 text-[0.9375rem] leading-relaxed text-[#8a929e]">{description}</p>
+            <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground">{description}</p>
           </Reveal>
         ) : null}
       </div>

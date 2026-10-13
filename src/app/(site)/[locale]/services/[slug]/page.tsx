@@ -76,7 +76,7 @@ export default async function ServiceDetailPage({
       <div className="container-x py-16 md:py-24">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <div className="relative aspect-16/9 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+            <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-[#1b1f27]">
               <Image
                 src={`/media/service-${service.slug}.svg`}
                 alt={service.title[locale]}
@@ -100,7 +100,7 @@ export default async function ServiceDetailPage({
             <div className="sticky top-28 space-y-6">
               <div className="card-industrial p-7">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
                     <ServiceIcon name={service.icon} className="size-5" />
                   </span>
                   <h2 className="text-base font-semibold text-white">{dict.services.capabilities}</h2>
@@ -117,7 +117,7 @@ export default async function ServiceDetailPage({
 
               <div className="card-industrial p-7">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
                     <FileCheck2 className="size-5" strokeWidth={1.5} />
                   </span>
                   <h2 className="text-base font-semibold text-white">{dict.services.deliverables}</h2>
@@ -131,7 +131,7 @@ export default async function ServiceDetailPage({
                 </ul>
               </div>
 
-              <div className="rounded-[var(--radius)] border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-7">
+              <div className="rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-7">
                 <h2 className="text-base font-semibold text-white">{dict.home.cta.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-[#a7aeb9]">{dict.home.cta.desc}</p>
                 <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-6 w-full">
@@ -151,7 +151,7 @@ export default async function ServiceDetailPage({
                 <Reveal key={entry.q.zh}>
                   <div className="card-industrial h-full p-6">
                     <h3 className="text-sm font-semibold text-white">{entry.q[locale]}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-[#8a929e]">{entry.a[locale]}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{entry.a[locale]}</p>
                   </div>
                 </Reveal>
               ))}
@@ -169,13 +169,13 @@ export default async function ServiceDetailPage({
                   href={localeHref(locale, `/services/${item.slug}`)}
                   className="card-industrial corner-ticks group p-6"
                 >
-                  <span className="inline-flex size-10 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-10 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
                     <ServiceIcon name={item.icon} className="size-4" />
                   </span>
                   <h3 className="mt-5 text-base font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
                     {item.title[locale]}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-[0.8125rem] text-[#8a929e]">{item.summary[locale]}</p>
+                  <p className="mt-2 line-clamp-2 text-[0.8125rem] text-muted-foreground">{item.summary[locale]}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs text-[#22e0ff]">
                     {dict.common.viewDetail}
                     <ArrowUpRight className="size-3.5" />

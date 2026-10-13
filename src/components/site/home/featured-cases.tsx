@@ -33,7 +33,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
             href={localeHref(locale, `/cases/${lead.slug}`)}
             className="card-industrial corner-ticks group grid overflow-hidden lg:grid-cols-2"
           >
-            <div className="relative aspect-16/10 overflow-hidden lg:aspect-auto lg:min-h-[26rem]">
+            <div className="relative aspect-16/10 overflow-hidden lg:aspect-auto lg:min-h-104">
               <Image
                 src={`/media/case-${lead.slug}.svg`}
                 alt={lead.title[locale]}
@@ -41,7 +41,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/70 to-transparent lg:bg-gradient-to-r" />
+              <div className="absolute inset-0 bg-linear-to-t from-background/70 to-transparent lg:bg-linear-to-r" />
             </div>
 
             <div className="flex flex-col justify-center p-8 lg:p-12">
@@ -55,13 +55,13 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
               </div>
 
               <h3 className="text-display mt-6 text-2xl text-white lg:text-3xl">{lead.title[locale]}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-[#8a929e]">{lead.summary[locale]}</p>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{lead.summary[locale]}</p>
 
               <div className="mt-8 grid grid-cols-3 gap-4 border-t border-[#1b1f27] pt-6">
                 {lead.metrics.map((metric) => (
                   <div key={metric.value}>
                     <div className="text-xl font-semibold text-[#22e0ff] tabular-nums">{metric.value}</div>
-                    <div className="mt-1 text-[0.6875rem] text-[#8a929e]">{metric.label[locale]}</div>
+                    <div className="mt-1 text-[0.6875rem] text-muted-foreground">{metric.label[locale]}</div>
                   </div>
                 ))}
               </div>
@@ -81,7 +81,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
                 href={localeHref(locale, `/cases/${item.slug}`)}
                 className="card-industrial group corner-ticks flex h-full gap-5 overflow-hidden p-5"
               >
-                <div className="relative size-24 shrink-0 overflow-hidden rounded-[var(--radius)] sm:size-28">
+                <div className="relative size-24 shrink-0 overflow-hidden rounded-(--radius) sm:size-28">
                   <Image
                     src={`/media/case-${item.slug}.svg`}
                     alt={item.title[locale]}
@@ -99,7 +99,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
                   <h3 className="mt-2.5 line-clamp-2 text-base leading-snug font-semibold text-white">
                     {item.title[locale]}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-[#8a929e]">
+                  <p className="mt-2 line-clamp-2 text-[0.8125rem] leading-relaxed text-muted-foreground">
                     {item.summary[locale]}
                   </p>
                 </div>

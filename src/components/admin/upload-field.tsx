@@ -157,7 +157,7 @@ export function UploadField({
           if (file) void upload(file);
         }}
         className={cn(
-          "mt-2 rounded-[var(--radius)] border border-dashed px-4 py-3 text-center text-xs transition-colors",
+          "mt-2 rounded-(--radius) border border-dashed px-4 py-3 text-center text-xs transition-colors",
           dragging ? "border-[#22e0ff]/60 bg-[#22e0ff]/6 text-[#22e0ff]" : "border-[#1b1f27] text-[#5c6472]"
         )}
       >
@@ -167,14 +167,14 @@ export function UploadField({
       {description ? <p className="mt-2 text-xs text-[#5c6472]">{description}</p> : null}
 
       {showPreview && url && isImage ? (
-        <div className="mt-3 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+        <div className="mt-3 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={url} alt="" className="max-h-44 w-full object-cover" />
         </div>
       ) : null}
 
       {showPreview && url && isVideo ? (
-        <video src={url} controls className="mt-3 max-h-44 w-full rounded-[var(--radius)] border border-[#1b1f27]" />
+        <video src={url} controls className="mt-3 max-h-44 w-full rounded-(--radius) border border-[#1b1f27]" />
       ) : null}
     </div>
   );

@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className="dark">
-      <body className="min-h-screen bg-[#08090b] text-[#e8ebf0] antialiased">
+      <body className="min-h-screen bg-background text-[#e8ebf0] antialiased">
         {children}
         <Toaster />
       </body>

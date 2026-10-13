@@ -59,7 +59,7 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                   "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
                   kind === entry.key
                     ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                    : "border-[#1b1f27] text-[#8a929e] hover:text-white"
+                    : "border-[#1b1f27] text-muted-foreground hover:text-white"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -93,14 +93,14 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-[var(--radius)] border border-dashed border-[#1b1f27] py-20 text-center">
-          <p className="text-sm text-[#8a929e]">没有匹配的资源</p>
+        <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-20 text-center">
+          <p className="text-sm text-muted-foreground">没有匹配的资源</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {filtered.map((row) => (
-            <div key={row.id} className="group overflow-hidden rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13]">
-              <div className="relative aspect-4/3 bg-[#0a0b0e]">
+            <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13]">
+              <div className="relative aspect-4/3 bg-ink-900">
                 {row.kind === "IMAGE" ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={row.url} alt={row.alt ?? row.originalName} className="size-full object-cover" />
@@ -131,7 +131,7 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                       onClick={(e) => {
                         if (!confirm("删除该资源？此操作不可撤销。")) e.preventDefault();
                       }}
-                      className="inline-flex size-9 items-center justify-center rounded-full border border-[#ff4d4f]/40 text-[#ff8a8c] transition-colors hover:bg-[#ff4d4f]/15"
+                      className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-[#ff8a8c] transition-colors hover:bg-destructive/15"
                       aria-label="删除"
                     >
                       <Trash2 className="size-3.5" />

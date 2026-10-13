@@ -50,7 +50,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "group relative block overflow-hidden rounded-[var(--radius)] border border-[#1b1f27] text-left",
+              "group relative block overflow-hidden rounded-(--radius) border border-[#1b1f27] text-left",
               i % 7 === 0 ? "col-span-2 row-span-2" : ""
             )}
           >
@@ -63,7 +63,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/92 via-transparent to-transparent opacity-75 transition-opacity group-hover:opacity-95" />
+            <div className="absolute inset-0 bg-linear-to-t from-background/92 via-transparent to-transparent opacity-75 transition-opacity group-hover:opacity-95" />
             {item.mediaKind === "VIDEO" ? (
               <span className="absolute top-3 right-3 inline-flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/50 backdrop-blur-sm">
                 <Play className="size-3.5 text-white" />
@@ -72,7 +72,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
             <div className="absolute inset-x-4 bottom-4">
               <p className="text-sm font-medium text-white">{item.title[locale]}</p>
               {item.caption[locale] ? (
-                <p className="mt-1 line-clamp-1 text-xs text-[#8a929e]">{item.caption[locale]}</p>
+                <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{item.caption[locale]}</p>
               ) : null}
             </div>
           </motion.button>
@@ -117,7 +117,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               className="relative max-h-[82vh] w-full max-w-5xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-16/10 w-full overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+              <div className="relative aspect-16/10 w-full overflow-hidden rounded-(--radius) border border-[#1b1f27]">
                 <Image
                   src={current.url ?? `/media/gallery-${String(((index ?? 0) % 9) + 1).padStart(2, "0")}.svg`}
                   alt={current.title[locale]}
@@ -129,7 +129,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               <div className="mt-4 text-center">
                 <p className="text-base font-medium text-white">{current.title[locale]}</p>
                 {current.caption[locale] ? (
-                  <p className="mt-1 text-sm text-[#8a929e]">{current.caption[locale]}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{current.caption[locale]}</p>
                 ) : null}
               </div>
             </motion.div>

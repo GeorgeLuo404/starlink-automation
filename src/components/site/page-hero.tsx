@@ -27,23 +27,23 @@ export function PageHero({
     <section className={cn("relative overflow-hidden border-b border-[#1b1f27]", className)}>
       <div className="grid-blueprint absolute inset-0 opacity-50" aria-hidden="true" />
       <div
-        className="absolute -top-32 left-1/4 h-64 w-[40rem] rounded-full bg-[#22e0ff]/7 blur-[100px]"
+        className="absolute -top-32 left-1/4 h-64 w-160 rounded-full bg-[#22e0ff]/7 blur-[100px]"
         aria-hidden="true"
       />
       <div className="container-x relative pt-36 pb-14 md:pt-44 md:pb-20">
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-xs text-[#5c6472]">
-          <Link href={localeHref(locale, "/")} className="transition-colors hover:text-[#8a929e]">
+          <Link href={localeHref(locale, "/")} className="transition-colors hover:text-muted-foreground">
             {locale === "zh" ? "首页" : "Home"}
           </Link>
           {crumbs.map((crumb) => (
             <span key={crumb.label} className="flex items-center gap-1.5">
               <ChevronRight className="size-3" />
               {crumb.href ? (
-                <Link href={crumb.href} className="transition-colors hover:text-[#8a929e]">
+                <Link href={crumb.href} className="transition-colors hover:text-muted-foreground">
                   {crumb.label}
                 </Link>
               ) : (
-                <span className="text-[#8a929e]">{crumb.label}</span>
+                <span className="text-muted-foreground">{crumb.label}</span>
               )}
             </span>
           ))}
@@ -66,7 +66,7 @@ export function PageHero({
 
         {description ? (
           <Reveal delay={0.14}>
-            <p className="mt-6 max-w-2xl text-[0.9375rem] leading-relaxed text-[#8a929e]">{description}</p>
+            <p className="mt-6 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">{description}</p>
           </Reveal>
         ) : null}
 

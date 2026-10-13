@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
             <li>pnpm db:seed</li>
             <li>pnpm admin:create</li>
           </ol>
-          <p className="text-[#8a929e]">
+          <p className="text-muted-foreground">
             前台网站不依赖数据库，未配置时会自动使用内置的默认内容，因此站点始终可以正常访问。
           </p>
         </SetupNotice>
@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
             <Link key={stat.label} href={stat.href} className="group">
               <AdminCard className="corner-ticks h-full p-5 transition-colors group-hover:border-[#22e0ff]/40">
                 <div className="flex items-start justify-between">
-                  <span className="inline-flex size-9 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0a0b0e] text-[#22e0ff]">
+                  <span className="inline-flex size-9 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-ink-900 text-[#22e0ff]">
                     <Icon className="size-4" strokeWidth={1.6} />
                   </span>
                   <ArrowUpRight className="size-4 text-[#3d4552] transition-colors group-hover:text-[#22e0ff]" />
@@ -104,11 +104,11 @@ export default async function AdminDashboardPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-medium text-white">{inquiry.name}</span>
                     {inquiry.company ? (
-                      <span className="text-xs text-[#8a929e]">· {inquiry.company}</span>
+                      <span className="text-xs text-muted-foreground">· {inquiry.company}</span>
                     ) : null}
                     <StatusPill status={inquiry.status} />
                   </div>
-                  <p className="mt-1.5 line-clamp-1 text-sm text-[#8a929e]">{inquiry.message}</p>
+                  <p className="mt-1.5 line-clamp-1 text-sm text-muted-foreground">{inquiry.message}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-4 font-mono text-[0.625rem] text-[#5c6472]">
                   <span>{inquiry.phone ?? inquiry.email ?? ""}</span>

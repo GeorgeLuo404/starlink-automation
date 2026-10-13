@@ -5,17 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius)] text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-(--radius) text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
   {
     variants: {
       variant: {
-        default: "bg-[#22e0ff] text-[#04141a] font-semibold hover:bg-white",
-        brand: "bg-[#22e0ff] text-[#04141a] font-semibold hover:bg-white",
+        default: "bg-[#22e0ff] text-primary-foreground font-semibold hover:bg-white",
+        brand: "bg-[#22e0ff] text-primary-foreground font-semibold hover:bg-white",
         outline:
           "border border-[#1b1f27] bg-transparent text-[#e8ebf0] hover:border-[#22e0ff]/60 hover:bg-[#22e0ff]/8",
-        secondary: "bg-[#171a21] text-[#e8ebf0] hover:bg-[#1f242e]",
+        secondary: "bg-secondary text-[#e8ebf0] hover:bg-[#1f242e]",
         ghost: "text-[#e8ebf0] hover:bg-white/5",
-        destructive: "bg-[#ff4d4f] text-white hover:bg-[#ff6b6d]",
+        destructive: "bg-destructive text-white hover:bg-[#ff6b6d]",
         link: "text-[#22e0ff] underline-offset-4 hover:underline p-0 h-auto",
       },
       size: {

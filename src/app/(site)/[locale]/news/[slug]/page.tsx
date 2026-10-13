@@ -84,7 +84,7 @@ export default async function ArticlePage({
 
       <article className="container-x py-16 md:py-20">
         <div className="mx-auto max-w-3xl">
-          <div className="relative aspect-16/9 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+          <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-[#1b1f27]">
             <Image
               src={`/media/article-${slug}.svg`}
               alt={article.title[locale]}
@@ -105,7 +105,7 @@ export default async function ArticlePage({
               {article.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-[#8a929e]"
+                  className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                 >
                   {tag}
                 </span>

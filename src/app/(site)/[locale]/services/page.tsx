@@ -59,7 +59,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
               >
                 <div className="lg:col-span-5">
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex size-12 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                    <span className="inline-flex size-12 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
                       <ServiceIcon name={service.icon} className="size-5" />
                     </span>
                     <span className="font-mono text-xs tracking-[0.2em] text-[#3d4552]">
@@ -69,7 +69,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                   <h2 className="text-display mt-6 text-2xl text-white lg:text-3xl">
                     {service.title[locale]}
                   </h2>
-                  <p className="mt-4 text-[0.9375rem] leading-relaxed text-[#8a929e]">
+                  <p className="mt-4 text-[0.9375rem] leading-relaxed text-muted-foreground">
                     {service.summary[locale]}
                   </p>
                   <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#22e0ff]">
@@ -90,7 +90,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                   </ul>
                 </div>
 
-                <div className="relative aspect-16/10 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27] lg:col-span-3 lg:aspect-auto lg:min-h-full">
+                <div className="relative aspect-16/10 overflow-hidden rounded-(--radius) border border-[#1b1f27] lg:col-span-3 lg:aspect-auto lg:min-h-full">
                   <Image
                     src={`/media/service-${service.slug}.svg`}
                     alt={service.title[locale]}

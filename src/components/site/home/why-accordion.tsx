@@ -31,7 +31,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   <span
                     className={cn(
                       "font-mono text-xs tracking-widest transition-colors",
-                      isOpen ? "text-[#22e0ff]" : "text-[#3d4552] group-hover:text-[#8a929e]"
+                      isOpen ? "text-[#22e0ff]" : "text-[#3d4552] group-hover:text-muted-foreground"
                     )}
                   >
                     {item.no}
@@ -47,7 +47,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   <span
                     className={cn(
                       "inline-flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors",
-                      isOpen ? "border-[#22e0ff]/50 text-[#22e0ff]" : "border-[#1b1f27] text-[#8a929e]"
+                      isOpen ? "border-[#22e0ff]/50 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground"
                     )}
                   >
                     {isOpen ? <Minus className="size-3.5" /> : <Plus className="size-3.5" />}
@@ -63,7 +63,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-3xl pb-7 pl-11 text-[0.9375rem] leading-relaxed text-[#8a929e] lg:pl-12">
+                      <p className="max-w-3xl pb-7 pl-11 text-[0.9375rem] leading-relaxed text-muted-foreground lg:pl-12">
                         {item.desc[locale]}
                       </p>
                     </motion.div>

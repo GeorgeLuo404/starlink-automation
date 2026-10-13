@@ -77,13 +77,13 @@ export function ContactForm({
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center rounded-[var(--radius)] border border-[#35d07f]/30 bg-[#35d07f]/6 px-6 py-14 text-center",
+          "flex flex-col items-center justify-center rounded-(--radius) border border-success/30 bg-success/6 px-6 py-14 text-center",
           variant === "inline" && "py-10"
         )}
       >
-        <CheckCircle2 className="size-10 text-[#35d07f]" strokeWidth={1.5} />
+        <CheckCircle2 className="size-10 text-success" strokeWidth={1.5} />
         <h3 className="mt-5 text-lg font-semibold text-white">{t.successTitle}</h3>
-        <p className="mt-2 max-w-sm text-sm leading-relaxed text-[#8a929e]">{t.successDesc}</p>
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{t.successDesc}</p>
         <button type="button" onClick={() => setState("idle")} className="btn btn-ghost mt-6 h-10 px-4">
           {t.formTitle}
         </button>
@@ -96,17 +96,17 @@ export function ContactForm({
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="field-label" htmlFor="cf-name">
-            {t.fields.name} <span className="text-[#ff4d4f]">*</span>
+            {t.fields.name} <span className="text-destructive">*</span>
           </label>
           <input
             id="cf-name"
-            className={cn("field", errors.name && "border-[#ff4d4f]/60")}
+            className={cn("field", errors.name && "border-destructive/60")}
             value={fields.name}
             onChange={(e) => update("name", e.target.value)}
             placeholder={t.fields.namePlaceholder}
             autoComplete="name"
           />
-          {errors.name ? <p className="mt-1.5 text-xs text-[#ff4d4f]">{errors.name}</p> : null}
+          {errors.name ? <p className="mt-1.5 text-xs text-destructive">{errors.name}</p> : null}
         </div>
 
         <div>
@@ -129,14 +129,14 @@ export function ContactForm({
           </label>
           <input
             id="cf-phone"
-            className={cn("field", errors.phone && "border-[#ff4d4f]/60")}
+            className={cn("field", errors.phone && "border-destructive/60")}
             value={fields.phone}
             onChange={(e) => update("phone", e.target.value)}
             placeholder={t.fields.phonePlaceholder}
             autoComplete="tel"
             inputMode="tel"
           />
-          {errors.phone ? <p className="mt-1.5 text-xs text-[#ff4d4f]">{errors.phone}</p> : null}
+          {errors.phone ? <p className="mt-1.5 text-xs text-destructive">{errors.phone}</p> : null}
         </div>
 
         <div>
@@ -145,14 +145,14 @@ export function ContactForm({
           </label>
           <input
             id="cf-email"
-            className={cn("field", errors.email && "border-[#ff4d4f]/60")}
+            className={cn("field", errors.email && "border-destructive/60")}
             value={fields.email}
             onChange={(e) => update("email", e.target.value)}
             placeholder={t.fields.emailPlaceholder}
             autoComplete="email"
             inputMode="email"
           />
-          {errors.email ? <p className="mt-1.5 text-xs text-[#ff4d4f]">{errors.email}</p> : null}
+          {errors.email ? <p className="mt-1.5 text-xs text-destructive">{errors.email}</p> : null}
         </div>
       </div>
 
@@ -174,29 +174,29 @@ export function ContactForm({
               </option>
             ))}
           </select>
-          <ArrowRight className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 rotate-90 text-[#8a929e]" />
+          <ArrowRight className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 rotate-90 text-muted-foreground" />
         </div>
       </div>
 
       <div>
         <label className="field-label" htmlFor="cf-message">
-          {t.fields.message} <span className="text-[#ff4d4f]">*</span>
+          {t.fields.message} <span className="text-destructive">*</span>
         </label>
         <textarea
           id="cf-message"
           rows={6}
-          className={cn("field resize-y", errors.message && "border-[#ff4d4f]/60")}
+          className={cn("field resize-y", errors.message && "border-destructive/60")}
           value={fields.message}
           onChange={(e) => update("message", e.target.value)}
           placeholder={t.fields.messagePlaceholder}
         />
-        {errors.message ? <p className="mt-1.5 text-xs text-[#ff4d4f]">{errors.message}</p> : null}
+        {errors.message ? <p className="mt-1.5 text-xs text-destructive">{errors.message}</p> : null}
       </div>
 
       {state === "error" ? (
-        <div className="rounded-[var(--radius)] border border-[#ff4d4f]/30 bg-[#ff4d4f]/6 p-4">
+        <div className="rounded-(--radius) border border-destructive/30 bg-destructive/6 p-4">
           <p className="text-sm font-medium text-[#ff8a8c]">{t.errorTitle}</p>
-          <p className="mt-1 text-xs text-[#8a929e]">{t.errorDesc}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t.errorDesc}</p>
         </div>
       ) : null}
 

@@ -30,7 +30,7 @@ export function HomeHero({
   const t = dict.home.hero;
 
   return (
-    <section ref={ref} className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden pt-24 pb-8">
+    <section ref={ref} className="relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-8">
       {/* Background ---------------------------------------------------- */}
       <motion.div
         style={reduced ? undefined : { y: bgY, scale: bgScale }}
@@ -55,7 +55,7 @@ export function HomeHero({
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#08090b_0%,rgba(8,9,11,0.72)_38%,rgba(8,9,11,0.94)_100%)]" aria-hidden="true" />
       <div className="grid-blueprint absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
       <div
-        className="absolute inset-x-0 top-0 -z-10 h-px animate-scan bg-gradient-to-r from-transparent via-[#22e0ff]/50 to-transparent"
+        className="absolute inset-x-0 top-0 -z-10 h-px animate-scan bg-linear-to-r from-transparent via-[#22e0ff]/50 to-transparent"
         aria-hidden="true"
       />
 
@@ -154,7 +154,7 @@ export function HomeHero({
                 <span className="font-mono text-[0.625rem] text-[#3d4552]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-xs tracking-wide text-[#8a929e]">{item}</span>
+                <span className="text-xs tracking-wide text-muted-foreground">{item}</span>
                 {i < t.ticker.length - 1 ? <span className="h-3 w-px bg-[#1b1f27]" /> : null}
               </span>
             ))}
@@ -174,7 +174,7 @@ export function HomeHero({
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           className="inline-flex size-7 items-center justify-center rounded-full border border-[#1b1f27]"
         >
-          <ArrowDown className="size-3 text-[#8a929e]" />
+          <ArrowDown className="size-3 text-muted-foreground" />
         </motion.span>
       </motion.div>
     </section>

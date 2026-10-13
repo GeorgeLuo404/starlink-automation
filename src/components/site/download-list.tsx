@@ -71,7 +71,7 @@ export function DownloadList({
               {String(i + 1).padStart(2, "0")}
             </span>
 
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
               <FileText className="size-5" strokeWidth={1.5} />
             </span>
 
@@ -79,7 +79,7 @@ export function DownloadList({
               <h3 className="text-base font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
                 {item.title[locale]}
               </h3>
-              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-[#8a929e]">
+              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">
                 {item.description[locale]}
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
@@ -119,7 +119,7 @@ export function DownloadList({
         <form onSubmit={submitGate} className="space-y-4">
           <div>
             <Label htmlFor="dl-name">
-              {dict.contact.fields.name} <span className="text-[#ff4d4f]">*</span>
+              {dict.contact.fields.name} <span className="text-destructive">*</span>
             </Label>
             <Input
               id="dl-name"

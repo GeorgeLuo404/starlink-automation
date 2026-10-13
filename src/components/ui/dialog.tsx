@@ -59,7 +59,7 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative z-10 my-8 w-full rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] shadow-2xl",
+          "relative z-10 my-8 w-full rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] shadow-2xl",
           widths[size],
           className
         )}
@@ -67,12 +67,12 @@ export function Dialog({
         <div className="flex items-start justify-between gap-4 border-b border-[#1b1f27] p-5">
           <div className="min-w-0">
             {title ? <h2 className="text-base font-semibold tracking-tight text-white">{title}</h2> : null}
-            {description ? <p className="mt-1 text-sm text-[#8a929e]">{description}</p> : null}
+            {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
           </div>
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="-mt-1 -mr-1 rounded p-1 text-[#8a929e] transition-colors hover:bg-white/5 hover:text-white"
+            className="-mt-1 -mr-1 rounded p-1 text-muted-foreground transition-colors hover:bg-white/5 hover:text-white"
             aria-label="Close"
           >
             <X className="size-4" />

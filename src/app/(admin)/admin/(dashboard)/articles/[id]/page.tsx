@@ -41,7 +41,7 @@ export default async function AdminArticleEditorPage({
     <>
       <Link
         href="/admin/articles"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#8a929e] transition-colors hover:text-white"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-white"
       >
         <ArrowLeft className="size-3.5" />
         返回文章列表

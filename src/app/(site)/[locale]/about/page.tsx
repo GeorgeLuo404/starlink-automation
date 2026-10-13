@@ -45,7 +45,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       />
 
       {/* Stats ---------------------------------------------------------- */}
-      <section className="border-b border-[#1b1f27] bg-[#0a0b0e]">
+      <section className="border-b border-[#1b1f27] bg-ink-900">
         <div className="container-x grid gap-8 py-14 sm:grid-cols-2 lg:grid-cols-4">
           {t.stats.map((item) => (
             <div key={item.label} className="border-l border-[#1b1f27] pl-6">
@@ -53,7 +53,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <Counter value={item.value} />
                 <span className="text-[#22e0ff]">{item.suffix}</span>
               </div>
-              <p className="mt-3 text-sm text-[#8a929e]">{item.label}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{item.label}</p>
             </div>
           ))}
         </div>
@@ -71,7 +71,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <p className="mt-8 text-[1.0625rem] leading-[1.85] text-[#c3c9d4]">{t.intro}</p>
             </Reveal>
             <Reveal delay={0.12}>
-              <p className="mt-6 text-[1.0625rem] leading-[1.85] text-[#8a929e]">{t.intro2}</p>
+              <p className="mt-6 text-[1.0625rem] leading-[1.85] text-muted-foreground">{t.intro2}</p>
             </Reveal>
 
             <Reveal delay={0.18}>
@@ -88,7 +88,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           </div>
 
           <div className="lg:col-span-5">
-            <div className="relative aspect-4/3 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27]">
+            <div className="relative aspect-4/3 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
               <Image
                 src="/media/factory.svg"
                 alt={locale === "zh" ? "作业现场" : "On the shop floor"}
@@ -118,7 +118,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Values --------------------------------------------------------- */}
-      <section className="section-y border-y border-[#1b1f27] bg-[#0a0b0e]">
+      <section className="section-y border-y border-[#1b1f27] bg-ink-900">
         <div className="container-x">
           <SectionHeading eyebrow={t.eyebrow} title={t.valuesTitle} />
           <Stagger className="mt-14 grid gap-4 md:grid-cols-3" gap={0.1}>
@@ -127,7 +127,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <div className="card-industrial h-full p-7">
                   <Quote className="size-5 text-[#22e0ff]" strokeWidth={1.5} />
                   <h3 className="mt-6 text-lg font-semibold text-white">{value.title[locale]}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#8a929e]">{value.desc[locale]}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{value.desc[locale]}</p>
                   <span className="mt-6 block font-mono text-[0.625rem] tracking-[0.2em] text-[#3d4552]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -148,7 +148,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <div className="border-t border-[#1b1f27] pt-6">
                   <div className="font-mono text-sm tracking-[0.2em] text-[#22e0ff]">{milestone.year}</div>
                   <h3 className="mt-3 text-base font-semibold text-white">{milestone.title[locale]}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#8a929e]">{milestone.desc[locale]}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{milestone.desc[locale]}</p>
                 </div>
               </Reveal>
             ))}
@@ -157,7 +157,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Team + certifications ----------------------------------------- */}
-      <section className="section-y border-t border-[#1b1f27] bg-[#0a0b0e]">
+      <section className="section-y border-t border-[#1b1f27] bg-ink-900">
         <div className="container-x grid gap-14 lg:grid-cols-2">
           <div>
             <h2 className="text-display text-2xl text-white">{t.teamTitle}</h2>
@@ -168,7 +168,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                     <Counter value={item.value} />
                     {item.suffix}
                   </div>
-                  <p className="mt-2 text-[0.8125rem] text-[#8a929e]">{item.label[locale]}</p>
+                  <p className="mt-2 text-[0.8125rem] text-muted-foreground">{item.label[locale]}</p>
                 </div>
               ))}
             </div>
@@ -180,7 +180,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {certifications.map((item) => (
                 <li
                   key={item.zh}
-                  className="flex items-center gap-3 rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] p-4"
+                  className="flex items-center gap-3 rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-4"
                 >
                   <Award className="size-4 shrink-0 text-[#22e0ff]" strokeWidth={1.5} />
                   <span className="text-sm text-[#c3c9d4]">{item[locale]}</span>
@@ -188,7 +188,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               ))}
             </ul>
 
-            <div className="mt-8 rounded-[var(--radius)] border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
+            <div className="mt-8 rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
               <h3 className="text-sm font-semibold text-white">{t.contactTitle}</h3>
               <p className="mt-2 text-sm text-[#a7aeb9]">{company.phone}</p>
               <p className="text-sm text-[#a7aeb9]">{company.email}</p>

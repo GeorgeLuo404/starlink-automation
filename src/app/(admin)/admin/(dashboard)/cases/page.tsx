@@ -56,22 +56,22 @@ export default async function AdminCasesPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/[0.02]">
+                  <tr key={row.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/2">
                     <td className="px-4 py-3">
                       <span className="line-clamp-1 font-medium text-[#e8ebf0]">{row.titleZh}</span>
                       <span className="mt-1 block font-mono text-[0.625rem] text-[#5c6472]">/{row.slug}</span>
                     </td>
-                    <td className="px-4 py-3 text-[#8a929e]">{row.industryZh ?? "—"}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#8a929e]">{row.year ?? "—"}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{row.industryZh ?? "—"}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{row.year ?? "—"}</td>
                     <td className="px-4 py-3"><StatusPill status={row.status} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
-                        <Link href={`/admin/cases/${row.id}`} className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-[#8a929e] transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]" aria-label="编辑">
+                        <Link href={`/admin/cases/${row.id}`} className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]" aria-label="编辑">
                           <Edit3 className="size-3.5" />
                         </Link>
                         <form action={deleteCase}>
                           <input type="hidden" name="id" value={row.id} />
-                          <button type="submit" className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-[#8a929e] transition-colors hover:border-[#ff4d4f]/40 hover:text-[#ff8a8c]" aria-label="删除">
+                          <button type="submit" className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]" aria-label="删除">
                             <Trash2 className="size-3.5" />
                           </button>
                         </form>

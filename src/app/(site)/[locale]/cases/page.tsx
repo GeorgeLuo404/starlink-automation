@@ -64,8 +64,8 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#08090b]/85 via-transparent to-transparent" />
-                  <span className="absolute top-4 left-4 rounded-full border border-[#22e0ff]/25 bg-[#08090b]/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-[#22e0ff] backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-linear-to-t from-background/85 via-transparent to-transparent" />
+                  <span className="absolute top-4 left-4 rounded-full border border-[#22e0ff]/25 bg-background/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-[#22e0ff] backdrop-blur-sm">
                     {item.industry[locale]}
                   </span>
                 </div>
@@ -79,7 +79,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                   <h2 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
                     {item.title[locale]}
                   </h2>
-                  <p className="mt-3 line-clamp-3 flex-1 text-[0.8125rem] leading-relaxed text-[#8a929e]">
+                  <p className="mt-3 line-clamp-3 flex-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
                     {item.summary[locale]}
                   </p>
 
@@ -90,7 +90,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                           <div className="text-sm font-semibold text-[#22e0ff] tabular-nums">
                             {metric.value}
                           </div>
-                          <div className="mt-0.5 text-[0.625rem] text-[#8a929e]">{metric.label[locale]}</div>
+                          <div className="mt-0.5 text-[0.625rem] text-muted-foreground">{metric.label[locale]}</div>
                         </div>
                       ))}
                     </div>

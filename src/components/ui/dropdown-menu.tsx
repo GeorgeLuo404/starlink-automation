@@ -40,7 +40,7 @@ export function DropdownMenu({
         <div
           role="menu"
           className={cn(
-            "absolute z-50 mt-2 min-w-44 overflow-hidden rounded-[var(--radius)] border border-[#1b1f27] bg-[#0d0f13] p-1 shadow-2xl",
+            "absolute z-50 mt-2 min-w-44 overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-1 shadow-2xl",
             align === "end" ? "right-0" : "left-0",
             className
           )}

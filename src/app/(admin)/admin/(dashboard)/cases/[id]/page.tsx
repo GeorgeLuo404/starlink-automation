@@ -35,7 +35,7 @@ export default async function AdminCaseEditorPage({ params }: { params: Promise<
 
   return (
     <>
-      <Link href="/admin/cases" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#8a929e] transition-colors hover:text-white">
+      <Link href="/admin/cases" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-white">
         <ArrowLeft className="size-3.5" />
         返回案例列表
       </Link>
