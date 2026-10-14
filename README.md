@@ -216,7 +216,7 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 
 ---
 
-## 6. 配色与设计令牌（改配色前必读）
+## 6. 设计系统与开发约定
 
 ### 6.1 两层结构：色板 → 语义角色
 
@@ -281,6 +281,40 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | 状态 | `text-success` `text-signal` `text-destructive` `text-destructive-soft` |
 
 透明度直接用 Tailwind 语法：`bg-primary/10`、`border-destructive/40`。
+
+### 6.4 两条容易踩的坑（都已经踩过一次）
+
+**① `next/image` 的 `fill` 必须放在 `relative` 的父元素里**
+
+`fill` 会渲染成 `position: absolute` 的图片，它相对**最近的定位祖先**定位。如果直接父元素是
+默认的 `static`，图片会跑去找更外层的定位元素 —— 而且 Next.js 会在浏览器控制台逐张报警。
+
+```tsx
+// ✗ 父元素是 static，控制台会刷警告
+<div className={i === 0 ? "aspect-square" : "aspect-4/3"}>
+  <Image src={...} fill alt="" />
+</div>
+
+// ✓ 父元素定位，比例框同时提供高度
+<div className={i === 0 ? "relative aspect-square" : "relative aspect-4/3"}>
+  <Image src={...} fill alt="" />
+</div>
+```
+
+注意条件 className 很容易漏（本项目首页图库与图库页就漏过一次）——
+凡是 `fill` 的父元素，务必确认 `relative` 在里面。
+
+**② `scroll-behavior: smooth` 要告诉 Next.js 来源**
+
+`globals.css` 里给 `html` 设了 `scroll-behavior: smooth`。Next.js 需要知道它是来自样式表的，
+才能在路由切换时临时挂起，否则会出现「跳转后缓慢滚动到顶部」。本项目已在两个根布局的
+`<html>` 上加了 `data-scroll-behavior="smooth"`：
+
+```tsx
+<html lang={...} className="dark" data-scroll-behavior="smooth">
+```
+
+如果以后新增根布局（例如再开一个 `(xxx)` 路由组），记得同样加上。
 
 ---
 

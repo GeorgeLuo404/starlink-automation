@@ -61,8 +61,15 @@ export default async function LocaleLayout({
   const typedLocale = locale as Locale;
   const dict = getDictionary(typedLocale);
 
+  // `data-scroll-behavior` tells Next.js that `scroll-behavior: smooth` comes from
+  // our stylesheet (globals.css), so it can suspend it during route transitions.
   return (
-    <html lang={localeHtmlLang[typedLocale]} className="dark" suppressHydrationWarning>
+    <html
+      lang={localeHtmlLang[typedLocale]}
+      className="dark"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-background antialiased">
         <a
           href="#main"

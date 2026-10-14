@@ -34,7 +34,7 @@ export async function HomeGallery({ locale, dict }: { locale: Locale; dict: Dict
                 href={localeHref(locale, "/gallery")}
                 className="group relative block size-full overflow-hidden rounded-(--radius) border border-border"
               >
-                <div className={i === 0 ? "aspect-square" : "aspect-4/3"}>
+                <div className={i === 0 ? "relative aspect-square" : "relative aspect-4/3"}>
                   <Image
                     src={item.url ?? `/media/gallery-${String(i + 1).padStart(2, "0")}.svg`}
                     alt={item.title[locale]}

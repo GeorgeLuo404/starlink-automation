@@ -54,7 +54,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               i % 7 === 0 ? "col-span-2 row-span-2" : ""
             )}
           >
-            <div className={i % 7 === 0 ? "aspect-square" : "aspect-4/3"}>
+            <div className={cn("relative", i % 7 === 0 ? "aspect-square" : "aspect-4/3")}>
               <Image
                 src={item.url ?? `/media/gallery-${String((i % 9) + 1).padStart(2, "0")}.svg`}
                 alt={item.title[locale]}
