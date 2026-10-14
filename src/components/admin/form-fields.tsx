@@ -12,7 +12,7 @@ export function FormSection({
   className?: string;
 }) {
   return (
-    <section className={cn("rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-6", className)}>
+    <section className={cn("rounded-(--radius) border border-border bg-card p-6", className)}>
       <h2 className="text-sm font-semibold text-white">{title}</h2>
       {description ? <p className="mt-1.5 text-xs text-muted-foreground">{description}</p> : null}
       <div className="mt-6 space-y-5">{children}</div>
@@ -53,7 +53,7 @@ export function FormField({
         placeholder={placeholder}
         className="field"
       />
-      {description ? <p className="mt-2 text-xs text-[#5c6472]">{description}</p> : null}
+      {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
 }
@@ -91,7 +91,7 @@ export function FormTextarea({
         placeholder={placeholder}
         className={cn("field resize-y leading-relaxed", mono && "font-mono text-xs")}
       />
-      {description ? <p className="mt-2 text-xs text-[#5c6472]">{description}</p> : null}
+      {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function FormSelect({
           </option>
         ))}
       </select>
-      {description ? <p className="mt-2 text-xs text-[#5c6472]">{description}</p> : null}
+      {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
 }
@@ -144,13 +144,13 @@ export function FormCheckbox({
         name={name}
         type="checkbox"
         defaultChecked={defaultChecked}
-        className="mt-0.5 size-4 shrink-0 cursor-pointer accent-[#22e0ff]"
+        className="mt-0.5 size-4 shrink-0 cursor-pointer accent-primary"
       />
       <div>
-        <label htmlFor={name} className="cursor-pointer text-sm text-[#e8ebf0]">
+        <label htmlFor={name} className="cursor-pointer text-sm text-foreground">
           {label}
         </label>
-        {description ? <p className="mt-1 text-xs text-[#5c6472]">{description}</p> : null}
+        {description ? <p className="mt-1 text-xs text-faint">{description}</p> : null}
       </div>
     </div>
   );
@@ -158,7 +158,7 @@ export function FormCheckbox({
 
 export function FormActions({ cancelHref, submitLabel = "保存" }: { cancelHref: string; submitLabel?: string }) {
   return (
-    <div className="sticky bottom-0 -mx-5 flex items-center justify-end gap-3 border-t border-[#1b1f27] bg-background/95 px-5 py-4 backdrop-blur-xl lg:-mx-8 lg:px-8">
+    <div className="sticky bottom-0 -mx-5 flex items-center justify-end gap-3 border-t border-border bg-background/95 px-5 py-4 backdrop-blur-xl lg:-mx-8 lg:px-8">
       <a href={cancelHref} className="btn btn-ghost h-10 px-4">
         取消
       </a>

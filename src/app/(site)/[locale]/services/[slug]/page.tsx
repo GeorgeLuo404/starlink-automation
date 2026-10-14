@@ -76,7 +76,7 @@ export default async function ServiceDetailPage({
       <div className="container-x py-16 md:py-24">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-[#1b1f27]">
+            <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-border">
               <Image
                 src={`/media/service-${service.slug}.svg`}
                 alt={service.title[locale]}
@@ -89,8 +89,8 @@ export default async function ServiceDetailPage({
 
             <div className="mt-12">
               <div className="flex items-center gap-3">
-                <span className="h-px w-8 bg-[#22e0ff]" />
-                <span className="text-eyebrow text-[#22e0ff]">{dict.services.capabilities}</span>
+                <span className="h-px w-8 bg-primary" />
+                <span className="text-eyebrow text-primary">{dict.services.capabilities}</span>
               </div>
               <RichText content={service.content[locale]} className="mt-8" />
             </div>
@@ -100,15 +100,15 @@ export default async function ServiceDetailPage({
             <div className="sticky top-28 space-y-6">
               <div className="card-industrial p-7">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
                     <ServiceIcon name={service.icon} className="size-5" />
                   </span>
                   <h2 className="text-base font-semibold text-white">{dict.services.capabilities}</h2>
                 </div>
                 <ul className="mt-6 space-y-3">
                   {service.features.map((feature) => (
-                    <li key={feature.zh} className="flex items-start gap-2.5 text-sm text-[#c3c9d4]">
-                      <Check className="mt-0.5 size-3.5 shrink-0 text-[#22e0ff]" />
+                    <li key={feature.zh} className="flex items-start gap-2.5 text-sm text-body">
+                      <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
                       {feature[locale]}
                     </li>
                   ))}
@@ -117,23 +117,23 @@ export default async function ServiceDetailPage({
 
               <div className="card-industrial p-7">
                 <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
                     <FileCheck2 className="size-5" strokeWidth={1.5} />
                   </span>
                   <h2 className="text-base font-semibold text-white">{dict.services.deliverables}</h2>
                 </div>
                 <ul className="mt-6 space-y-3">
                   {service.deliverables.map((item) => (
-                    <li key={item.zh} className="border-l border-[#1b1f27] pl-4 text-sm text-[#c3c9d4]">
+                    <li key={item.zh} className="border-l border-border pl-4 text-sm text-body">
                       {item[locale]}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-7">
+              <div className="rounded-(--radius) border border-primary/25 bg-primary/6 p-7">
                 <h2 className="text-base font-semibold text-white">{dict.home.cta.title}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-[#a7aeb9]">{dict.home.cta.desc}</p>
+                <p className="mt-3 text-sm leading-relaxed text-subtle">{dict.home.cta.desc}</p>
                 <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-6 w-full">
                   {dict.home.cta.primary}
                   <ArrowRight className="size-4" />
@@ -144,7 +144,7 @@ export default async function ServiceDetailPage({
         </div>
 
         {service.faq.length > 0 ? (
-          <div className="mt-20 border-t border-[#1b1f27] pt-14">
+          <div className="mt-20 border-t border-border pt-14">
             <h2 className="text-display text-2xl text-white">{dict.services.faqTitle}</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-2">
               {service.faq.map((entry) => (
@@ -160,7 +160,7 @@ export default async function ServiceDetailPage({
         ) : null}
 
         {others.length > 0 ? (
-          <div className="mt-20 border-t border-[#1b1f27] pt-14">
+          <div className="mt-20 border-t border-border pt-14">
             <h2 className="text-display text-2xl text-white">{dict.common.relatedTitle}</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {others.map((item) => (
@@ -169,14 +169,14 @@ export default async function ServiceDetailPage({
                   href={localeHref(locale, `/services/${item.slug}`)}
                   className="card-industrial corner-ticks group p-6"
                 >
-                  <span className="inline-flex size-10 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                  <span className="inline-flex size-10 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
                     <ServiceIcon name={item.icon} className="size-4" />
                   </span>
-                  <h3 className="mt-5 text-base font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
+                  <h3 className="mt-5 text-base font-semibold text-white transition-colors group-hover:text-primary">
                     {item.title[locale]}
                   </h3>
                   <p className="mt-2 line-clamp-2 text-[0.8125rem] text-muted-foreground">{item.summary[locale]}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs text-[#22e0ff]">
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs text-primary">
                     {dict.common.viewDetail}
                     <ArrowUpRight className="size-3.5" />
                   </span>

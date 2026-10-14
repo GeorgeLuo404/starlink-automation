@@ -28,7 +28,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-300",
           scrolled
-            ? "border-b border-[#1b1f27] bg-background/85 backdrop-blur-xl"
+            ? "border-b border-border bg-background/85 backdrop-blur-xl"
             : "border-b border-transparent bg-transparent"
         )}
       >
@@ -68,7 +68,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                         transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
                         className="absolute top-full left-1/2 w-136 -translate-x-1/2 pt-2"
                       >
-                        <div className="grid grid-cols-2 gap-1 rounded-(--radius) border border-[#1b1f27] bg-ink-900/97 p-2 backdrop-blur-xl">
+                        <div className="grid grid-cols-2 gap-1 rounded-(--radius) border border-border bg-surface/97 p-2 backdrop-blur-xl">
                           {services.map((service) => (
                             <Link
                               key={service.slug}
@@ -86,7 +86,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                           ))}
                           <Link
                             href={localeHref(locale, "/services")}
-                            className="col-span-2 mt-1 rounded border border-dashed border-[#1b1f27] p-2.5 text-center text-xs text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
+                            className="col-span-2 mt-1 rounded border border-dashed border-border p-2.5 text-center text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
                           >
                             {dict.home.services.cta} →
                           </Link>
@@ -108,7 +108,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                   {isActive(item.href) ? (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-x-2 -bottom-0.5 h-px bg-[#22e0ff]"
+                      className="absolute inset-x-2 -bottom-0.5 h-px bg-primary"
                     />
                   ) : null}
                 </Link>
@@ -124,7 +124,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="inline-flex size-9 items-center justify-center rounded border border-[#1b1f27] text-[#e8ebf0] lg:hidden"
+              className="inline-flex size-9 items-center justify-center rounded border border-border text-foreground lg:hidden"
               aria-label={dict.nav.menu}
             >
               <Menu className="size-4" />
@@ -148,7 +148,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex size-9 items-center justify-center rounded border border-[#1b1f27]"
+                className="inline-flex size-9 items-center justify-center rounded border border-border"
                 aria-label={dict.nav.close}
               >
                 <X className="size-4" />
@@ -166,7 +166,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                     <Link
                       href={localeHref(locale, item.href)}
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center justify-between border-b border-[#1b1f27] py-4 text-lg text-white"
+                      className="flex items-center justify-between border-b border-border py-4 text-lg text-white"
                     >
                       {dict.nav[item.key]}
                       <ArrowUpRight className="size-4 text-muted-foreground" />

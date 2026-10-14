@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && node scripts/check-tokens.mjs && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
@@ -19,7 +19,9 @@
     "db:studio": "prisma studio",
     "admin:create": "tsx scripts/create-admin.ts",
     "docker:db": "docker compose up -d db",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "check": "pnpm typecheck && pnpm check:tokens"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

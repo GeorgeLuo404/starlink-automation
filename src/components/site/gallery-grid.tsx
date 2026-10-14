@@ -50,7 +50,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, delay: (i % 4) * 0.05, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "group relative block overflow-hidden rounded-(--radius) border border-[#1b1f27] text-left",
+              "group relative block overflow-hidden rounded-(--radius) border border-border text-left",
               i % 7 === 0 ? "col-span-2 row-span-2" : ""
             )}
           >
@@ -117,7 +117,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               className="relative max-h-[82vh] w-full max-w-5xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative aspect-16/10 w-full overflow-hidden rounded-(--radius) border border-[#1b1f27]">
+              <div className="relative aspect-16/10 w-full overflow-hidden rounded-(--radius) border border-border">
                 <Image
                   src={current.url ?? `/media/gallery-${String(((index ?? 0) % 9) + 1).padStart(2, "0")}.svg`}
                   alt={current.title[locale]}

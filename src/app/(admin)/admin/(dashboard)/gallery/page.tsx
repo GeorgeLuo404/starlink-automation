@@ -44,8 +44,8 @@ export default async function AdminGalleryPage() {
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {rows.map((row) => (
-            <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13]">
-              <div className="relative aspect-4/3 bg-ink-900">
+            <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-border bg-card">
+              <div className="relative aspect-4/3 bg-surface">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={row.url} alt={row.titleZh} className="size-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:opacity-100">
@@ -54,16 +54,16 @@ export default async function AdminGalleryPage() {
                   </Link>
                   <form action={deleteGalleryItem}>
                     <input type="hidden" name="id" value={row.id} />
-                    <button type="submit" className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-[#ff8a8c] hover:bg-destructive/15" aria-label="删除">
+                    <button type="submit" className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft hover:bg-destructive/15" aria-label="删除">
                       <Trash2 className="size-3.5" />
                     </button>
                   </form>
                 </div>
               </div>
               <div className="p-3">
-                <p className="truncate text-xs font-medium text-[#e8ebf0]">{row.titleZh}</p>
+                <p className="truncate text-xs font-medium text-foreground">{row.titleZh}</p>
                 <div className="mt-2 flex items-center justify-between">
-                  <span className="font-mono text-[0.5625rem] text-[#5c6472]">{row.album}</span>
+                  <span className="font-mono text-[0.5625rem] text-faint">{row.album}</span>
                   <StatusPill status={row.status} />
                 </div>
               </div>

@@ -70,16 +70,16 @@ export default async function AdminDashboardPage() {
           const Icon = stat.icon;
           return (
             <Link key={stat.label} href={stat.href} className="group">
-              <AdminCard className="corner-ticks h-full p-5 transition-colors group-hover:border-[#22e0ff]/40">
+              <AdminCard className="corner-ticks h-full p-5 transition-colors group-hover:border-primary/40">
                 <div className="flex items-start justify-between">
-                  <span className="inline-flex size-9 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-ink-900 text-[#22e0ff]">
+                  <span className="inline-flex size-9 items-center justify-center rounded-(--radius) border border-border bg-surface text-primary">
                     <Icon className="size-4" strokeWidth={1.6} />
                   </span>
-                  <ArrowUpRight className="size-4 text-[#3d4552] transition-colors group-hover:text-[#22e0ff]" />
+                  <ArrowUpRight className="size-4 text-ghost transition-colors group-hover:text-primary" />
                 </div>
                 <p className="mt-5 text-2xl font-semibold text-white tabular-nums">{stat.value}</p>
-                <p className="mt-1 text-sm text-[#c3c9d4]">{stat.label}</p>
-                <p className="mt-0.5 font-mono text-[0.625rem] text-[#5c6472]">{stat.sub}</p>
+                <p className="mt-1 text-sm text-body">{stat.label}</p>
+                <p className="mt-0.5 font-mono text-[0.625rem] text-faint">{stat.sub}</p>
               </AdminCard>
             </Link>
           );
@@ -89,7 +89,7 @@ export default async function AdminDashboardPage() {
       <div className="mt-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-base font-semibold text-white">最新询盘</h2>
-          <Link href="/admin/inquiries" className="text-sm text-[#22e0ff] hover:underline">
+          <Link href="/admin/inquiries" className="text-sm text-primary hover:underline">
             查看全部
           </Link>
         </div>
@@ -97,7 +97,7 @@ export default async function AdminDashboardPage() {
         {recent.length === 0 ? (
           <EmptyState title="暂无询盘" description="当访客通过网站表单提交需求后，会显示在这里。" />
         ) : (
-          <AdminCard className="divide-y divide-[#1b1f27]">
+          <AdminCard className="divide-y divide-border">
             {recent.map((inquiry) => (
               <div key={inquiry.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
@@ -110,7 +110,7 @@ export default async function AdminDashboardPage() {
                   </div>
                   <p className="mt-1.5 line-clamp-1 text-sm text-muted-foreground">{inquiry.message}</p>
                 </div>
-                <div className="flex shrink-0 items-center gap-4 font-mono text-[0.625rem] text-[#5c6472]">
+                <div className="flex shrink-0 items-center gap-4 font-mono text-[0.625rem] text-faint">
                   <span>{inquiry.phone ?? inquiry.email ?? ""}</span>
                   <span>{formatDate(inquiry.createdAt)}</span>
                 </div>

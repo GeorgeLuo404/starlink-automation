@@ -16,19 +16,19 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
       <div className="container-x">
         <SectionHeading eyebrow={t.eyebrow} title={t.title} description={t.desc} />
 
-        <Stagger className="mt-14 grid gap-px overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#1b1f27] sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-14 grid gap-px overflow-hidden rounded-(--radius) border border-border bg-raised sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
-            <StaggerItem key={service.slug} className="bg-ink-900">
+            <StaggerItem key={service.slug} className="bg-surface">
               <TiltCard max={3}>
                 <Link
                   href={localeHref(locale, `/services/${service.slug}`)}
-                  className="group corner-ticks relative flex h-full flex-col p-7 transition-colors hover:bg-[#0d0f13] lg:p-8"
+                  className="group corner-ticks relative flex h-full flex-col p-7 transition-colors hover:bg-card lg:p-8"
                 >
                   <div className="flex items-start justify-between">
-                    <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff] transition-colors group-hover:border-[#22e0ff]/40">
+                    <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-border bg-card text-primary transition-colors group-hover:border-primary/40">
                       <ServiceIcon name={service.icon} className="size-5" />
                     </span>
-                    <span className="font-mono text-[0.625rem] tracking-[0.2em] text-[#3d4552]">
+                    <span className="font-mono text-[0.625rem] tracking-[0.2em] text-ghost">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                   </div>
@@ -38,13 +38,13 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
 
                   <div className="mt-7 flex flex-wrap gap-x-4 gap-y-1.5">
                     {service.features.slice(0, 3).map((feature) => (
-                      <span key={feature.zh} className="font-mono text-[0.625rem] tracking-wide text-[#5c6472]">
+                      <span key={feature.zh} className="font-mono text-[0.625rem] tracking-wide text-faint">
                         · {feature[locale]}
                       </span>
                     ))}
                   </div>
 
-                  <span className="mt-7 inline-flex items-center gap-1.5 text-xs font-medium text-[#22e0ff] opacity-0 transition-opacity group-hover:opacity-100">
+                  <span className="mt-7 inline-flex items-center gap-1.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
                     {dict.home.services.cta}
                     <ArrowUpRight className="size-3.5" />
                   </span>
@@ -53,8 +53,8 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
             </StaggerItem>
           ))}
 
-          <StaggerItem className="bg-ink-900">
-            <Reveal className="flex h-full flex-col justify-between bg-[#0d0f13] p-7 lg:p-8">
+          <StaggerItem className="bg-surface">
+            <Reveal className="flex h-full flex-col justify-between bg-card p-7 lg:p-8">
               <div>
                 <h3 className="text-xl font-semibold tracking-tight text-white">{dict.nav.cta}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{dict.home.cta.desc}</p>

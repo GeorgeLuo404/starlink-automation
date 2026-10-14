@@ -17,11 +17,11 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
       <div className="container-x">
         <SectionHeading eyebrow={t.eyebrow} title={t.title} />
 
-        <div className="mt-14 border-t border-[#1b1f27]">
+        <div className="mt-14 border-t border-border">
           {whyItems.map((item) => {
             const isOpen = open === item.no;
             return (
-              <div key={item.no} className="border-b border-[#1b1f27]">
+              <div key={item.no} className="border-b border-border">
                 <button
                   type="button"
                   onClick={() => setOpen(isOpen ? null : item.no)}
@@ -31,7 +31,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   <span
                     className={cn(
                       "font-mono text-xs tracking-widest transition-colors",
-                      isOpen ? "text-[#22e0ff]" : "text-[#3d4552] group-hover:text-muted-foreground"
+                      isOpen ? "text-primary" : "text-ghost group-hover:text-muted-foreground"
                     )}
                   >
                     {item.no}
@@ -39,7 +39,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   <span
                     className={cn(
                       "flex-1 text-lg font-medium tracking-tight transition-colors lg:text-xl",
-                      isOpen ? "text-white" : "text-[#c3c9d4] group-hover:text-white"
+                      isOpen ? "text-white" : "text-body group-hover:text-white"
                     )}
                   >
                     {item.title[locale]}
@@ -47,7 +47,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                   <span
                     className={cn(
                       "inline-flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors",
-                      isOpen ? "border-[#22e0ff]/50 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground"
+                      isOpen ? "border-primary/50 text-primary" : "border-border text-muted-foreground"
                     )}
                   >
                     {isOpen ? <Minus className="size-3.5" /> : <Plus className="size-3.5" />}

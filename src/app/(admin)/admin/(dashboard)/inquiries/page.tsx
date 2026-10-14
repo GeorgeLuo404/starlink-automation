@@ -50,7 +50,7 @@ export default async function AdminInquiriesPage({
           href="/admin/inquiries"
           className={cn(
             "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-            !filter ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground hover:text-white"
+            !filter ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-white"
           )}
         >
           全部
@@ -61,7 +61,7 @@ export default async function AdminInquiriesPage({
             href={`/admin/inquiries?status=${entry}`}
             className={cn(
               "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-              filter === entry ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]" : "border-[#1b1f27] text-muted-foreground hover:text-white"
+              filter === entry ? "border-primary/40 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-white"
             )}
           >
             {entry === "NEW" ? "新询盘" : entry === "IN_PROGRESS" ? "跟进中" : entry === "DONE" ? "已完成" : "垃圾信息"}
@@ -80,8 +80,8 @@ export default async function AdminInquiriesPage({
                   <div className="flex flex-wrap items-center gap-2.5">
                     <span className="text-base font-semibold text-white">{row.name}</span>
                     <StatusPill status={row.status} />
-                    <span className="font-mono text-[0.625rem] text-[#5c6472]">{formatDate(row.createdAt)}</span>
-                    <span className="rounded-full border border-[#1b1f27] px-2 py-0.5 font-mono text-[0.5625rem] text-[#5c6472]">
+                    <span className="font-mono text-[0.625rem] text-faint">{formatDate(row.createdAt)}</span>
+                    <span className="rounded-full border border-border px-2 py-0.5 font-mono text-[0.5625rem] text-faint">
                       {row.source}
                     </span>
                   </div>
@@ -94,23 +94,23 @@ export default async function AdminInquiriesPage({
                       </span>
                     ) : null}
                     {row.phone ? (
-                      <a href={`tel:${row.phone}`} className="inline-flex items-center gap-1.5 hover:text-[#22e0ff]">
+                      <a href={`tel:${row.phone}`} className="inline-flex items-center gap-1.5 hover:text-primary">
                         <Phone className="size-3.5" />
                         {row.phone}
                       </a>
                     ) : null}
                     {row.email ? (
-                      <a href={`mailto:${row.email}`} className="inline-flex items-center gap-1.5 hover:text-[#22e0ff]">
+                      <a href={`mailto:${row.email}`} className="inline-flex items-center gap-1.5 hover:text-primary">
                         <Mail className="size-3.5" />
                         {row.email}
                       </a>
                     ) : null}
                     {row.service ? (
-                      <span className="rounded-full border border-[#1b1f27] px-2 py-0.5">意向：{row.service}</span>
+                      <span className="rounded-full border border-border px-2 py-0.5">意向：{row.service}</span>
                     ) : null}
                   </div>
 
-                  <p className="mt-4 rounded-(--radius) border border-[#1b1f27] bg-ink-900 p-4 text-sm leading-relaxed whitespace-pre-wrap text-[#c3c9d4]">
+                  <p className="mt-4 rounded-(--radius) border border-border bg-surface p-4 text-sm leading-relaxed whitespace-pre-wrap text-body">
                     {row.message}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default async function AdminInquiriesPage({
                     <input type="hidden" name="id" value={row.id} />
                     <button
                       type="submit"
-                      className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-[#1b1f27] text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
+                      className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-border text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
                     >
                       <Trash2 className="size-3.5" />
                       删除

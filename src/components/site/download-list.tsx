@@ -61,29 +61,29 @@ export function DownloadList({
 
   return (
     <>
-      <div className="divide-y divide-[#1b1f27] border-y border-[#1b1f27]">
+      <div className="divide-y divide-border border-y border-border">
         {items.map((item, i) => (
           <div
             key={item.slug}
             className="group flex flex-col gap-5 py-7 transition-colors sm:flex-row sm:items-center"
           >
-            <span className="font-mono text-xs tracking-widest text-[#3d4552]">
+            <span className="font-mono text-xs tracking-widest text-ghost">
               {String(i + 1).padStart(2, "0")}
             </span>
 
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
               <FileText className="size-5" strokeWidth={1.5} />
             </span>
 
             <div className="min-w-0 flex-1">
-              <h3 className="text-base font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
+              <h3 className="text-base font-semibold text-white transition-colors group-hover:text-primary">
                 {item.title[locale]}
               </h3>
               <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-muted-foreground">
                 {item.description[locale]}
               </p>
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
-                <span className="text-[#22e0ff]">{item.fileType}</span>
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 font-mono text-[0.625rem] tracking-wider text-faint">
+                <span className="text-primary">{item.fileType}</span>
                 <span>{formatBytes(item.fileSize)}</span>
                 {item.version ? (
                   <span>

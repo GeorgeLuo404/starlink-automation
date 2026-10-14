@@ -31,13 +31,13 @@ export function ArticleCard({
           className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
         />
         <div className="absolute inset-0 bg-linear-to-t from-background/85 via-background/20 to-transparent" />
-        <span className="absolute top-4 left-4 rounded-full border border-[#22e0ff]/25 bg-background/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-[#22e0ff] backdrop-blur-sm">
+        <span className="absolute top-4 left-4 rounded-full border border-primary/25 bg-background/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-primary backdrop-blur-sm">
           {article.category[locale]}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
+        <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-wider text-faint">
           <span>{formatDate(article.publishedAt, locale)}</span>
           <span>·</span>
           <span>
@@ -45,14 +45,14 @@ export function ArticleCard({
           </span>
         </div>
 
-        <h3 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
+        <h3 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-primary">
           {article.title[locale]}
         </h3>
         <p className="mt-3 line-clamp-3 flex-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
           {article.excerpt[locale]}
         </p>
 
-        <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-[#22e0ff]">
+        <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-primary">
           {dict.common.readMore}
           <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>

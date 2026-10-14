@@ -73,18 +73,18 @@ export function AdminShell({
 
   const sidebar = (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 shrink-0 items-center gap-3 border-b border-[#1b1f27] px-5">
+      <div className="flex h-16 shrink-0 items-center gap-3 border-b border-border px-5">
         <LogoMark className="size-7" />
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-white">星链自动化</p>
-          <p className="font-mono text-[0.5625rem] tracking-[0.2em] text-[#5c6472] uppercase">Admin</p>
+          <p className="font-mono text-[0.5625rem] tracking-[0.2em] text-faint uppercase">Admin</p>
         </div>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-5">
         {groups.map((group) => (
           <div key={group.title} className="mb-6">
-            <p className="mb-2 px-2 font-mono text-[0.5625rem] tracking-[0.2em] text-[#3d4552] uppercase">
+            <p className="mb-2 px-2 font-mono text-[0.5625rem] tracking-[0.2em] text-ghost uppercase">
               {group.title}
             </p>
             <ul className="space-y-0.5">
@@ -99,14 +99,14 @@ export function AdminShell({
                       className={cn(
                         "group flex items-center gap-2.5 rounded-(--radius) px-2.5 py-2 text-sm transition-colors",
                         active
-                          ? "bg-[#22e0ff]/10 text-[#22e0ff]"
+                          ? "bg-primary/10 text-primary"
                           : "text-muted-foreground hover:bg-white/4 hover:text-white"
                       )}
                     >
                       <Icon className="size-4 shrink-0" strokeWidth={1.6} />
                       <span className="flex-1 truncate">{item.label}</span>
                       {item.badge ? (
-                        <span className="rounded-full bg-signal px-1.5 py-0.5 font-mono text-[0.5625rem] font-semibold text-[#1a1200]">
+                        <span className="rounded-full bg-signal px-1.5 py-0.5 font-mono text-[0.5625rem] font-semibold text-signal-foreground">
                           {item.badge}
                         </span>
                       ) : null}
@@ -119,7 +119,7 @@ export function AdminShell({
         ))}
       </nav>
 
-      <div className="shrink-0 border-t border-[#1b1f27] p-3">
+      <div className="shrink-0 border-t border-border p-3">
         <a
           href="/zh"
           target="_blank"
@@ -132,15 +132,15 @@ export function AdminShell({
         <form action={logoutAction}>
           <button
             type="submit"
-            className="flex w-full items-center gap-2.5 rounded-(--radius) px-2.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-[#ff8a8c]"
+            className="flex w-full items-center gap-2.5 rounded-(--radius) px-2.5 py-2 text-sm text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive-soft"
           >
             <LogOut className="size-4" strokeWidth={1.6} />
             退出登录
           </button>
         </form>
-        <div className="mt-3 rounded-(--radius) border border-[#1b1f27] px-3 py-2.5">
-          <p className="truncate text-xs font-medium text-[#e8ebf0]">{session.name}</p>
-          <p className="truncate font-mono text-[0.5625rem] text-[#5c6472]">{session.email}</p>
+        <div className="mt-3 rounded-(--radius) border border-border px-3 py-2.5">
+          <p className="truncate text-xs font-medium text-foreground">{session.name}</p>
+          <p className="truncate font-mono text-[0.5625rem] text-faint">{session.email}</p>
         </div>
       </div>
     </div>
@@ -148,18 +148,18 @@ export function AdminShell({
 
   return (
     <div className="flex min-h-screen bg-background">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-[#1b1f27] bg-ink-900 lg:block">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-border bg-surface lg:block">
         {sidebar}
       </aside>
 
       {open ? (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/70" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-64 border-r border-[#1b1f27] bg-ink-900">
+          <aside className="absolute inset-y-0 left-0 w-64 border-r border-border bg-surface">
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 z-10 inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground"
+              className="absolute top-4 right-4 z-10 inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground"
               aria-label="关闭"
             >
               <X className="size-4" />
@@ -170,11 +170,11 @@ export function AdminShell({
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-[#1b1f27] bg-background/90 px-5 backdrop-blur-xl lg:hidden">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/90 px-5 backdrop-blur-xl lg:hidden">
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex size-9 items-center justify-center rounded border border-[#1b1f27]"
+            className="inline-flex size-9 items-center justify-center rounded border border-border"
             aria-label="菜单"
           >
             <Menu className="size-4" />

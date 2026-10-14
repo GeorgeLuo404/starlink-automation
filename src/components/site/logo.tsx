@@ -11,18 +11,18 @@ export function LogoMark({ className }: { className?: string }) {
         d="M20 2.5 34.5 11v18L20 37.5 5.5 29V11L20 2.5Z"
         stroke="currentColor"
         strokeWidth="1.4"
-        className="text-[#22e0ff]"
+        className="text-primary"
       />
       <path d="M20 2.5 34.5 11v18L20 37.5 5.5 29V11L20 2.5Z" fill="url(#sl-glow)" opacity="0.5" />
-      <circle cx="20" cy="20" r="2.6" fill="#22e0ff" />
-      <circle cx="20" cy="9" r="1.9" fill="#e8ebf0" />
-      <circle cx="30" cy="26" r="1.9" fill="#e8ebf0" />
-      <circle cx="10" cy="26" r="1.9" fill="#e8ebf0" />
-      <path d="M20 20 20 9M20 20 30 26M20 20 10 26" stroke="#22e0ff" strokeWidth="1" opacity="0.75" />
+      <circle cx="20" cy="20" r="2.6" className="fill-primary" />
+      <circle cx="20" cy="9" r="1.9" className="fill-foreground" />
+      <circle cx="30" cy="26" r="1.9" className="fill-foreground" />
+      <circle cx="10" cy="26" r="1.9" className="fill-foreground" />
+      <path d="M20 20 20 9M20 20 30 26M20 20 10 26" strokeWidth="1" opacity="0.75" className="stroke-primary" />
       <defs>
         <radialGradient id="sl-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%" stopColor="#22e0ff" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#22e0ff" stopOpacity="0" />
+          <stop offset="0%" style={{ stopColor: "var(--brand-500)", stopOpacity: 0.45 }} />
+          <stop offset="100%" style={{ stopColor: "var(--brand-500)", stopOpacity: 0 }} />
         </radialGradient>
       </defs>
     </svg>

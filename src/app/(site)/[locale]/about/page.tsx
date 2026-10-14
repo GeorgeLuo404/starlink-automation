@@ -45,13 +45,13 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       />
 
       {/* Stats ---------------------------------------------------------- */}
-      <section className="border-b border-[#1b1f27] bg-ink-900">
+      <section className="border-b border-border bg-surface">
         <div className="container-x grid gap-8 py-14 sm:grid-cols-2 lg:grid-cols-4">
           {t.stats.map((item) => (
-            <div key={item.label} className="border-l border-[#1b1f27] pl-6">
+            <div key={item.label} className="border-l border-border pl-6">
               <div className="text-display text-4xl text-white tabular-nums">
                 <Counter value={item.value} />
-                <span className="text-[#22e0ff]">{item.suffix}</span>
+                <span className="text-primary">{item.suffix}</span>
               </div>
               <p className="mt-3 text-sm text-muted-foreground">{item.label}</p>
             </div>
@@ -64,11 +64,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <div className="container-x grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-[#22e0ff]" />
-              <span className="text-eyebrow text-[#22e0ff]">{t.introTitle}</span>
+              <span className="h-px w-8 bg-primary" />
+              <span className="text-eyebrow text-primary">{t.introTitle}</span>
             </div>
             <Reveal delay={0.06}>
-              <p className="mt-8 text-[1.0625rem] leading-[1.85] text-[#c3c9d4]">{t.intro}</p>
+              <p className="mt-8 text-[1.0625rem] leading-[1.85] text-body">{t.intro}</p>
             </Reveal>
             <Reveal delay={0.12}>
               <p className="mt-6 text-[1.0625rem] leading-[1.85] text-muted-foreground">{t.intro2}</p>
@@ -88,7 +88,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           </div>
 
           <div className="lg:col-span-5">
-            <div className="relative aspect-4/3 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
+            <div className="relative aspect-4/3 overflow-hidden rounded-(--radius) border border-border">
               <Image
                 src="/media/factory.svg"
                 alt={locale === "zh" ? "作业现场" : "On the shop floor"}
@@ -98,7 +98,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               />
             </div>
 
-            <div className="card-industrial mt-6 divide-y divide-[#1b1f27]">
+            <div className="card-industrial mt-6 divide-y divide-border">
               {[
                 { label: locale === "zh" ? "公司名称" : "Company", value: locale === "zh" ? company.nameZh : company.nameEn },
                 { label: locale === "zh" ? "成立年份" : "Founded", value: String(company.founded) },
@@ -106,10 +106,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 { label: locale === "zh" ? "邮箱" : "Email", value: company.email },
               ].map((row) => (
                 <div key={row.label} className="flex items-baseline justify-between gap-6 p-5">
-                  <span className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
+                  <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
                     {row.label}
                   </span>
-                  <span className="text-right text-sm text-[#e8ebf0]">{row.value}</span>
+                  <span className="text-right text-sm text-foreground">{row.value}</span>
                 </div>
               ))}
             </div>
@@ -118,17 +118,17 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Values --------------------------------------------------------- */}
-      <section className="section-y border-y border-[#1b1f27] bg-ink-900">
+      <section className="section-y border-y border-border bg-surface">
         <div className="container-x">
           <SectionHeading eyebrow={t.eyebrow} title={t.valuesTitle} />
           <Stagger className="mt-14 grid gap-4 md:grid-cols-3" gap={0.1}>
             {aboutValues.map((value, i) => (
               <StaggerItem key={value.title.zh} className="h-full">
                 <div className="card-industrial h-full p-7">
-                  <Quote className="size-5 text-[#22e0ff]" strokeWidth={1.5} />
+                  <Quote className="size-5 text-primary" strokeWidth={1.5} />
                   <h3 className="mt-6 text-lg font-semibold text-white">{value.title[locale]}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{value.desc[locale]}</p>
-                  <span className="mt-6 block font-mono text-[0.625rem] tracking-[0.2em] text-[#3d4552]">
+                  <span className="mt-6 block font-mono text-[0.625rem] tracking-[0.2em] text-ghost">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -145,8 +145,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {milestones.map((milestone, i) => (
               <Reveal key={milestone.year} delay={i * 0.05}>
-                <div className="border-t border-[#1b1f27] pt-6">
-                  <div className="font-mono text-sm tracking-[0.2em] text-[#22e0ff]">{milestone.year}</div>
+                <div className="border-t border-border pt-6">
+                  <div className="font-mono text-sm tracking-[0.2em] text-primary">{milestone.year}</div>
                   <h3 className="mt-3 text-base font-semibold text-white">{milestone.title[locale]}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{milestone.desc[locale]}</p>
                 </div>
@@ -157,13 +157,13 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Team + certifications ----------------------------------------- */}
-      <section className="section-y border-t border-[#1b1f27] bg-ink-900">
+      <section className="section-y border-t border-border bg-surface">
         <div className="container-x grid gap-14 lg:grid-cols-2">
           <div>
             <h2 className="text-display text-2xl text-white">{t.teamTitle}</h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
               {teamComposition.map((item) => (
-                <div key={item.label.zh} className="border-l border-[#1b1f27] pl-5">
+                <div key={item.label.zh} className="border-l border-border pl-5">
                   <div className="text-display text-3xl text-white tabular-nums">
                     <Counter value={item.value} />
                     {item.suffix}
@@ -180,18 +180,18 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {certifications.map((item) => (
                 <li
                   key={item.zh}
-                  className="flex items-center gap-3 rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-4"
+                  className="flex items-center gap-3 rounded-(--radius) border border-border bg-card p-4"
                 >
-                  <Award className="size-4 shrink-0 text-[#22e0ff]" strokeWidth={1.5} />
-                  <span className="text-sm text-[#c3c9d4]">{item[locale]}</span>
+                  <Award className="size-4 shrink-0 text-primary" strokeWidth={1.5} />
+                  <span className="text-sm text-body">{item[locale]}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-8 rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
+            <div className="mt-8 rounded-(--radius) border border-primary/25 bg-primary/6 p-6">
               <h3 className="text-sm font-semibold text-white">{t.contactTitle}</h3>
-              <p className="mt-2 text-sm text-[#a7aeb9]">{company.phone}</p>
-              <p className="text-sm text-[#a7aeb9]">{company.email}</p>
+              <p className="mt-2 text-sm text-subtle">{company.phone}</p>
+              <p className="text-sm text-subtle">{company.email}</p>
               <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-5 h-10 px-4">
                 {dict.nav.contact}
                 <ArrowRight className="size-4" />

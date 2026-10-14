@@ -52,19 +52,19 @@ export function HomeHero({
         )}
       </motion.div>
 
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#08090b_0%,rgba(8,9,11,0.72)_38%,rgba(8,9,11,0.94)_100%)]" aria-hidden="true" />
+      <div className="hero-scrim absolute inset-0 -z-10" aria-hidden="true" />
       <div className="grid-blueprint absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
       <div
-        className="absolute inset-x-0 top-0 -z-10 h-px animate-scan bg-linear-to-r from-transparent via-[#22e0ff]/50 to-transparent"
+        className="absolute inset-x-0 top-0 -z-10 h-px animate-scan bg-linear-to-r from-transparent via-primary/50 to-transparent"
         aria-hidden="true"
       />
 
       {/* Technical side annotations ------------------------------------ */}
       <div className="pointer-events-none absolute top-1/2 left-4 hidden -translate-y-1/2 xl:block" aria-hidden="true">
-        <div className="flex flex-col items-center gap-3 font-mono text-[0.5625rem] tracking-[0.3em] text-[#3d4552]">
-          <span className="h-16 w-px bg-[#1b1f27]" />
+        <div className="flex flex-col items-center gap-3 font-mono text-[0.5625rem] tracking-[0.3em] text-ghost">
+          <span className="h-16 w-px bg-raised" />
           <span style={{ writingMode: "vertical-rl" }}>SHENZHEN · CHINA</span>
-          <span className="h-16 w-px bg-[#1b1f27]" />
+          <span className="h-16 w-px bg-raised" />
         </div>
       </div>
 
@@ -76,16 +76,16 @@ export function HomeHero({
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-wrap items-center gap-3"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#22e0ff]/25 bg-[#22e0ff]/8 px-3 py-1.5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1.5">
               <span className="relative flex size-1.5">
-                <span className="absolute inline-flex size-full animate-pulse-ring rounded-full bg-[#22e0ff]" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-[#22e0ff]" />
+                <span className="absolute inline-flex size-full animate-pulse-ring rounded-full bg-primary" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-primary" />
               </span>
-              <span className="font-mono text-[0.625rem] tracking-[0.18em] text-[#22e0ff] uppercase">
+              <span className="font-mono text-[0.625rem] tracking-[0.18em] text-primary uppercase">
                 {t.badge}
               </span>
             </span>
-            <span className="font-mono text-[0.625rem] tracking-[0.18em] text-[#5c6472] uppercase">
+            <span className="font-mono text-[0.625rem] tracking-[0.18em] text-faint uppercase">
               {t.eyebrow}
             </span>
           </motion.div>
@@ -117,7 +117,7 @@ export function HomeHero({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.42, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-7 max-w-2xl text-[0.9375rem] leading-relaxed text-[#a7aeb9] sm:text-base"
+            className="mt-7 max-w-2xl text-[0.9375rem] leading-relaxed text-subtle sm:text-base"
           >
             {t.subtitle}
           </motion.p>
@@ -146,16 +146,16 @@ export function HomeHero({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
-          className="mt-14 border-t border-[#1b1f27] pt-6"
+          className="mt-14 border-t border-border pt-6"
         >
           <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
             {t.ticker.map((item, i) => (
               <span key={item} className="flex items-center gap-3">
-                <span className="font-mono text-[0.625rem] text-[#3d4552]">
+                <span className="font-mono text-[0.625rem] text-ghost">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="text-xs tracking-wide text-muted-foreground">{item}</span>
-                {i < t.ticker.length - 1 ? <span className="h-3 w-px bg-[#1b1f27]" /> : null}
+                {i < t.ticker.length - 1 ? <span className="h-3 w-px bg-raised" /> : null}
               </span>
             ))}
           </div>
@@ -168,11 +168,11 @@ export function HomeHero({
         transition={{ delay: 1.1, duration: 0.8 }}
         className="pointer-events-none absolute right-5 bottom-8 hidden items-center gap-3 md:flex"
       >
-        <span className="font-mono text-[0.5625rem] tracking-[0.28em] text-[#5c6472] uppercase">{t.scroll}</span>
+        <span className="font-mono text-[0.5625rem] tracking-[0.28em] text-faint uppercase">{t.scroll}</span>
         <motion.span
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="inline-flex size-7 items-center justify-center rounded-full border border-[#1b1f27]"
+          className="inline-flex size-7 items-center justify-center rounded-full border border-border"
         >
           <ArrowDown className="size-3 text-muted-foreground" />
         </motion.span>

@@ -65,7 +65,7 @@ export default async function ArticlePage({
           { label: article.title[locale] },
         ]}
       >
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[0.6875rem] tracking-wider text-[#5c6472]">
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[0.6875rem] tracking-wider text-faint">
           <span>{formatDate(article.publishedAt, locale)}</span>
           <span className="flex items-center gap-1.5">
             <Clock className="size-3.5" />
@@ -84,7 +84,7 @@ export default async function ArticlePage({
 
       <article className="container-x py-16 md:py-20">
         <div className="mx-auto max-w-3xl">
-          <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-[#1b1f27]">
+          <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-border">
             <Image
               src={`/media/article-${slug}.svg`}
               alt={article.title[locale]}
@@ -98,14 +98,14 @@ export default async function ArticlePage({
           <RichText content={article.content[locale]} className="mt-12" />
 
           {article.tags.length > 0 ? (
-            <div className="mt-12 flex flex-wrap items-center gap-2 border-t border-[#1b1f27] pt-8">
-              <span className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
+            <div className="mt-12 flex flex-wrap items-center gap-2 border-t border-border pt-8">
+              <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
                 {dict.common.tags}
               </span>
               {article.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
+                  className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                 >
                   {tag}
                 </span>
@@ -123,7 +123,7 @@ export default async function ArticlePage({
         </div>
 
         {others.length > 0 ? (
-          <div className="mt-20 border-t border-[#1b1f27] pt-14">
+          <div className="mt-20 border-t border-border pt-14">
             <h2 className="text-display text-2xl text-white">{dict.common.relatedTitle}</h2>
             <div className="mt-8 grid gap-6 md:grid-cols-3">
               {others.map((item) => (

@@ -40,7 +40,7 @@ export function DropdownMenu({
         <div
           role="menu"
           className={cn(
-            "absolute z-50 mt-2 min-w-44 overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-1 shadow-2xl",
+            "absolute z-50 mt-2 min-w-44 overflow-hidden rounded-(--radius) border border-border bg-card p-1 shadow-2xl",
             align === "end" ? "right-0" : "left-0",
             className
           )}
@@ -61,7 +61,7 @@ export function DropdownItem({
       type="button"
       role="menuitem"
       className={cn(
-        "flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-sm text-[#c3c9d4] transition-colors hover:bg-white/5 hover:text-white",
+        "flex w-full items-center gap-2 rounded px-2.5 py-2 text-left text-sm text-body transition-colors hover:bg-white/5 hover:text-white",
         className
       )}
       {...props}

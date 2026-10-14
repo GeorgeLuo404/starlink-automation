@@ -21,7 +21,7 @@ function Checkbox({
       onClick={() => onCheckedChange?.(!checked)}
       className={cn(
         "inline-flex size-4 shrink-0 items-center justify-center rounded border transition-colors",
-        checked ? "border-[#22e0ff] bg-[#22e0ff] text-primary-foreground" : "border-[#1b1f27] bg-[#0d0f13]",
+        checked ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card",
         className
       )}
       {...props}

@@ -24,7 +24,7 @@ export function AdminPageHeader({
 export function AdminCard({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13]", className)}
+      className={cn("rounded-(--radius) border border-border bg-card", className)}
       {...props}
     />
   );
@@ -32,8 +32,8 @@ export function AdminCard({ className, ...props }: React.ComponentProps<"div">) 
 
 export function EmptyState({ title, description, action }: { title: string; description?: string; action?: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-(--radius) border border-dashed border-[#1b1f27] px-6 py-20 text-center">
-      <p className="text-sm font-medium text-[#e8ebf0]">{title}</p>
+    <div className="flex flex-col items-center justify-center rounded-(--radius) border border-dashed border-border px-6 py-20 text-center">
+      <p className="text-sm font-medium text-foreground">{title}</p>
       {description ? <p className="mt-2 max-w-md text-sm text-muted-foreground">{description}</p> : null}
       {action ? <div className="mt-6">{action}</div> : null}
     </div>
@@ -45,7 +45,7 @@ export function StatusPill({ status }: { status: string }) {
     PUBLISHED: "border-success/30 bg-success/10 text-success",
     DRAFT: "border-muted-foreground/25 bg-white/5 text-muted-foreground",
     ARCHIVED: "border-signal/30 bg-signal/10 text-signal",
-    NEW: "border-[#22e0ff]/30 bg-[#22e0ff]/10 text-[#22e0ff]",
+    NEW: "border-primary/30 bg-primary/10 text-primary",
     IN_PROGRESS: "border-signal/30 bg-signal/10 text-signal",
     DONE: "border-success/30 bg-success/10 text-success",
     SPAM: "border-destructive/30 bg-destructive/10 text-destructive",
@@ -63,7 +63,7 @@ export function StatusPill({ status }: { status: string }) {
     <span
       className={cn(
         "inline-flex rounded-full border px-2.5 py-0.5 text-[0.6875rem] whitespace-nowrap",
-        map[status] ?? "border-[#1b1f27] text-muted-foreground"
+        map[status] ?? "border-border text-muted-foreground"
       )}
     >
       {labels[status] ?? status}
@@ -75,14 +75,14 @@ export function SetupNotice({ title, children }: { title: string; children?: Rea
   return (
     <div className="rounded-(--radius) border border-signal/30 bg-signal/6 p-6">
       <h2 className="text-sm font-semibold text-signal">{title}</h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#c3c9d4]">{children}</div>
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-body">{children}</div>
     </div>
   );
 }
 
 export function AdminLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
   return (
-    <Link href={href} className={cn("text-[#22e0ff] underline-offset-4 hover:underline", className)}>
+    <Link href={href} className={cn("text-primary underline-offset-4 hover:underline", className)}>
       {children}
     </Link>
   );

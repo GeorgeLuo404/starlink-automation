@@ -28,8 +28,8 @@ export function SectionHeading({
         {eyebrow ? (
           <Reveal>
             <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-[#22e0ff]" />
-              <span className="text-eyebrow text-[#22e0ff]">{eyebrow}</span>
+              <span className="h-px w-8 bg-primary" />
+              <span className="text-eyebrow text-primary">{eyebrow}</span>
             </div>
           </Reveal>
         ) : null}

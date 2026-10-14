@@ -40,7 +40,7 @@ export function TabsList({ className, ...props }: React.ComponentProps<"div">) {
     <div
       role="tablist"
       className={cn(
-        "inline-flex items-center gap-1 rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] p-1",
+        "inline-flex items-center gap-1 rounded-(--radius) border border-border bg-card p-1",
         className
       )}
       {...props}
@@ -67,7 +67,7 @@ export function TabsTrigger({
       onClick={() => ctx?.setValue(value)}
       className={cn(
         "rounded-[calc(var(--radius)-2px)] px-3 py-1.5 text-sm whitespace-nowrap transition-colors",
-        active ? "bg-secondary text-white" : "text-muted-foreground hover:text-[#e8ebf0]",
+        active ? "bg-secondary text-white" : "text-muted-foreground hover:text-foreground",
         className
       )}
     >

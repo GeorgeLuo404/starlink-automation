@@ -24,14 +24,14 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <section className={cn("relative overflow-hidden border-b border-[#1b1f27]", className)}>
+    <section className={cn("relative overflow-hidden border-b border-border", className)}>
       <div className="grid-blueprint absolute inset-0 opacity-50" aria-hidden="true" />
       <div
-        className="absolute -top-32 left-1/4 h-64 w-160 rounded-full bg-[#22e0ff]/7 blur-[100px]"
+        className="absolute -top-32 left-1/4 h-64 w-160 rounded-full bg-primary/7 blur-[100px]"
         aria-hidden="true"
       />
       <div className="container-x relative pt-36 pb-14 md:pt-44 md:pb-20">
-        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-xs text-[#5c6472]">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-xs text-faint">
           <Link href={localeHref(locale, "/")} className="transition-colors hover:text-muted-foreground">
             {locale === "zh" ? "首页" : "Home"}
           </Link>
@@ -52,8 +52,8 @@ export function PageHero({
         {eyebrow ? (
           <Reveal delay={0.04}>
             <div className="mt-8 flex items-center gap-3">
-              <span className="h-px w-8 bg-[#22e0ff]" />
-              <span className="text-eyebrow text-[#22e0ff]">{eyebrow}</span>
+              <span className="h-px w-8 bg-primary" />
+              <span className="text-eyebrow text-primary">{eyebrow}</span>
             </div>
           </Reveal>
         ) : null}

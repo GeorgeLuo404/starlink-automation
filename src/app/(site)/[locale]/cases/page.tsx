@@ -65,18 +65,18 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-background/85 via-transparent to-transparent" />
-                  <span className="absolute top-4 left-4 rounded-full border border-[#22e0ff]/25 bg-background/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-[#22e0ff] backdrop-blur-sm">
+                  <span className="absolute top-4 left-4 rounded-full border border-primary/25 bg-background/80 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-primary backdrop-blur-sm">
                     {item.industry[locale]}
                   </span>
                 </div>
 
                 <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
+                  <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-wider text-faint">
                     <span>{item.year}</span>
                     <span>·</span>
                     <span>{item.location}</span>
                   </div>
-                  <h2 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
+                  <h2 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-primary">
                     {item.title[locale]}
                   </h2>
                   <p className="mt-3 line-clamp-3 flex-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
@@ -84,10 +84,10 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                   </p>
 
                   {item.metrics.length > 0 ? (
-                    <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-[#1b1f27] pt-4">
+                    <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 border-t border-border pt-4">
                       {item.metrics.slice(0, 3).map((metric) => (
                         <div key={metric.value}>
-                          <div className="text-sm font-semibold text-[#22e0ff] tabular-nums">
+                          <div className="text-sm font-semibold text-primary tabular-nums">
                             {metric.value}
                           </div>
                           <div className="mt-0.5 text-[0.625rem] text-muted-foreground">{metric.label[locale]}</div>
@@ -96,7 +96,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                     </div>
                   ) : null}
 
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-[#22e0ff]">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-primary">
                     {dict.common.viewDetail}
                     <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>

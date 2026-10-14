@@ -195,7 +195,7 @@ export function ContactForm({
 
       {state === "error" ? (
         <div className="rounded-(--radius) border border-destructive/30 bg-destructive/6 p-4">
-          <p className="text-sm font-medium text-[#ff8a8c]">{t.errorTitle}</p>
+          <p className="text-sm font-medium text-destructive-soft">{t.errorTitle}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t.errorDesc}</p>
         </div>
       ) : null}
@@ -214,7 +214,7 @@ export function ContactForm({
             </>
           )}
         </button>
-        <p className="text-xs text-[#5c6472]">{dict.home.cta.note}</p>
+        <p className="text-xs text-faint">{dict.home.cta.note}</p>
       </div>
     </form>
   );

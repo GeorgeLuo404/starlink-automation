@@ -33,7 +33,7 @@ function LanguageSwitcherInner({ current, className }: { current: Locale; classN
           className={cn(
             "rounded-full px-2 py-1 font-mono text-[0.625rem] tracking-wider transition-colors",
             locale === current
-              ? "bg-[#22e0ff] font-semibold text-primary-foreground"
+              ? "bg-primary font-semibold text-primary-foreground"
               : "text-muted-foreground hover:text-white"
           )}
         >
@@ -55,14 +55,14 @@ export function LanguageSwitcher({ current, className }: { current: Locale; clas
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full border border-[#1b1f27] bg-[#0d0f13]/60 p-0.5",
+        "inline-flex items-center gap-0.5 rounded-full border border-border bg-card/60 p-0.5",
         className
       )}
     >
       <Globe className="mr-1 ml-1.5 size-3 text-muted-foreground" aria-hidden="true" />
       <Suspense
         fallback={
-          <span className="rounded-full bg-[#22e0ff] px-2 py-1 font-mono text-[0.625rem] font-semibold tracking-wider text-primary-foreground">
+          <span className="rounded-full bg-primary px-2 py-1 font-mono text-[0.625rem] font-semibold tracking-wider text-primary-foreground">
             {localeLabels[current]}
           </span>
         }

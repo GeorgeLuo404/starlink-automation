@@ -75,8 +75,8 @@ export default async function NewsPage({
               className={cn(
                 "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
                 !category
-                  ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                  : "border-[#1b1f27] text-muted-foreground hover:text-white"
+                  ? "border-primary/40 bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:text-white"
               )}
             >
               {dict.common.all}
@@ -88,8 +88,8 @@ export default async function NewsPage({
                 className={cn(
                   "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
                   category === cat.slug
-                    ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                    : "border-[#1b1f27] text-muted-foreground hover:text-white"
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-border text-muted-foreground hover:text-white"
                 )}
               >
                 {locale === "zh" ? cat.nameZh : cat.nameEn}
@@ -115,8 +115,8 @@ export default async function NewsPage({
 
       <div className="container-x py-16 md:py-24">
         {items.length === 0 ? (
-          <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-24 text-center">
-            <p className="text-sm font-medium text-[#e8ebf0]">{dict.common.empty}</p>
+          <div className="rounded-(--radius) border border-dashed border-border py-24 text-center">
+            <p className="text-sm font-medium text-foreground">{dict.common.empty}</p>
             <p className="mt-2 text-sm text-muted-foreground">{dict.common.emptyHint}</p>
           </div>
         ) : (
@@ -130,7 +130,7 @@ export default async function NewsPage({
             </Stagger>
 
             {totalPages > 1 ? (
-              <nav className="mt-16 flex items-center justify-between border-t border-[#1b1f27] pt-8" aria-label="Pagination">
+              <nav className="mt-16 flex items-center justify-between border-t border-border pt-8" aria-label="Pagination">
                 <Link
                   href={buildQuery({ page: String(Math.max(1, page - 1)) })}
                   aria-disabled={page <= 1}

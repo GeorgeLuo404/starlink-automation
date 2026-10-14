@@ -58,8 +58,8 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
                   kind === entry.key
-                    ? "border-[#22e0ff]/40 bg-[#22e0ff]/10 text-[#22e0ff]"
-                    : "border-[#1b1f27] text-muted-foreground hover:text-white"
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-border text-muted-foreground hover:text-white"
                 )}
               >
                 <Icon className="size-3.5" />
@@ -82,7 +82,7 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
         </div>
 
         <div className="relative w-full max-w-xs">
-          <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[#5c6472]" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-faint" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -93,19 +93,19 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-20 text-center">
+        <div className="rounded-(--radius) border border-dashed border-border py-20 text-center">
           <p className="text-sm text-muted-foreground">没有匹配的资源</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {filtered.map((row) => (
-            <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13]">
-              <div className="relative aspect-4/3 bg-ink-900">
+            <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-border bg-card">
+              <div className="relative aspect-4/3 bg-surface">
                 {row.kind === "IMAGE" ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={row.url} alt={row.alt ?? row.originalName} className="size-full object-cover" />
                 ) : (
-                  <div className="flex size-full flex-col items-center justify-center gap-2 text-[#5c6472]">
+                  <div className="flex size-full flex-col items-center justify-center gap-2 text-faint">
                     {row.kind === "VIDEO" ? <Film className="size-6" strokeWidth={1.4} /> : <FileText className="size-6" strokeWidth={1.4} />}
                     <span className="font-mono text-[0.625rem] uppercase">{row.mimeType.split("/")[1] ?? "file"}</span>
                   </div>
@@ -131,7 +131,7 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                       onClick={(e) => {
                         if (!confirm("删除该资源？此操作不可撤销。")) e.preventDefault();
                       }}
-                      className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-[#ff8a8c] transition-colors hover:bg-destructive/15"
+                      className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft transition-colors hover:bg-destructive/15"
                       aria-label="删除"
                     >
                       <Trash2 className="size-3.5" />
@@ -140,10 +140,10 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                 </div>
               </div>
               <div className="p-3">
-                <p className="truncate text-xs font-medium text-[#e8ebf0]" title={row.originalName}>
+                <p className="truncate text-xs font-medium text-foreground" title={row.originalName}>
                   {row.originalName}
                 </p>
-                <div className="mt-1.5 flex items-center justify-between font-mono text-[0.5625rem] text-[#5c6472]">
+                <div className="mt-1.5 flex items-center justify-between font-mono text-[0.5625rem] text-faint">
                   <span>{formatBytes(row.size)}</span>
                   <span>{formatDate(row.createdAt)}</span>
                 </div>

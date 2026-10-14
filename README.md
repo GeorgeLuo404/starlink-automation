@@ -216,12 +216,81 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 
 ---
 
-## 6. 你可能想改的地方
+## 6. 配色与设计令牌（改配色前必读）
+
+### 6.1 两层结构：色板 → 语义角色
+
+`src/app/globals.css` 把颜色分成两层，**十六进制只允许出现在第一层**：
+
+```css
+/* 1 · 原始色板 —— 唯一出现十六进制的地方 */
+:root {
+  --brand-500: #22e0ff;
+  --ink-950:   #08090b;
+  --paper-500: #8a929e;
+  /* … */
+}
+
+/* 2 · 语义角色 —— 组件只允许使用这一层 */
+:root {
+  --primary:          var(--brand-500);
+  --background:       var(--ink-950);
+  --muted-foreground: var(--paper-500);
+  /* … */
+}
+```
+
+组件里写的是语义类名，不是颜色值：
+
+```tsx
+<div className="bg-background text-foreground border-border">
+  <span className="text-muted-foreground">次要说明文字</span>
+  <a className="bg-primary text-primary-foreground">主要按钮</a>
+</div>
+```
+
+**换配色只需要改色板**，例如把主色从青色改成橙色：
+
+```css
+--brand-500: #f97316;   /* 全站按钮、链接、高亮、图标、SVG 一起变 */
+```
+
+### 6.2 自动守卫
+
+```bash
+pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
+```
+
+它扫描 `src/` 与 `scripts/`，只要在色板之外发现十六进制颜色就报错并指出行号。
+所以「组件里偷偷写死一个颜色」这件事在构建阶段就会被拦住。
+
+> 唯一的例外是 `src/lib/theme-color.ts` —— `<meta name="theme-color">` 渲染在 HTML head 里，
+> 无法使用 CSS 变量，只能是一个字面量。
+
+### 6.3 语义角色速查
+
+| 场景 | 类名 |
+| --- | --- |
+| 页面底色 / 正文 | `bg-background` `text-foreground` |
+| 交替区块底色 | `bg-surface` |
+| 卡片 / 面板 / 表单 | `bg-card` `border-border` |
+| 品牌主色 | `bg-primary` `text-primary` `border-primary/40` |
+| 次级面 / 悬停面 | `bg-secondary` `hover:bg-secondary-hover` |
+| 轨道 / 缩略图底 | `bg-raised` |
+| 正文分级 | `text-foreground` > `text-body` > `text-subtle` > `text-muted-foreground` > `text-faint` > `text-ghost` |
+| 状态 | `text-success` `text-signal` `text-destructive` `text-destructive-soft` |
+
+透明度直接用 Tailwind 语法：`bg-primary/10`、`border-destructive/40`。
+
+---
+
+## 7. 你可能想改的地方
 
 | 想改什么 | 改哪里 |
 | --- | --- |
 | 公司名、电话、邮箱、地址 | `src/content/defaults.ts` 的 `company`，或后台「站点设置」 |
-| 配色 / 圆角 / 字体 | `src/app/globals.css` 的 `@theme` 块 |
+| 配色 | **只改** `src/app/globals.css` 的色板（见下方第 6.1 节），组件无需改动 |
+| 圆角 / 字体 | `src/app/globals.css` 的 `--radius` 与 `--font-*` |
 | 首页文案 | `src/messages/zh.json` 与 `en.json` |
 | 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后重新 `pnpm db:seed`） |
 | 占位图换成真实照片 | 直接覆盖 `public/media/*.svg`，或在后台媒体库上传后替换引用 |
@@ -229,7 +298,7 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 
 ---
 
-## 7. 许可证与归属
+## 8. 许可证与归属
 
 本项目为深圳市星链自动化有限公司定制开发，代码归甲方所有。
 参考站点的视觉与动效为**设计参考**，源码、文案与图形资源均为独立实现，不包含第三方受版权保护的素材。

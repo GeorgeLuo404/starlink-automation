@@ -88,12 +88,12 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
         onClick={() => inputRef.current?.click()}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center rounded-(--radius) border border-dashed px-6 py-12 text-center transition-colors",
-          dragging ? "border-[#22e0ff]/60 bg-[#22e0ff]/6" : "border-[#1b1f27] hover:border-[#22e0ff]/40"
+          dragging ? "border-primary/60 bg-primary/6" : "border-border hover:border-primary/40"
         )}
       >
-        <UploadCloud className={cn("size-7", dragging ? "text-[#22e0ff]" : "text-[#5c6472]")} strokeWidth={1.4} />
-        <p className="mt-4 text-sm font-medium text-[#e8ebf0]">拖拽文件到此处，或点击选择</p>
-        <p className="mt-1.5 font-mono text-[0.6875rem] text-[#5c6472]">
+        <UploadCloud className={cn("size-7", dragging ? "text-primary" : "text-faint")} strokeWidth={1.4} />
+        <p className="mt-4 text-sm font-medium text-foreground">拖拽文件到此处，或点击选择</p>
+        <p className="mt-1.5 font-mono text-[0.6875rem] text-faint">
           图片 / 视频 / PDF / Office · 单文件不超过 200MB
         </p>
       </div>
@@ -115,18 +115,18 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
           {queue.map((item) => (
             <li
               key={item.name}
-              className="flex items-center gap-3 rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] px-3 py-2.5"
+              className="flex items-center gap-3 rounded-(--radius) border border-border bg-card px-3 py-2.5"
             >
-              <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#c3c9d4]">{item.name}</span>
+              <span className="min-w-0 flex-1 truncate font-mono text-xs text-body">{item.name}</span>
               {item.status === "uploading" ? (
                 <>
-                  <span className="h-1 w-24 overflow-hidden rounded-full bg-[#1b1f27]">
+                  <span className="h-1 w-24 overflow-hidden rounded-full bg-raised">
                     <span
-                      className="block h-full rounded-full bg-[#22e0ff] transition-all"
+                      className="block h-full rounded-full bg-primary transition-all"
                       style={{ width: `${item.progress}%` }}
                     />
                   </span>
-                  <Loader2 className="size-3.5 animate-spin text-[#22e0ff]" />
+                  <Loader2 className="size-3.5 animate-spin text-primary" />
                 </>
               ) : item.status === "done" ? (
                 <span className="font-mono text-[0.625rem] text-success">完成</span>

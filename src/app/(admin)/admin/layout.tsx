@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { THEME_COLOR } from "@/lib/theme-color";
 
 export const metadata: Metadata = {
   title: "管理后台 | 星链自动化",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#08090b",
+  themeColor: THEME_COLOR,
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -18,7 +19,7 @@ export const viewport: Viewport = {
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className="dark">
-      <body className="min-h-screen bg-background text-[#e8ebf0] antialiased">
+      <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
         <Toaster />
       </body>

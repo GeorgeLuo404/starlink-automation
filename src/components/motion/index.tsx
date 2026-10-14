@@ -409,7 +409,7 @@ export function ScrollProgress({ className }: { className?: string }) {
   return (
     <motion.div
       style={{ scaleX }}
-      className={cn("fixed inset-x-0 top-0 z-60 h-px origin-left bg-[#22e0ff]", className)}
+      className={cn("fixed inset-x-0 top-0 z-60 h-px origin-left bg-primary", className)}
     />
   );
 }

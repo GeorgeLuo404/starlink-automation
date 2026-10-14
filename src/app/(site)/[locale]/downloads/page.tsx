@@ -47,14 +47,14 @@ export default async function DownloadsPage({ params }: { params: Promise<{ loca
 
       <div className="container-x py-16 md:py-20">
         {items.length === 0 ? (
-          <div className="rounded-(--radius) border border-dashed border-[#1b1f27] py-24 text-center">
+          <div className="rounded-(--radius) border border-dashed border-border py-24 text-center">
             <p className="text-sm text-muted-foreground">{dict.downloads.emptyHint}</p>
           </div>
         ) : (
           <DownloadList items={items} locale={locale} dict={dict} />
         )}
 
-        <p className="mt-10 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-[#5c6472]">
+        <p className="mt-10 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-faint">
           {locale === "zh"
             ? "如需特定技术文档或图纸样例，请通过联系页面告知我们，我们会按需提供。"
             : "Need a specific datasheet or a drawing sample? Contact us and we will provide it on request."}

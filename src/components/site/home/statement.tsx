@@ -4,12 +4,12 @@ import type { Dictionary } from "@/lib/i18n";
 export function HomeStatement({ dict }: { dict: Dictionary }) {
   const t = dict.home.statement;
   return (
-    <section className="section-y relative overflow-hidden border-y border-[#1b1f27] bg-ink-900">
+    <section className="section-y relative overflow-hidden border-y border-border bg-surface">
       <div className="grid-blueprint-fine absolute inset-0 opacity-50" aria-hidden="true" />
       <div className="container-x relative">
         <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-[#22e0ff]" />
-          <span className="text-eyebrow text-[#22e0ff]">{t.eyebrow}</span>
+          <span className="h-px w-8 bg-primary" />
+          <span className="text-eyebrow text-primary">{t.eyebrow}</span>
         </div>
         <ScrollHighlightText
           text={t.text}

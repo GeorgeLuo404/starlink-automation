@@ -4,8 +4,8 @@
       <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
     </pattern>
     <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#000" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0.82"/>
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.82"/>
     </linearGradient>
     <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
       <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>

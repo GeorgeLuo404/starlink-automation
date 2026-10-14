@@ -47,9 +47,9 @@ export default async function AdminDownloadsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1b1f27]">
+                <tr className="border-b border-border">
                   {["资料", "类型", "大小", "下载", "状态", "操作"].map((head) => (
-                    <th key={head} className="px-4 py-3 text-left font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase whitespace-nowrap">
+                    <th key={head} className="px-4 py-3 text-left font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase whitespace-nowrap">
                       {head}
                     </th>
                   ))}
@@ -57,23 +57,23 @@ export default async function AdminDownloadsPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/2">
+                  <tr key={row.id} className="border-b border-border last:border-0 hover:bg-white/2">
                     <td className="px-4 py-3">
-                      <span className="font-medium text-[#e8ebf0]">{row.titleZh}</span>
-                      <span className="mt-1 block font-mono text-[0.625rem] text-[#5c6472]">{row.slug}</span>
+                      <span className="font-medium text-foreground">{row.titleZh}</span>
+                      <span className="mt-1 block font-mono text-[0.625rem] text-faint">{row.slug}</span>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-[#22e0ff]">{row.fileType}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-primary">{row.fileType}</td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{formatBytes(row.fileSize)}</td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{row.downloadCount}</td>
                     <td className="px-4 py-3"><StatusPill status={row.status} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1.5">
-                        <Link href={`/admin/downloads/${row.id}`} className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]" aria-label="编辑">
+                        <Link href={`/admin/downloads/${row.id}`} className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary" aria-label="编辑">
                           <Edit3 className="size-3.5" />
                         </Link>
                         <form action={deleteDownload}>
                           <input type="hidden" name="id" value={row.id} />
-                          <button type="submit" className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]" aria-label="删除">
+                          <button type="submit" className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft" aria-label="删除">
                             <Trash2 className="size-3.5" />
                           </button>
                         </form>

@@ -1,20 +1,24 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { Toaster as SonnerToaster } from "sonner";
 
+/**
+ * Sonner exposes its own theming variables, so toasts can be driven by the same
+ * semantic tokens as the rest of the site — no duplicated colour literals.
+ */
 export function Toaster() {
   return (
     <SonnerToaster
       position="top-right"
-      toastOptions={{
-        style: {
-          background: "#0d0f13",
-          border: "1px solid #1b1f27",
-          color: "#e8ebf0",
-          borderRadius: "0.375rem",
-          fontSize: "0.875rem",
-        },
-      }}
+      style={
+        {
+          "--normal-bg": "var(--card)",
+          "--normal-text": "var(--foreground)",
+          "--normal-border": "var(--border)",
+          "--border-radius": "var(--radius)",
+        } as CSSProperties
+      }
     />
   );
 }

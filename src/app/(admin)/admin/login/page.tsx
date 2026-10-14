@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-16">
       <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
       <div
-        className="absolute -top-40 left-1/2 h-80 w-xl -translate-x-1/2 rounded-full bg-[#22e0ff]/8 blur-[110px]"
+        className="absolute -top-40 left-1/2 h-80 w-xl -translate-x-1/2 rounded-full bg-primary/8 blur-[110px]"
         aria-hidden="true"
       />
       <Suspense fallback={null}>

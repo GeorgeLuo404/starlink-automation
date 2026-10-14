@@ -78,19 +78,19 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
           <aside className="lg:col-span-5">
             <h2 className="text-eyebrow">{t.infoTitle}</h2>
-            <div className="mt-6 divide-y divide-[#1b1f27] border-y border-[#1b1f27]">
+            <div className="mt-6 divide-y divide-border border-y border-border">
               {info.map((row) => {
                 const Icon = row.icon;
                 const content = (
                   <div className="flex items-start gap-4 py-5">
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
                       <Icon className="size-4" strokeWidth={1.5} />
                     </span>
                     <div className="min-w-0">
-                      <div className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
+                      <div className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
                         {row.label}
                       </div>
-                      <div className="mt-1.5 text-sm wrap-break-word text-[#e8ebf0]">{row.value}</div>
+                      <div className="mt-1.5 text-sm wrap-break-word text-foreground">{row.value}</div>
                     </div>
                   </div>
                 );
@@ -104,23 +104,23 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               })}
             </div>
 
-            <div className="mt-8 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
-              <div className="relative flex aspect-4/3 items-center justify-center bg-[#0d0f13]">
+            <div className="mt-8 overflow-hidden rounded-(--radius) border border-border">
+              <div className="relative flex aspect-4/3 items-center justify-center bg-card">
                 <div className="grid-blueprint absolute inset-0 opacity-60" aria-hidden="true" />
                 <div className="relative text-center">
                   <span className="relative mx-auto flex size-3 items-center justify-center">
-                    <span className="absolute inline-flex size-full animate-pulse-ring rounded-full bg-[#22e0ff]" />
-                    <span className="relative inline-flex size-3 rounded-full bg-[#22e0ff]" />
+                    <span className="absolute inline-flex size-full animate-pulse-ring rounded-full bg-primary" />
+                    <span className="relative inline-flex size-3 rounded-full bg-primary" />
                   </span>
                   <p className="mt-4 text-sm font-medium text-white">{t.mapTitle}</p>
-                  <p className="mt-1 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
+                  <p className="mt-1 font-mono text-[0.625rem] tracking-wider text-faint">
                     {locale === "zh" ? company.addressZh : company.addressEn}
                   </p>
                 </div>
               </div>
             </div>
 
-            <p className="mt-6 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-[#5c6472]">
+            <p className="mt-6 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-faint">
               {dict.home.cta.note}
             </p>
           </aside>

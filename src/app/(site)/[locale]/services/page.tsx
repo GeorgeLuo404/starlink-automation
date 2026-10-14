@@ -59,10 +59,10 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
               >
                 <div className="lg:col-span-5">
                   <div className="flex items-center gap-4">
-                    <span className="inline-flex size-12 items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-[#0d0f13] text-[#22e0ff]">
+                    <span className="inline-flex size-12 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
                       <ServiceIcon name={service.icon} className="size-5" />
                     </span>
-                    <span className="font-mono text-xs tracking-[0.2em] text-[#3d4552]">
+                    <span className="font-mono text-xs tracking-[0.2em] text-ghost">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                   </div>
@@ -72,7 +72,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                   <p className="mt-4 text-[0.9375rem] leading-relaxed text-muted-foreground">
                     {service.summary[locale]}
                   </p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#22e0ff]">
+                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
                     {dict.services.detailCta}
                     <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
@@ -82,15 +82,15 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
                   <h3 className="text-eyebrow">{dict.services.capabilities}</h3>
                   <ul className="mt-5 space-y-2.5">
                     {service.features.slice(0, 6).map((feature) => (
-                      <li key={feature.zh} className="flex items-start gap-2.5 text-sm text-[#c3c9d4]">
-                        <Check className="mt-0.5 size-3.5 shrink-0 text-[#22e0ff]" />
+                      <li key={feature.zh} className="flex items-start gap-2.5 text-sm text-body">
+                        <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
                         {feature[locale]}
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="relative aspect-16/10 overflow-hidden rounded-(--radius) border border-[#1b1f27] lg:col-span-3 lg:aspect-auto lg:min-h-full">
+                <div className="relative aspect-16/10 overflow-hidden rounded-(--radius) border border-border lg:col-span-3 lg:aspect-auto lg:min-h-full">
                   <Image
                     src={`/media/service-${service.slug}.svg`}
                     alt={service.title[locale]}

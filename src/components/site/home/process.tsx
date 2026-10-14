@@ -6,7 +6,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 export function HomeProcess({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.home.process;
   return (
-    <section className="section-y relative overflow-hidden bg-ink-900">
+    <section className="section-y relative overflow-hidden bg-surface">
       <div className="container-x relative">
         <SectionHeading eyebrow={t.eyebrow} title={t.title} description={t.desc} />
 
@@ -16,7 +16,7 @@ export function HomeProcess({ locale, dict }: { locale: Locale; dict: Dictionary
             {processSteps.map((step) => (
               <StaggerItem key={step.no} className="group">
                 <div className="relative">
-                  <span className="relative z-10 inline-flex size-13 items-center justify-center rounded-full border border-[#1b1f27] bg-background font-mono text-xs tracking-widest text-muted-foreground transition-colors duration-300 group-hover:border-[#22e0ff]/50 group-hover:text-[#22e0ff]">
+                  <span className="relative z-10 inline-flex size-13 items-center justify-center rounded-full border border-border bg-background font-mono text-xs tracking-widest text-muted-foreground transition-colors duration-300 group-hover:border-primary/50 group-hover:text-primary">
                     {step.no}
                   </span>
                   <h3 className="mt-6 text-base font-semibold text-white">{step.title[locale]}</h3>

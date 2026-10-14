@@ -49,7 +49,7 @@ export function NewsletterForm({ dict, className }: { dict: Dictionary; classNam
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius) bg-[#22e0ff] text-primary-foreground transition-colors hover:bg-white disabled:opacity-50"
+        className="inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius) bg-primary text-primary-foreground transition-colors hover:bg-white disabled:opacity-50"
         aria-label={dict.footer.subscribeButton}
       >
         <ArrowRight className="size-4" />

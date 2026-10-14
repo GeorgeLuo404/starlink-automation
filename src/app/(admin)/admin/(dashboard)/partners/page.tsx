@@ -50,20 +50,20 @@ export default async function AdminPartnersPage() {
         <EmptyState title="还没有合作伙伴" description="添加品牌名称后，首页会以跑马灯形式展示。" />
       ) : (
         <AdminCard>
-          <ul className="divide-y divide-[#1b1f27]">
+          <ul className="divide-y divide-border">
             {rows.map((row) => (
               <li key={row.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
                 <div className="flex min-w-0 items-center gap-4">
-                  <span className="font-mono text-sm tracking-wide text-[#e8ebf0]">{row.name}</span>
+                  <span className="font-mono text-sm tracking-wide text-foreground">{row.name}</span>
                   {row.url ? <span className="text-xs text-muted-foreground">{row.url}</span> : null}
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-[0.625rem] text-[#5c6472]">#{row.sortOrder}</span>
+                  <span className="font-mono text-[0.625rem] text-faint">#{row.sortOrder}</span>
                   <form action={deletePartner}>
                     <input type="hidden" name="id" value={row.id} />
                     <button
                       type="submit"
-                      className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
+                      className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
                       aria-label="删除"
                     >
                       <Trash2 className="size-3.5" />

@@ -57,11 +57,11 @@ export default async function AdminArticlesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1b1f27]">
+                <tr className="border-b border-border">
                   {["标题", "状态", "发布日期", "阅读", "操作"].map((head) => (
                     <th
                       key={head}
-                      className="px-4 py-3 text-left font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase whitespace-nowrap"
+                      className="px-4 py-3 text-left font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase whitespace-nowrap"
                     >
                       {head}
                     </th>
@@ -70,17 +70,17 @@ export default async function AdminArticlesPage() {
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-[#1b1f27] last:border-0 hover:bg-white/2">
+                  <tr key={article.id} className="border-b border-border last:border-0 hover:bg-white/2">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="line-clamp-1 font-medium text-[#e8ebf0]">{article.titleZh}</span>
+                        <span className="line-clamp-1 font-medium text-foreground">{article.titleZh}</span>
                         {article.featured ? (
-                          <span className="rounded-full border border-[#22e0ff]/30 px-2 py-0.5 font-mono text-[0.5625rem] text-[#22e0ff]">
+                          <span className="rounded-full border border-primary/30 px-2 py-0.5 font-mono text-[0.5625rem] text-primary">
                             精选
                           </span>
                         ) : null}
                       </div>
-                      <span className="mt-1 block font-mono text-[0.625rem] text-[#5c6472]">/{article.slug}</span>
+                      <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{article.slug}</span>
                     </td>
                     <td className="px-4 py-3">
                       <StatusPill status={article.status} />
@@ -93,7 +93,7 @@ export default async function AdminArticlesPage() {
                       <div className="flex items-center gap-1.5">
                         <Link
                           href={`/admin/articles/${article.id}`}
-                          className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-[#22e0ff]/40 hover:text-[#22e0ff]"
+                          className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
                           aria-label="编辑"
                         >
                           <Edit3 className="size-3.5" />
@@ -108,7 +108,7 @@ export default async function AdminArticlesPage() {
                           />
                           <button
                             type="submit"
-                            className="rounded border border-[#1b1f27] px-2.5 py-1.5 font-mono text-[0.625rem] text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
+                            className="rounded border border-border px-2.5 py-1.5 font-mono text-[0.625rem] text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
                           >
                             {article.status === "PUBLISHED" ? "下架" : "发布"}
                           </button>
@@ -118,7 +118,7 @@ export default async function AdminArticlesPage() {
                           <input type="hidden" name="id" value={article.id} />
                           <button
                             type="submit"
-                            className="inline-flex size-8 items-center justify-center rounded border border-[#1b1f27] text-muted-foreground transition-colors hover:border-destructive/40 hover:text-[#ff8a8c]"
+                            className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
                             aria-label="删除"
                           >
                             <Trash2 className="size-3.5" />

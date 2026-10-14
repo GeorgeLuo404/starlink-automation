@@ -10,7 +10,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-[#1b1f27] bg-ink-900">
+    <footer className="relative border-t border-border bg-surface">
       <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="container-x relative py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12">
@@ -20,20 +20,20 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <div className="mt-6 space-y-2.5 text-sm">
               <a
                 href={`tel:${company.phone}`}
-                className="flex items-center gap-2.5 text-[#c3c9d4] transition-colors hover:text-[#22e0ff]"
+                className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
               >
-                <Phone className="size-3.5 text-[#22e0ff]" />
+                <Phone className="size-3.5 text-primary" />
                 {company.phone}
               </a>
               <a
                 href={`mailto:${company.email}`}
-                className="flex items-center gap-2.5 text-[#c3c9d4] transition-colors hover:text-[#22e0ff]"
+                className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
               >
-                <Mail className="size-3.5 text-[#22e0ff]" />
+                <Mail className="size-3.5 text-primary" />
                 {company.email}
               </a>
               <p className="flex items-start gap-2.5 text-muted-foreground">
-                <MapPin className="mt-0.5 size-3.5 shrink-0 text-[#22e0ff]" />
+                <MapPin className="mt-0.5 size-3.5 shrink-0 text-primary" />
                 {locale === "zh" ? company.addressZh : company.addressEn}
               </p>
             </div>
@@ -80,7 +80,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
 
         <div className="hairline my-10" />
 
-        <div className="flex flex-col gap-4 text-xs text-[#5c6472] md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 text-xs text-faint md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {dict.meta.siteName}. {dict.footer.rights}.
           </p>

@@ -9,7 +9,7 @@ function Separator({
     <div
       role="separator"
       className={cn(
-        "shrink-0 bg-[#1b1f27]",
+        "shrink-0 bg-raised",
         orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
         className
       )}

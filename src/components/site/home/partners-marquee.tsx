@@ -13,21 +13,21 @@ export async function HomePartners({ dict }: { dict: Dictionary }) {
     items.map((partner) => (
       <div
         key={partner.name}
-        className="group mx-4 flex min-w-44 flex-col items-center justify-center rounded-(--radius) border border-[#1b1f27] bg-ink-900 px-6 py-5 transition-colors hover:border-[#22e0ff]/30"
+        className="group mx-4 flex min-w-44 flex-col items-center justify-center rounded-(--radius) border border-border bg-surface px-6 py-5 transition-colors hover:border-primary/30"
       >
-        <span className="font-mono text-sm tracking-[0.12em] text-[#c3c9d4] transition-colors group-hover:text-white">
+        <span className="font-mono text-sm tracking-[0.12em] text-body transition-colors group-hover:text-white">
           {partner.name}
         </span>
-        <span className="mt-1.5 text-[0.6875rem] text-[#5c6472]">{partner.sub}</span>
+        <span className="mt-1.5 text-[0.6875rem] text-faint">{partner.sub}</span>
       </div>
     ));
 
   return (
-    <section className="section-y relative overflow-hidden bg-ink-900">
+    <section className="section-y relative overflow-hidden bg-surface">
       <div className="container-x relative">
         <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-[#22e0ff]" />
-          <span className="text-eyebrow text-[#22e0ff]">{t.eyebrow}</span>
+          <span className="h-px w-8 bg-primary" />
+          <span className="text-eyebrow text-primary">{t.eyebrow}</span>
         </div>
         <h2 className="text-display mt-5 text-2xl text-white sm:text-3xl">{t.title}</h2>
       </div>

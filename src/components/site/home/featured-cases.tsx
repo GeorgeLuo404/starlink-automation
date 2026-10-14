@@ -46,10 +46,10 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
 
             <div className="flex flex-col justify-center p-8 lg:p-12">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-[#22e0ff]/25 bg-[#22e0ff]/8 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-[#22e0ff]">
+                <span className="rounded-full border border-primary/25 bg-primary/8 px-2.5 py-1 font-mono text-[0.625rem] tracking-wider text-primary">
                   {lead.industry[locale]}
                 </span>
-                <span className="font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
+                <span className="font-mono text-[0.625rem] tracking-wider text-faint">
                   {lead.year} · {lead.location}
                 </span>
               </div>
@@ -57,10 +57,10 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
               <h3 className="text-display mt-6 text-2xl text-white lg:text-3xl">{lead.title[locale]}</h3>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{lead.summary[locale]}</p>
 
-              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-[#1b1f27] pt-6">
+              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-border pt-6">
                 {lead.metrics.map((metric) => (
                   <div key={metric.value}>
-                    <div className="text-xl font-semibold text-[#22e0ff] tabular-nums">{metric.value}</div>
+                    <div className="text-xl font-semibold text-primary tabular-nums">{metric.value}</div>
                     <div className="mt-1 text-[0.6875rem] text-muted-foreground">{metric.label[locale]}</div>
                   </div>
                 ))}
@@ -68,7 +68,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
 
               <span className="mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-white">
                 {dict.common.viewDetail}
-                <ArrowUpRight className="size-4 text-[#22e0ff] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>
             </div>
           </Link>
@@ -91,8 +91,8 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 font-mono text-[0.625rem] tracking-wider text-[#5c6472]">
-                    <span className="text-[#22e0ff]">{item.industry[locale]}</span>
+                  <div className="flex items-center gap-2 font-mono text-[0.625rem] tracking-wider text-faint">
+                    <span className="text-primary">{item.industry[locale]}</span>
                     <span>·</span>
                     <span>{item.year}</span>
                   </div>

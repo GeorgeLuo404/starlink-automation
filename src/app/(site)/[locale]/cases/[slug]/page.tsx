@@ -71,7 +71,7 @@ export default async function CaseDetailPage({
 
       <div className="container-x py-16 md:py-24">
         <Reveal>
-          <div className="relative aspect-21/9 overflow-hidden rounded-(--radius) border border-[#1b1f27]">
+          <div className="relative aspect-21/9 overflow-hidden rounded-(--radius) border border-border">
             <Image
               src={`/media/case-${item.slug}.svg`}
               alt={item.title[locale]}
@@ -87,12 +87,12 @@ export default async function CaseDetailPage({
           <div className="lg:col-span-8">
             <RichText content={item.content[locale]} />
 
-            <div className="mt-14 border-t border-[#1b1f27] pt-10">
+            <div className="mt-14 border-t border-border pt-10">
               <h2 className="text-display text-xl text-white">{dict.cases.scope}</h2>
               <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                 {item.scope.map((s) => (
-                  <li key={s.zh} className="flex items-start gap-2.5 text-sm text-[#c3c9d4]">
-                    <Check className="mt-0.5 size-3.5 shrink-0 text-[#22e0ff]" />
+                  <li key={s.zh} className="flex items-start gap-2.5 text-sm text-body">
+                    <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
                     {s[locale]}
                   </li>
                 ))}
@@ -102,27 +102,27 @@ export default async function CaseDetailPage({
 
           <aside className="lg:col-span-4">
             <div className="sticky top-28 space-y-6">
-              <div className="card-industrial divide-y divide-[#1b1f27]">
+              <div className="card-industrial divide-y divide-border">
                 {facts.map((fact) => (
                   <div key={fact.label} className="flex items-baseline justify-between gap-4 p-5">
-                    <span className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
+                    <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
                       {fact.label}
                     </span>
-                    <span className="text-right text-sm text-[#e8ebf0]">{fact.value}</span>
+                    <span className="text-right text-sm text-foreground">{fact.value}</span>
                   </div>
                 ))}
               </div>
 
               {item.metrics.length > 0 ? (
                 <div className="card-industrial p-6">
-                  <h2 className="font-mono text-[0.625rem] tracking-[0.14em] text-[#5c6472] uppercase">
+                  <h2 className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
                     {dict.cases.results}
                   </h2>
                   <div className="mt-5 space-y-4">
                     {item.metrics.map((metric) => (
                       <div key={metric.value} className="flex items-baseline justify-between gap-4">
                         <span className="text-sm text-muted-foreground">{metric.label[locale]}</span>
-                        <span className="text-xl font-semibold text-[#22e0ff] tabular-nums">{metric.value}</span>
+                        <span className="text-xl font-semibold text-primary tabular-nums">{metric.value}</span>
                       </div>
                     ))}
                   </div>
@@ -134,7 +134,7 @@ export default async function CaseDetailPage({
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-[#1b1f27] px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
+                      className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                     >
                       {tag}
                     </span>
@@ -142,7 +142,7 @@ export default async function CaseDetailPage({
                 </div>
               ) : null}
 
-              <div className="rounded-(--radius) border border-[#22e0ff]/25 bg-[#22e0ff]/6 p-6">
+              <div className="rounded-(--radius) border border-primary/25 bg-primary/6 p-6">
                 <h2 className="text-sm font-semibold text-white">{dict.home.cta.title}</h2>
                 <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-5 w-full">
                   {dict.home.cta.primary}
@@ -154,7 +154,7 @@ export default async function CaseDetailPage({
         </div>
 
         {others.length > 0 ? (
-          <div className="mt-20 border-t border-[#1b1f27] pt-14">
+          <div className="mt-20 border-t border-border pt-14">
             <h2 className="text-display text-2xl text-white">{dict.cases.related}</h2>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {others.map((other) => (
@@ -167,10 +167,10 @@ export default async function CaseDetailPage({
                     <Image src={`/media/case-${other.slug}.svg`} alt={other.title[locale]} fill sizes="80px" className="object-cover" />
                   </div>
                   <div className="min-w-0">
-                    <span className="font-mono text-[0.625rem] tracking-wider text-[#22e0ff]">
+                    <span className="font-mono text-[0.625rem] tracking-wider text-primary">
                       {other.industry[locale]}
                     </span>
-                    <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold text-white transition-colors group-hover:text-[#22e0ff]">
+                    <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold text-white transition-colors group-hover:text-primary">
                       {other.title[locale]}
                     </h3>
                   </div>

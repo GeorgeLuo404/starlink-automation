@@ -13,7 +13,7 @@ export async function HomeGallery({ locale, dict }: { locale: Locale; dict: Dict
   if (!items.length) return null;
 
   return (
-    <section className="section-y relative border-t border-[#1b1f27]">
+    <section className="section-y relative border-t border-border">
       <div className="container-x">
         <SectionHeading
           eyebrow={t.eyebrow}
@@ -32,7 +32,7 @@ export async function HomeGallery({ locale, dict }: { locale: Locale; dict: Dict
             <StaggerItem key={`${item.title.zh}-${i}`} className={i === 0 ? "col-span-2 row-span-2" : ""}>
               <Link
                 href={localeHref(locale, "/gallery")}
-                className="group relative block size-full overflow-hidden rounded-(--radius) border border-[#1b1f27]"
+                className="group relative block size-full overflow-hidden rounded-(--radius) border border-border"
               >
                 <div className={i === 0 ? "aspect-square" : "aspect-4/3"}>
                   <Image

@@ -7,18 +7,18 @@ import { Magnetic, Reveal } from "@/components/motion";
 export function HomeCta({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.home.cta;
   return (
-    <section className="relative overflow-hidden border-t border-[#1b1f27] bg-ink-900">
+    <section className="relative overflow-hidden border-t border-border bg-surface">
       <div className="grid-blueprint absolute inset-0 opacity-50" aria-hidden="true" />
       <div
-        className="absolute -top-40 left-1/2 h-80 w-184 -translate-x-1/2 rounded-full bg-[#22e0ff]/8 blur-[110px]"
+        className="absolute -top-40 left-1/2 h-80 w-184 -translate-x-1/2 rounded-full bg-primary/8 blur-[110px]"
         aria-hidden="true"
       />
       <div className="container-x relative py-20 text-center md:py-28">
         <Reveal>
           <div className="mx-auto flex max-w-fit items-center gap-3">
-            <span className="h-px w-8 bg-[#22e0ff]" />
-            <span className="text-eyebrow text-[#22e0ff]">{t.eyebrow}</span>
-            <span className="h-px w-8 bg-[#22e0ff]" />
+            <span className="h-px w-8 bg-primary" />
+            <span className="text-eyebrow text-primary">{t.eyebrow}</span>
+            <span className="h-px w-8 bg-primary" />
           </div>
         </Reveal>
         <Reveal delay={0.06}>
@@ -44,7 +44,7 @@ export function HomeCta({ locale, dict }: { locale: Locale; dict: Dictionary }) 
           </div>
         </Reveal>
         <Reveal delay={0.24}>
-          <p className="mt-7 font-mono text-[0.6875rem] tracking-wide text-[#5c6472]">{t.note}</p>
+          <p className="mt-7 font-mono text-[0.6875rem] tracking-wide text-faint">{t.note}</p>
         </Reveal>
       </div>
     </section>

@@ -52,7 +52,7 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
         {state.error ? (
           <div className="flex items-start gap-2.5 rounded-(--radius) border border-destructive/30 bg-destructive/6 p-3.5">
             <AlertCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
-            <p className="text-sm text-[#ff8a8c]">
+            <p className="text-sm text-destructive-soft">
               {state.error === "invalid" ? dict.admin.invalidCredentials : state.error}
             </p>
           </div>
@@ -73,7 +73,7 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
         </button>
       </form>
 
-      <p className="mt-8 text-center font-mono text-[0.625rem] leading-relaxed tracking-wide text-[#3d4552]">
+      <p className="mt-8 text-center font-mono text-[0.625rem] leading-relaxed tracking-wide text-ghost">
         {dict.meta.siteName}
       </p>
     </div>
