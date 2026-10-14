@@ -172,8 +172,8 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -188,12 +188,12 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #0a0b0e;
+    background: var(--surface);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
     border-radius: 999px;
-    border: 2px solid #0a0b0e;
+    border: 2px solid var(--surface);
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover);
@@ -292,7 +292,7 @@
     line-height: 1;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--color-muted-foreground);
+    color: var(--muted-foreground);
   }
   .text-display {
     font-weight: 600;
@@ -333,8 +333,9 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .mask-fade-x {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    /* `black` here is a mask alpha value, not a brand colour */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   }
   .text-gradient-brand {
     background: linear-gradient(100deg, var(--white) 0%, var(--brand-200) 45%, var(--primary) 100%);
@@ -379,7 +380,7 @@
   }
   .btn-primary {
     background: var(--primary);
-    color: var(--color-primary-foreground);
+    color: var(--primary-foreground);
     font-weight: 600;
   }
   .btn-primary:hover {
@@ -387,7 +388,7 @@
   }
   .btn-ghost {
     border: 1px solid var(--border);
-    color: var(--color-foreground);
+    color: var(--foreground);
     background: transparent;
   }
   .btn-ghost:hover {
@@ -438,16 +439,16 @@
   /* ------------------------------- forms ------------------------------ */
   .field {
     width: 100%;
-    background: #0d0f13;
+    background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 0.7rem 0.9rem;
     font-size: 0.875rem;
-    color: var(--color-foreground);
+    color: var(--foreground);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .field::placeholder {
-    color: #5c6472;
+    color: var(--faint);
   }
   .field:focus {
     outline: none;
@@ -460,7 +461,7 @@
     font-family: var(--font-mono);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-muted-foreground);
+    color: var(--muted-foreground);
     margin-bottom: 0.5rem;
   }
 
@@ -494,7 +495,7 @@
 
   /* ------------------------ article prose (CMS) ----------------------- */
   .prose-industrial {
-    color: #c3c9d4;
+    color: var(--body);
     font-size: 1.0625rem;
     line-height: 1.85;
   }
@@ -538,7 +539,7 @@
   .prose-industrial blockquote {
     border-left: 2px solid var(--primary);
     padding: 0.35em 0 0.35em 1.25em;
-    color: #e8ebf0;
+    color: var(--foreground);
   }
   .prose-industrial img {
     border-radius: var(--radius);
@@ -547,14 +548,14 @@
   .prose-industrial code {
     font-family: var(--font-mono);
     font-size: 0.875em;
-    background: #14171d;
+    background: var(--elevated);
     border: 1px solid var(--border);
     padding: 0.15em 0.4em;
     border-radius: 4px;
     color: var(--brand-300);
   }
   .prose-industrial pre {
-    background: #0a0b0e;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1.15rem 1.25rem;
