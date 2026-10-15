@@ -10,7 +10,8 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(loginAction, { error: null });
 
   return (
-    <div className="w-full max-w-sm">
+    // `relative` keeps the form above the page's decorative layers in paint order
+    <div className="relative w-full max-w-sm">
       <div className="flex flex-col items-center text-center">
         <Logo size="lg" />
         <h1 className="mt-8 text-xl font-semibold tracking-tight text-white">{dict.admin.login}</h1>

@@ -110,7 +110,8 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                     <span className="font-mono text-[0.625rem] uppercase">{row.mimeType.split("/")[1] ?? "file"}</span>
                   </div>
                 )}
-                <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:opacity-100">
+                {/* opacity-0 still receives clicks, so keep it inert until hovered */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
                   <button
                     type="button"
                     onClick={() => {

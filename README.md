@@ -282,7 +282,7 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 
 透明度直接用 Tailwind 语法：`bg-primary/10`、`border-destructive/40`。
 
-### 6.4 两条容易踩的坑（都已经踩过一次）
+### 6.4 三条容易踩的坑（都已经踩过一次）
 
 **① `next/image` 的 `fill` 必须放在 `relative` 的父元素里**
 
@@ -315,6 +315,32 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 ```
 
 如果以后新增根布局（例如再开一个 `(xxx)` 路由组），记得同样加上。
+
+**③ 纯装饰层必须加 `pointer-events-none`**
+
+`absolute inset-0` 的网格、光晕、渐变层是**定位元素**，而定位元素会画在**非定位兄弟元素之上**。
+如果它后面的内容没有定位（比如表单直接放在一个普通 `div` 里），这个装饰层就会盖住表单，
+**吞掉所有点击 —— 输入框点不中、也没法输入**。`aria-hidden="true"` 对命中测试没有任何作用。
+
+```tsx
+// ✗ 装饰层挡住表单：输入框完全无法交互
+<div className="relative flex min-h-screen items-center justify-center">
+  <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
+  <form>...</form>            {/* 非定位 → 被上面的层盖住 */}
+</div>
+
+// ✓ 装饰层不接收指针事件；内容自身也定位，双保险
+<div className="relative flex min-h-screen items-center justify-center">
+  <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+  <form className="relative">...</form>
+</div>
+```
+
+同理，`opacity-0` 的悬停工具条**仍然可以点击**，要么加 `pointer-events-none group-hover:pointer-events-auto`，
+要么用 `hidden group-hover:block`。
+
+页面上其它 `absolute inset-0` 之所以没问题，是因为内容包在 `container-x relative` 里（定位层之间按 DOM 顺序叠放），
+或者装饰层本身在 `<Link>` 内部（点谁都会触发父级链接）。新增区块时注意保持这个前提。
 
 ---
 

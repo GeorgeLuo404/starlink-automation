@@ -48,7 +48,8 @@ export default async function AdminGalleryPage() {
               <div className="relative aspect-4/3 bg-surface">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={row.url} alt={row.titleZh} className="size-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:opacity-100">
+                {/* opacity-0 still receives clicks, so keep it inert until hovered */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
                   <Link href={`/admin/gallery/${row.id}`} className="inline-flex size-9 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10" aria-label="编辑">
                     <Edit3 className="size-3.5" />
                   </Link>
