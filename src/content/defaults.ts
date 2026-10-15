@@ -84,7 +84,7 @@ export const company = {
   nameEn: "Shenzhen Starlink Automation Co., Ltd.",
   shortZh: "星链自动化",
   shortEn: "Starlink Automation",
-  founded: 2014,
+  founded: 2024,
   addressZh: "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区",
   addressEn: "Zone E, 9th Floor, Lilan Technology Building, Jiazitang Community, Fenghuang Subdistrict, Guangming District, Shenzhen, Guangdong, China",
   phone: "138-0000-0000",
@@ -529,7 +529,7 @@ export const cases: CaseContent[] = [
     title: { zh: "模组 PACK 线数据采集与 MES 对接", en: "Module PACK line data acquisition and MES integration" },
     client: { zh: "储能电池制造商", en: "Energy storage battery manufacturer" },
     industry: { zh: "新能源锂电", en: "New-energy battery" },
-    year: 2023,
+    year: 2025,
     location: "安徽 · 合肥",
     summary: {
       zh: "为 8 个工位建立统一数据采集层，实现单件级全流程追溯。",
@@ -791,12 +791,12 @@ export const aboutValues = [
 ];
 
 export const milestones = [
-  { year: "2014", title: { zh: "公司成立", en: "Founded" }, desc: { zh: "以电气图纸设计与 PLC 调试服务起步。", en: "Started with electrical design and PLC commissioning services." } },
-  { year: "2017", title: { zh: "进入锂电行业", en: "Entered the battery industry" }, desc: { zh: "承接首个电芯装配线控制项目。", en: "First cell assembly line control project." } },
-  { year: "2020", title: { zh: "组建机器人团队", en: "Robot team formed" }, desc: { zh: "开始提供机器人集成与视觉引导方案。", en: "Began offering robot integration and vision guidance." } },
-  { year: "2022", title: { zh: "热压机专机业务", en: "Hot press business" }, desc: { zh: "完成温压闭环控制方案的标准化。", en: "Standardised temperature and pressure closed-loop control." } },
-  { year: "2024", title: { zh: "累计交付破百", en: "100+ projects delivered" }, desc: { zh: "服务行业覆盖锂电、3C、汽车零部件等。", en: "Serving battery, 3C and automotive parts industries." } },
+  { year: "2024", title: { zh: "公司成立", en: "Founded" }, desc: { zh: "2024 年成立于深圳，以电气图纸设计与 PLC 程序调试服务起步。", en: "Founded in Shenzhen in 2024, starting with electrical drawing design and PLC commissioning." } },
+  { year: "2024", title: { zh: "进入锂电行业", en: "Entered the battery industry" }, desc: { zh: "承接首个电芯装配线控制项目，切入新能源赛道。", en: "First cell assembly line control project — our entry into the new-energy sector." } },
+  { year: "2025", title: { zh: "组建机器人团队", en: "Robot team formed" }, desc: { zh: "开始提供机器人集成、视觉引导与力控应用方案。", en: "Began offering robot integration, vision guidance and force control." } },
+  { year: "2025", title: { zh: "热压机专机业务", en: "Hot press business" }, desc: { zh: "完成温度—压力闭环控制方案的标准化。", en: "Standardised the temperature and pressure closed-loop solution." } },
   { year: "2026", title: { zh: "通过 ISO 9001 认证", en: "ISO 9001 certified" }, desc: { zh: "交付流程实现体系化管理。", en: "Delivery processes brought under a formal QMS." } },
+  { year: "2026", title: { zh: "累计交付 30+ 项目", en: "30+ projects delivered" }, desc: { zh: "服务行业覆盖锂电、3C 与汽车零部件。", en: "Serving the battery, 3C and automotive parts industries." } },
 ];
 
 export const certifications = [
@@ -806,9 +806,10 @@ export const certifications = [
   { zh: "电气作业人员持证上岗", en: "Certified electrical works personnel" },
 ];
 
+// 团队规模控制在 20 人以内 / headcount stays under 20
 export const teamComposition = [
-  { value: 16, suffix: "", label: { zh: "电气设计工程师", en: "Electrical design engineers" } },
-  { value: 12, suffix: "", label: { zh: "PLC 调试工程师", en: "PLC commissioning engineers" } },
-  { value: 6, suffix: "", label: { zh: "机器人调试工程师", en: "Robot commissioning engineers" } },
-  { value: 4, suffix: "", label: { zh: "视觉与算法工程师", en: "Vision and algorithm engineers" } },
+  { value: 6, suffix: "", label: { zh: "电气设计工程师", en: "Electrical design engineers" } },
+  { value: 6, suffix: "", label: { zh: "PLC 调试工程师", en: "PLC commissioning engineers" } },
+  { value: 4, suffix: "", label: { zh: "机器人调试工程师", en: "Robot commissioning engineers" } },
+  { value: 2, suffix: "", label: { zh: "视觉与算法工程师", en: "Vision and algorithm engineers" } },
 ];

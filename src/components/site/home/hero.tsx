@@ -12,7 +12,7 @@ export function HomeHero({
   locale,
   dict,
   videoUrl,
-  posterUrl = "/media/hero-poster.svg",
+  posterUrl = "/media/hero-poster.png",
 }: {
   locale: Locale;
   dict: Dictionary;

@@ -94,16 +94,16 @@
       "title": "Results, not promises",
       "items": [
         {
-          "value": 120,
+          "value": 30,
           "suffix": "+",
           "label": "Projects delivered",
           "desc": "Battery, 3C and automotive parts"
         },
         {
-          "value": 12,
+          "value": 3,
           "suffix": " yrs",
-          "label": "Industry experience",
-          "desc": "Average across the core team"
+          "label": "Company age",
+          "desc": "Founded in Shenzhen in 2024"
         },
         {
           "value": 98,
@@ -246,22 +246,22 @@
     "contactTitle": "Get in touch",
     "stats": [
       {
-        "value": 120,
+        "value": 30,
         "suffix": "+",
         "label": "Projects"
       },
       {
-        "value": 35,
-        "suffix": "+",
-        "label": "Engineers"
+        "value": 18,
+        "suffix": "",
+        "label": "Team members"
       },
       {
-        "value": 12,
+        "value": 3,
         "suffix": " yrs",
-        "label": "Experience"
+        "label": "Company age"
       },
       {
-        "value": 8,
+        "value": 4,
         "suffix": "",
         "label": "Industries"
       }

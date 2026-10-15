@@ -94,16 +94,16 @@
       "title": "用结果说话",
       "items": [
         {
-          "value": 120,
+          "value": 30,
           "suffix": "+",
           "label": "累计交付项目",
           "desc": "覆盖锂电、3C、汽车零部件"
         },
         {
-          "value": 12,
+          "value": 3,
           "suffix": " 年",
-          "label": "行业深耕",
-          "desc": "核心团队平均从业年限"
+          "label": "成立年限",
+          "desc": "2024 年成立于深圳"
         },
         {
           "value": 98,
@@ -246,22 +246,22 @@
     "contactTitle": "联系我们",
     "stats": [
       {
-        "value": 120,
+        "value": 30,
         "suffix": "+",
         "label": "交付项目"
       },
       {
-        "value": 35,
-        "suffix": "+",
-        "label": "工程师团队"
+        "value": 18,
+        "suffix": " 人",
+        "label": "团队规模"
       },
       {
-        "value": 12,
+        "value": 3,
         "suffix": " 年",
-        "label": "行业经验"
+        "label": "成立年限"
       },
       {
-        "value": 8,
+        "value": 4,
         "suffix": " 个",
         "label": "服务行业"
       }
