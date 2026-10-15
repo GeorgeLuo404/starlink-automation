@@ -19,7 +19,13 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
         <Stagger className="mt-14 grid gap-px overflow-hidden rounded-(--radius) border border-border bg-raised sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => (
             <StaggerItem key={service.slug} className="bg-surface">
-              <TiltCard max={3}>
+              {/*
+                h-full is required: StaggerItem is the grid item and stretches to the
+                row height, but TiltCard is a plain wrapper. Without a height on it the
+                Link's h-full resolves against an auto-height parent and collapses to
+                its content, so hover/corner-ticks only covered the text.
+              */}
+              <TiltCard max={3} className="h-full">
                 <Link
                   href={localeHref(locale, `/services/${service.slug}`)}
                   className="group corner-ticks relative flex h-full flex-col p-7 transition-colors hover:bg-card lg:p-8"

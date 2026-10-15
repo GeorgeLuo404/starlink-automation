@@ -282,7 +282,7 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 
 透明度直接用 Tailwind 语法：`bg-primary/10`、`border-destructive/40`。
 
-### 6.4 三条容易踩的坑（都已经踩过一次）
+### 6.4 四条容易踩的坑（都已经踩过一次）
 
 **① `next/image` 的 `fill` 必须放在 `relative` 的父元素里**
 
@@ -341,6 +341,31 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 
 页面上其它 `absolute inset-0` 之所以没问题，是因为内容包在 `container-x relative` 里（定位层之间按 DOM 顺序叠放），
 或者装饰层本身在 `<Link>` 内部（点谁都会触发父级链接）。新增区块时注意保持这个前提。
+
+**④ `h-full` 的链条不能被中间层打断**
+
+`h-full` 是 `height: 100%`，**只有当父元素高度是确定值时才生效**。网格项会因为
+`align-items: stretch` 被拉伸到整行高度（高度确定），所以它的**直接子元素**写 `h-full` 有效；
+但只要中间多一层没设高度的普通 `div`，这一层就退化成"内容高度"，后面所有 `h-full` 全部失效。
+
+本项目首页「业务能力」卡片就踩过：`StaggerItem`（网格项，被拉伸）→ `TiltCard`（普通 div，无高度）
+→ `Link h-full`，结果 Link 只有文字那么高，**鼠标移到卡片下方的空白区域没有 hover 反应**，
+`.corner-ticks` 的角标也画在了半空中。
+
+```tsx
+// ✗ TiltCard 没有高度 → Link 的 h-full 失效
+<StaggerItem className="bg-surface">      {/* 网格项，被拉伸到整行高 */}
+  <TiltCard max={3}>                       {/* height: auto */}
+    <Link className="flex h-full ...">     {/* 100% of auto = 内容高度 */}
+
+// ✓ 把高度传递下去
+<StaggerItem className="bg-surface">
+  <TiltCard max={3} className="h-full">
+    <Link className="flex h-full ...">
+```
+
+排查口诀：**从网格项到 `h-full` 元素之间，每一层都要能传递高度**（`h-full`、`flex-1`，
+或本身就是网格/弹性子项）。
 
 ---
 
