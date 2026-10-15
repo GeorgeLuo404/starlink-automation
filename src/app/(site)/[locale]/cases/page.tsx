@@ -74,7 +74,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
                   <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-wider text-faint">
                     <span>{item.year}</span>
                     <span>·</span>
-                    <span>{item.location}</span>
+                    <span>{item.location[locale]}</span>
                   </div>
                   <h2 className="mt-3.5 line-clamp-2 text-base leading-snug font-semibold text-white transition-colors group-hover:text-primary">
                     {item.title[locale]}

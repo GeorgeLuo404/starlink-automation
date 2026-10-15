@@ -12,6 +12,52 @@
 
 export type Localized = { zh: string; en: string };
 
+/**
+ * 把双语值打包进单个文本列（数据库里 Project.scope / Project.location 用这种方式）。
+ * Packs a bilingual value into one text column, used by the single-column fields.
+ */
+export function packLocalized(value: Localized) {
+  return `${value.zh}||${value.en}`;
+}
+
+export function unpackLocalized(raw: string): Localized {
+  const [zh, en] = raw.split("||");
+  return { zh: zh ?? "", en: en || zh || "" };
+}
+
+/**
+ * 标签中英对照表 / tag translation table.
+ * 标签在数据库里是单个字符串数组，用对照表来翻译，避免把每个标签都改成对象。
+ */
+export const tagTranslations: Record<string, string> = {
+  追溯: "Traceability",
+  视觉定位: "Vision positioning",
+  安全互锁: "Safety interlocks",
+  热压机: "Hot press",
+  温控: "Temperature control",
+  配方管理: "Recipe management",
+  机器视觉: "Machine vision",
+  缺陷检测: "Defect inspection",
+  质量管理: "Quality management",
+  数据采集: "Data acquisition",
+  交付: "Delivery",
+  锂电: "Battery",
+  质量体系: "Quality system",
+  认证: "Certification",
+  锂电池检测: "Battery inspection",
+  通信: "Communication",
+  故障排查: "Troubleshooting",
+  团队: "Team",
+  机器人: "Robotics",
+  电气设计: "Electrical design",
+  规范: "Standard",
+};
+
+/** 没有对照的标签（如 S7-1500、Profinet）原样返回 / untranslated tags pass through */
+export function localizeTag(tag: string, locale: "zh" | "en") {
+  return locale === "zh" ? tag : (tagTranslations[tag] ?? tag);
+}
+
 export type ServiceContent = {
   slug: string;
   title: Localized;
@@ -29,7 +75,7 @@ export type CaseContent = {
   client: Localized;
   industry: Localized;
   year: number;
-  location: string;
+  location: Localized;
   summary: Localized;
   content: Localized;
   scope: Localized[];
@@ -103,7 +149,7 @@ export const services: ServiceContent[] = [
     title: { zh: "PLC 程序调试", en: "PLC Programming & Commissioning" },
     summary: {
       zh: "从控制方案、程序编写到现场联调，让设备按节拍稳定运行。",
-      en: "From控制 concept and programming to on-site commissioning — machines that hold their cycle time.",
+      en: "From control concept and programming to on-site commissioning — machines that hold their cycle time.",
     },
     content: {
       zh: "我们以工艺节拍为出发点设计控制逻辑，而不是先写程序再谈产能。项目启动阶段即完成 I/O 清单、状态机设计与异常流程定义，程序结构分层清晰（设备层 / 单元层 / 产线层），便于后续扩线与维护。\n\n团队熟悉西门子 S7-1200/1500、三菱 FX/Q/iQ-R、欧姆龙 NJ/NX、汇川 AM/H5U、台达 AS、倍福 TwinCAT 等主流平台，可按照客户既有体系选型，不做品牌绑定。现场调试阶段我们提供完整的调试记录、参数备份与故障处理手册，确保产线在交付后仍可被快速定位与维护。",
@@ -388,19 +434,19 @@ export const whyItems: WhyItem[] = [
 /* 合作伙伴 / Partners                                                 */
 /* ------------------------------------------------------------------ */
 
-export const partners: { name: string; sub: string }[] = [
-  { name: "SIEMENS", sub: "西门子" },
-  { name: "MITSUBISHI", sub: "三菱电机" },
-  { name: "OMRON", sub: "欧姆龙" },
-  { name: "INOVANCE", sub: "汇川技术" },
-  { name: "DELTA", sub: "台达电子" },
-  { name: "BECKHOFF", sub: "倍福自动化" },
-  { name: "FANUC", sub: "发那科" },
-  { name: "ABB", sub: "ABB 机器人" },
-  { name: "KUKA", sub: "库卡" },
-  { name: "YASKAWA", sub: "安川电机" },
-  { name: "EPSON", sub: "爱普生" },
-  { name: "UNIVERSAL ROBOTS", sub: "优傲机器人" },
+export const partners: { name: string; sub: Localized }[] = [
+  { name: "SIEMENS", sub: { zh: "西门子", en: "Siemens AG" } },
+  { name: "MITSUBISHI", sub: { zh: "三菱电机", en: "Mitsubishi Electric" } },
+  { name: "OMRON", sub: { zh: "欧姆龙", en: "Omron Corporation" } },
+  { name: "INOVANCE", sub: { zh: "汇川技术", en: "Inovance Technology" } },
+  { name: "DELTA", sub: { zh: "台达电子", en: "Delta Electronics" } },
+  { name: "BECKHOFF", sub: { zh: "倍福自动化", en: "Beckhoff Automation" } },
+  { name: "FANUC", sub: { zh: "发那科", en: "FANUC Corporation" } },
+  { name: "ABB", sub: { zh: "ABB 机器人", en: "ABB Robotics" } },
+  { name: "KUKA", sub: { zh: "库卡", en: "KUKA AG" } },
+  { name: "YASKAWA", sub: { zh: "安川电机", en: "Yaskawa Electric" } },
+  { name: "EPSON", sub: { zh: "爱普生", en: "Seiko Epson" } },
+  { name: "UNIVERSAL ROBOTS", sub: { zh: "优傲机器人", en: "Universal Robots A/S" } },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -414,7 +460,7 @@ export const cases: CaseContent[] = [
     client: { zh: "国内头部动力电池企业", en: "Leading domestic power battery maker" },
     industry: { zh: "新能源锂电", en: "New-energy battery" },
     year: 2025,
-    location: "广东 · 惠州",
+    location: { zh: "广东 · 惠州", en: "Huizhou, Guangdong" },
     summary: {
       zh: "为 12 工位电芯装配线提供整线控制与数据采集，节拍由 6.5s 优化至 5.2s。",
       en: "Full-line control and data acquisition for a 12-station cell assembly line; takt improved from 6.5s to 5.2s.",
@@ -443,7 +489,7 @@ export const cases: CaseContent[] = [
     client: { zh: "精密结构件制造商", en: "Precision structural parts manufacturer" },
     industry: { zh: "3C 电子", en: "3C electronics" },
     year: 2024,
-    location: "广东 · 深圳",
+    location: { zh: "广东 · 深圳", en: "Shenzhen, Guangdong" },
     summary: {
       zh: "CNC 加工单元机器人上下料改造，实现 1 人看管 6 台机床。",
       en: "Robot tending retrofit for a CNC cell — one operator now covers six machines.",
@@ -472,7 +518,7 @@ export const cases: CaseContent[] = [
     client: { zh: "动力电池设备集成商", en: "Power battery equipment integrator" },
     industry: { zh: "新能源锂电", en: "New-energy battery" },
     year: 2025,
-    location: "江苏 · 常州",
+    location: { zh: "江苏 · 常州", en: "Changzhou, Jiangsu" },
     summary: {
       zh: "多区温控与压力闭环改造，热板均匀性 ±2℃，压力波动 ±1.5%。",
       en: "Multi-zone temperature and pressure retrofit: platen uniformity ±2°C, pressure deviation ±1.5%.",
@@ -501,7 +547,7 @@ export const cases: CaseContent[] = [
     client: { zh: "汽车零部件一级供应商", en: "Tier-1 automotive supplier" },
     industry: { zh: "汽车零部件", en: "Automotive parts" },
     year: 2024,
-    location: "广东 · 广州",
+    location: { zh: "广东 · 广州", en: "Guangzhou, Guangdong" },
     summary: {
       zh: "替代人工目检的自动化外观检测线，漏检率从 1.2% 降至 0.15%。",
       en: "Automated appearance inspection replacing manual visual checks; escape rate down from 1.2% to 0.15%.",
@@ -530,7 +576,7 @@ export const cases: CaseContent[] = [
     client: { zh: "储能电池制造商", en: "Energy storage battery manufacturer" },
     industry: { zh: "新能源锂电", en: "New-energy battery" },
     year: 2025,
-    location: "安徽 · 合肥",
+    location: { zh: "安徽 · 合肥", en: "Hefei, Anhui" },
     summary: {
       zh: "为 8 个工位建立统一数据采集层，实现单件级全流程追溯。",
       en: "Unified data acquisition across 8 stations, delivering part-level end-to-end traceability.",
@@ -750,17 +796,6 @@ export const galleryItems: GalleryContent[] = [
 /* ------------------------------------------------------------------ */
 /* 集成能力环形图 / Integration diagram nodes                          */
 /* ------------------------------------------------------------------ */
-
-export const integrationNodes = [
-  "PLC 控制",
-  "工业机器人",
-  "机器视觉",
-  "伺服驱动",
-  "传感检测",
-  "安全系统",
-  "上位机 / MES",
-  "数据采集",
-];
 
 /* ------------------------------------------------------------------ */
 /* 关于我们 / About                                                    */

@@ -46,7 +46,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <HomeCases locale={locale} dict={dict} />
       <IntegrationOrbit dict={dict} />
       <HomeWhy locale={locale} dict={dict} />
-      <HomePartners dict={dict} />
+      <HomePartners locale={locale} dict={dict} />
       <HomeNews locale={locale} dict={dict} />
       <HomeGallery locale={locale} dict={dict} />
       <HomeCta locale={locale} dict={dict} />

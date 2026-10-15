@@ -19,6 +19,7 @@ import {
   galleryItems,
   partners,
   services,
+  packLocalized,
 } from "../src/content/defaults";
 
 try {
@@ -37,10 +38,7 @@ function pair(value: { zh: string; en: string }) {
   return { zh: value.zh, en: value.en || value.zh };
 }
 
-/** Projects store their scope as "zh||en" strings so both languages survive. */
-function scopeLine(value: { zh: string; en: string }) {
-  return `${value.zh}||${value.en || value.zh}`;
-}
+/* Bilingual single-column fields are packed as "zh||en" (see packLocalized). */
 
 async function main() {
   const db = getPrisma();
@@ -109,10 +107,10 @@ async function main() {
       coverUrl: `/media/case-${item.slug}.svg`,
       gallery: [] as string[],
       tags: item.tags,
-      scope: item.scope.map(scopeLine),
+      scope: item.scope.map(packLocalized),
       metrics: item.metrics.map((metric) => ({ value: metric.value, label: pair(metric.label) })),
       year: item.year,
-      location: item.location,
+      location: packLocalized(item.location),
       status: "PUBLISHED" as const,
       featured: item.featured,
       sortOrder: index,

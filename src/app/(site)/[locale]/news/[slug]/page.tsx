@@ -6,6 +6,7 @@ import { ArrowLeft, Clock, Eye } from "lucide-react";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
 import { getArticle, listArticles } from "@/lib/data";
+import { localizeTag } from "@/content/defaults";
 import { ViewCounter } from "@/components/site/view-counter";
 import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
@@ -107,7 +108,7 @@ export default async function ArticlePage({
                   key={tag}
                   className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                 >
-                  {tag}
+                  {localizeTag(tag, locale)}
                 </span>
               ))}
             </div>

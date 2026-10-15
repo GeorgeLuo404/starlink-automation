@@ -11,7 +11,9 @@ import {
   type CaseContent,
   type DownloadContent,
   type GalleryContent,
+  type Localized,
   type ServiceContent,
+  unpackLocalized,
 } from "@/content/defaults";
 
 /**
@@ -89,15 +91,10 @@ function toCase(row: Record<string, unknown>): CaseContent {
     client: localPair(row, "client"),
     industry: localPair(row, "industry"),
     year: Number(row.year ?? new Date().getFullYear()),
-    location: String(row.location ?? ""),
+    location: unpackLocalized(String(row.location ?? "")),
     summary: { zh: String(row.summaryZh ?? ""), en: String(row.summaryEn ?? row.summaryZh ?? "") },
     content: { zh: String(row.contentZh ?? ""), en: String(row.contentEn ?? row.contentZh ?? "") },
-    scope: Array.isArray(row.scope)
-      ? (row.scope as string[]).map((entry) => {
-          const [zh, en] = entry.split("||");
-          return { zh: zh ?? "", en: en || zh || "" };
-        })
-      : [],
+    scope: Array.isArray(row.scope) ? (row.scope as string[]).map(unpackLocalized) : [],
     metrics,
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     featured: Boolean(row.featured),
@@ -316,11 +313,13 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
 
 /* --------------------------------- 合作伙伴 -------------------------------- */
 
-export async function listPartners(): Promise<{ name: string; sub: string }[]> {
+export async function listPartners(): Promise<{ name: string; sub: Localized }[]> {
   return fromDb(async (db) => {
     const rows = await db.partner.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
     if (!rows.length) return defaultPartners;
-    return rows.map((r) => ({ name: r.name, sub: r.name }));
+    // In the admin, Partner.url carries the Chinese brand name (see admin/partners),
+    // so it doubles as the localised secondary line.
+    return rows.map((r) => ({ name: r.name, sub: { zh: r.url ?? r.name, en: r.name } }));
   }, defaultPartners);
 }
 

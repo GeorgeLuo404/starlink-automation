@@ -1,8 +1,8 @@
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import { listPartners } from "@/lib/data";
 import { Marquee } from "@/components/motion";
 
-export async function HomePartners({ dict }: { dict: Dictionary }) {
+export async function HomePartners({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const partners = await listPartners();
   const t = dict.home.partners;
   const half = Math.ceil(partners.length / 2);
@@ -18,7 +18,7 @@ export async function HomePartners({ dict }: { dict: Dictionary }) {
         <span className="font-mono text-sm tracking-[0.12em] text-body transition-colors group-hover:text-white">
           {partner.name}
         </span>
-        <span className="mt-1.5 text-[0.6875rem] text-faint">{partner.sub}</span>
+        <span className="mt-1.5 text-[0.6875rem] text-faint">{partner.sub[locale]}</span>
       </div>
     ));
 

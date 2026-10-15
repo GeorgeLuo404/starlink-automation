@@ -6,6 +6,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
 import { getCase, listCases } from "@/lib/data";
+import { localizeTag } from "@/content/defaults";
 import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { localeHref } from "@/components/site/nav-items";
@@ -53,7 +54,7 @@ export default async function CaseDetailPage({
     { label: dict.cases.client, value: item.client[locale] },
     { label: dict.cases.industry, value: item.industry[locale] },
     { label: dict.cases.year, value: String(item.year) },
-    { label: dict.cases.location, value: item.location },
+    { label: dict.cases.location, value: item.location[locale] },
   ].filter((f) => f.value);
 
   return (
@@ -136,7 +137,7 @@ export default async function CaseDetailPage({
                       key={tag}
                       className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
                     >
-                      {tag}
+                      {localizeTag(tag, locale)}
                     </span>
                   ))}
                 </div>

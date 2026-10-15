@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { Dictionary } from "@/lib/i18n";
-import { integrationNodes } from "@/content/defaults";
 import { LogoMark } from "@/components/site/logo";
 import { Reveal } from "@/components/motion";
 import { cn } from "@/lib/utils";
@@ -17,7 +16,8 @@ import { cn } from "@/lib/utils";
 export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
   const t = dict.home.integration;
   const [active, setActive] = useState<number | null>(null);
-  const nodes = integrationNodes;
+  // labels are localised in the dictionary — never hard-code them here
+  const nodes = t.nodes;
   const step = 360 / nodes.length;
 
   return (

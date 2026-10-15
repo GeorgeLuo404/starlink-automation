@@ -50,7 +50,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
                   {lead.industry[locale]}
                 </span>
                 <span className="font-mono text-[0.625rem] tracking-wider text-faint">
-                  {lead.year} · {lead.location}
+                  {lead.year} · {lead.location[locale]}
                 </span>
               </div>
 
