@@ -21,7 +21,7 @@ export default async function AdminArticleEditorPage({
       <>
         <AdminPageHeader title={isNew ? "新建文章" : "编辑文章"} />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可撰写文章。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可撰写文章。</p>
         </SetupNotice>
       </>
     );

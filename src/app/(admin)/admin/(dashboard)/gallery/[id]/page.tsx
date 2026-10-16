@@ -17,7 +17,7 @@ export default async function AdminGalleryEditorPage({ params }: { params: Promi
       <>
         <AdminPageHeader title={isNew ? "添加图片" : "编辑图片"} />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理图库。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理图库。</p>
         </SetupNotice>
       </>
     );

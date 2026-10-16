@@ -2,16 +2,34 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { clearSessionCookie, getSession, setSessionCookie, verifyPassword } from "@/lib/auth";
-import { requireDb } from "@/lib/prisma";
+import { getPrisma, requireDb } from "@/lib/prisma";
 import { deleteObject } from "@/lib/storage";
 import { slugify } from "@/lib/utils";
+import {
+  articleSchema,
+  articleStatusSchema,
+  caseSchema,
+  downloadSchema,
+  formObject,
+  gallerySchema,
+  idSchema,
+  inquiryUpdateSchema,
+  partnerSchema,
+  serviceSchema,
+  settingsSchema,
+} from "@/lib/admin-schemas";
 
 /* ====================================================================== */
 /* Helpers                                                                */
 /* ====================================================================== */
 
-export type ActionState = { ok: boolean; message?: string };
+/**
+ * Result of a form action. Success always ends in a redirect, so the state a
+ * form actually sees is either the initial `{ ok: true }` or a failure.
+ */
+export type ActionState = { ok: boolean; message?: string; fieldErrors?: Record<string, string[]> };
 
 async function guard() {
   const session = await getSession();
@@ -24,32 +42,47 @@ function bust() {
   revalidatePath("/", "layout");
 }
 
-function str(form: FormData, key: string, fallback = "") {
-  const value = form.get(key);
-  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+function invalid(error: z.ZodError): ActionState {
+  return {
+    ok: false,
+    message: error.issues[0]?.message ?? "表单内容无效，请检查后重试",
+    fieldErrors: z.flattenError(error).fieldErrors as Record<string, string[]>,
+  };
 }
 
-function optional(form: FormData, key: string) {
-  const value = form.get(key);
-  return typeof value === "string" && value.trim() ? value.trim() : null;
+const NO_DATABASE: ActionState = { ok: false, message: "数据库未连接，请先启动 PostgreSQL 并执行 pnpm db:deploy" };
+
+/** Run a database write and turn known Prisma failures into readable messages. */
+async function persist(work: () => Promise<unknown>): Promise<ActionState | null> {
+  try {
+    await work();
+    return null;
+  } catch (error) {
+    const code = typeof error === "object" && error !== null && "code" in error ? String(error.code) : "";
+    if (code === "P2002") {
+      return {
+        ok: false,
+        message: "该 Slug 已被其他记录使用，请换一个",
+        fieldErrors: { slug: ["该 Slug 已被使用"] },
+      };
+    }
+    if (code === "P2025") return { ok: false, message: "记录不存在，可能已被删除" };
+    console.error("[admin] database write failed:", error);
+    return { ok: false, message: "保存失败：数据库暂时不可用，请稍后重试" };
+  }
 }
 
-function bool(form: FormData, key: string) {
-  const value = form.get(key);
-  return value === "on" || value === "true" || value === "1";
+/** Zod parse + DB availability check shared by every form action. */
+async function prepare<T extends z.ZodType>(schema: T, form: FormData) {
+  await guard();
+  const parsed = schema.safeParse(formObject(form));
+  if (!parsed.success) return { ok: false, failure: invalid(parsed.error) } as const;
+  const db = getPrisma();
+  if (!db) return { ok: false, failure: NO_DATABASE } as const;
+  return { ok: true, data: parsed.data as z.infer<T>, db } as const;
 }
 
-function num(form: FormData, key: string, fallback = 0) {
-  const parsed = Number(form.get(key));
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function list(form: FormData, key: string) {
-  return str(form, key)
-    .split(/[,，\n]/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
+const bilingual = (row: string[]) => ({ zh: row[0] ?? "", en: row[1] || row[0] || "" });
 
 /* ====================================================================== */
 /* Auth                                                                   */
@@ -58,8 +91,8 @@ function list(form: FormData, key: string) {
 export type LoginState = { error: string | null };
 
 export async function loginAction(_prev: LoginState, form: FormData): Promise<LoginState> {
-  const email = str(form, "email").toLowerCase();
-  const password = str(form, "password");
+  const email = String(form.get("email") ?? "").trim().toLowerCase();
+  const password = String(form.get("password") ?? "");
 
   if (!email || !password) return { error: "invalid" };
 
@@ -73,7 +106,7 @@ export async function loginAction(_prev: LoginState, form: FormData): Promise<Lo
   } catch (error) {
     console.error("[login] database unavailable:", error);
     return {
-      error: "数据库未连接，请先配置 DATABASE_URL 并执行 pnpm db:push 与 pnpm db:seed / Database unavailable.",
+      error: "数据库未连接，请先启动 PostgreSQL 并执行 pnpm db:deploy 与 pnpm db:seed / Database unavailable.",
     };
   }
 
@@ -102,67 +135,55 @@ export async function logoutAction() {
 /* Articles / 新闻                                                        */
 /* ====================================================================== */
 
-export async function saveArticle(form: FormData) {
-  await guard();
-  const db = requireDb();
-
-  const id = optional(form, "id");
-  const titleZh = str(form, "titleZh");
-  const slug = str(form, "slug") || slugify(titleZh);
-
-  const status = str(form, "status", "DRAFT") as "DRAFT" | "PUBLISHED" | "ARCHIVED";
-  const publishedAtRaw = optional(form, "publishedAt");
+export async function saveArticle(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(articleSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...fields } = input;
 
   const data = {
-    slug,
-    titleZh,
-    titleEn: optional(form, "titleEn"),
-    excerptZh: optional(form, "excerptZh"),
-    excerptEn: optional(form, "excerptEn"),
-    contentZh: str(form, "contentZh", " "),
-    contentEn: optional(form, "contentEn"),
-    coverUrl: optional(form, "coverUrl"),
-    tags: list(form, "tags"),
-    status,
-    featured: bool(form, "featured"),
-    pinned: bool(form, "pinned"),
-    readMinutes: num(form, "readMinutes", 3),
-    seoTitle: optional(form, "seoTitle"),
-    seoDesc: optional(form, "seoDesc"),
-    publishedAt: publishedAtRaw ? new Date(publishedAtRaw) : status === "PUBLISHED" ? new Date() : null,
+    ...fields,
+    slug: input.slug || slugify(input.titleZh),
+    publishedAt: input.publishedAt ?? (input.status === "PUBLISHED" ? new Date() : null),
   };
 
-  if (id) {
-    await db.article.update({ where: { id }, data });
-  } else {
-    await db.article.create({ data });
-  }
+  const failure = await persist(() =>
+    id ? db.article.update({ where: { id }, data }) : db.article.create({ data })
+  );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/articles");
 }
 
-export async function deleteArticle(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().article.delete({ where: { id } });
-    bust();
-  }
+export async function deleteArticle(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.article.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/articles");
 }
 
-export async function setArticleStatus(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  const status = str(form, "status", "DRAFT") as "DRAFT" | "PUBLISHED" | "ARCHIVED";
-  if (id) {
-    await requireDb().article.update({
-      where: { id },
-      data: { status, publishedAt: status === "PUBLISHED" ? new Date() : undefined },
+export async function setArticleStatus(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(articleStatusSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data } = ready;
+
+  const failure = await persist(async () => {
+    const current = await db.article.findUniqueOrThrow({ where: { id: data.id }, select: { publishedAt: true } });
+    await db.article.update({
+      where: { id: data.id },
+      // Keep the original publish date when an article is taken down and re-published.
+      data: {
+        status: data.status,
+        publishedAt: data.status === "PUBLISHED" && !current.publishedAt ? new Date() : undefined,
+      },
     });
-    bust();
-  }
+  });
+  if (failure) return failure;
+
+  bust();
   redirect("/admin/articles");
 }
 
@@ -170,67 +191,41 @@ export async function setArticleStatus(form: FormData) {
 /* Projects / 案例                                                        */
 /* ====================================================================== */
 
-export async function saveCase(form: FormData) {
-  await guard();
-  const db = requireDb();
-
-  const id = optional(form, "id");
-  const titleZh = str(form, "titleZh");
-  const slug = str(form, "slug") || slugify(titleZh);
-
-  const metrics = list(form, "metrics")
-    .map((entry) => {
-      const [value, zh, en] = entry.split("|").map((part) => part?.trim() ?? "");
-      return value ? { value, label: { zh: zh || value, en: en || zh || value } } : null;
-    })
-    .filter(Boolean) as { value: string; label: { zh: string; en: string } }[];
+export async function saveCase(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(caseSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...fields } = input;
 
   const data = {
-    slug,
-    titleZh,
-    titleEn: optional(form, "titleEn"),
-    clientZh: optional(form, "clientZh"),
-    clientEn: optional(form, "clientEn"),
-    industryZh: optional(form, "industryZh"),
-    industryEn: optional(form, "industryEn"),
-    summaryZh: optional(form, "summaryZh"),
-    summaryEn: optional(form, "summaryEn"),
-    contentZh: optional(form, "contentZh"),
-    contentEn: optional(form, "contentEn"),
-    coverUrl: optional(form, "coverUrl"),
-    gallery: list(form, "gallery"),
-    videoUrl: optional(form, "videoUrl"),
-    tags: list(form, "tags"),
-    scope: str(form, "scope")
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const [zh, en] = line.split("|").map((part) => part?.trim() ?? "");
-        return `${zh ?? ""}||${en || zh || ""}`;
-      }),
-    metrics,
-    year: num(form, "year", new Date().getFullYear()),
-    location: optional(form, "location"),
-    status: str(form, "status", "DRAFT") as "DRAFT" | "PUBLISHED" | "ARCHIVED",
-    featured: bool(form, "featured"),
-    sortOrder: num(form, "sortOrder", 0),
+    ...fields,
+    slug: input.slug || slugify(input.titleZh),
+    // Bilingual scope entries are stored packed as "zh||en" (see packLocalized).
+    scope: input.scope.map((row) => {
+      const { zh, en } = bilingual(row);
+      return `${zh}||${en}`;
+    }),
+    metrics: input.metrics.map((row) => ({
+      value: row[0],
+      label: { zh: row[1] || row[0], en: row[2] || row[1] || row[0] },
+    })),
   };
 
-  if (id) await db.project.update({ where: { id }, data });
-  else await db.project.create({ data });
+  const failure = await persist(() =>
+    id ? db.project.update({ where: { id }, data }) : db.project.create({ data })
+  );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/cases");
 }
 
-export async function deleteCase(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().project.delete({ where: { id } });
-    bust();
-  }
+export async function deleteCase(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.project.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/cases");
 }
 
@@ -238,71 +233,38 @@ export async function deleteCase(form: FormData) {
 /* Services / 业务能力                                                    */
 /* ====================================================================== */
 
-export async function saveService(form: FormData) {
-  await guard();
-  const db = requireDb();
-
-  const id = optional(form, "id");
-  const titleZh = str(form, "titleZh");
-  const slug = str(form, "slug") || slugify(titleZh);
-
-  const features = list(form, "features").map((entry) => {
-    const [zh, en] = entry.split("|").map((part) => part?.trim() ?? "");
-    return { zh: zh ?? "", en: en || zh || "" };
-  });
-
-  const pairLines = (key: string) =>
-    str(form, key)
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const [zh, en] = line.split("|").map((part) => part?.trim() ?? "");
-        return { zh: zh ?? "", en: en || zh || "" };
-      });
-
-  const faq = str(form, "faq")
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [qZh, qEn, aZh, aEn] = line.split("|").map((part) => part?.trim() ?? "");
-      return { q: { zh: qZh ?? "", en: qEn || qZh || "" }, a: { zh: aZh ?? "", en: aEn || aZh || "" } };
-    })
-    .filter((entry) => entry.q.zh && entry.a.zh);
+export async function saveService(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(serviceSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...fields } = input;
 
   const data = {
-    slug,
-    titleZh,
-    titleEn: optional(form, "titleEn"),
-    summaryZh: optional(form, "summaryZh"),
-    summaryEn: optional(form, "summaryEn"),
-    contentZh: optional(form, "contentZh"),
-    contentEn: optional(form, "contentEn"),
-    icon: str(form, "icon", "Cpu"),
-    coverUrl: optional(form, "coverUrl"),
-    videoUrl: optional(form, "videoUrl"),
-    features,
-    deliverables: pairLines("deliverables"),
-    faq,
-    published: bool(form, "published"),
-    sortOrder: num(form, "sortOrder", 0),
+    ...fields,
+    slug: input.slug || slugify(input.titleZh),
+    features: input.features.map(bilingual),
+    deliverables: input.deliverables.map(bilingual),
+    faq: input.faq.map((row) => ({
+      q: { zh: row[0], en: row[1] || row[0] },
+      a: { zh: row[2], en: row[3] || row[2] },
+    })),
   };
 
-  if (id) await db.service.update({ where: { id }, data });
-  else await db.service.create({ data });
+  const failure = await persist(() =>
+    id ? db.service.update({ where: { id }, data }) : db.service.create({ data })
+  );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/services");
 }
 
-export async function deleteService(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().service.delete({ where: { id } });
-    bust();
-  }
+export async function deleteService(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.service.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/services");
 }
 
@@ -310,44 +272,34 @@ export async function deleteService(form: FormData) {
 /* Downloads / 资料                                                       */
 /* ====================================================================== */
 
-export async function saveDownload(form: FormData) {
-  await guard();
-  const db = requireDb();
-
-  const id = optional(form, "id");
-  const titleZh = str(form, "titleZh");
-  const slug = str(form, "slug") || slugify(titleZh);
+export async function saveDownload(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(downloadSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...fields } = input;
 
   const data = {
-    slug,
-    titleZh,
-    titleEn: optional(form, "titleEn"),
-    descriptionZh: optional(form, "descriptionZh"),
-    descriptionEn: optional(form, "descriptionEn"),
-    fileUrl: str(form, "fileUrl", "#"),
-    storageKey: optional(form, "storageKey"),
-    fileType: str(form, "fileType", "PDF").toUpperCase(),
-    fileSize: num(form, "fileSize", 0),
-    version: optional(form, "version"),
-    requiresForm: bool(form, "requiresForm"),
-    status: str(form, "status", "PUBLISHED") as "DRAFT" | "PUBLISHED" | "ARCHIVED",
-    sortOrder: num(form, "sortOrder", 0),
+    ...fields,
+    slug: input.slug || slugify(input.titleZh),
+    // Empty means "no file yet": the download route then serves a placeholder PDF.
+    fileUrl: input.fileUrl ?? "",
   };
 
-  if (id) await db.downloadFile.update({ where: { id }, data });
-  else await db.downloadFile.create({ data });
+  const failure = await persist(() =>
+    id ? db.downloadFile.update({ where: { id }, data }) : db.downloadFile.create({ data })
+  );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/downloads");
 }
 
-export async function deleteDownload(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().downloadFile.delete({ where: { id } });
-    bust();
-  }
+export async function deleteDownload(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.downloadFile.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/downloads");
 }
 
@@ -355,42 +307,27 @@ export async function deleteDownload(form: FormData) {
 /* Gallery / 图库                                                         */
 /* ====================================================================== */
 
-export async function saveGalleryItem(form: FormData) {
-  await guard();
-  const db = requireDb();
+export async function saveGalleryItem(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(gallerySchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...data } = input;
 
-  const id = optional(form, "id");
-  const url = str(form, "url");
-  const kind = str(form, "mediaKind", "IMAGE") as "IMAGE" | "VIDEO" | "DOCUMENT";
-
-  const data = {
-    titleZh: str(form, "titleZh"),
-    titleEn: optional(form, "titleEn"),
-    captionZh: optional(form, "captionZh"),
-    captionEn: optional(form, "captionEn"),
-    url,
-    thumbUrl: optional(form, "thumbUrl"),
-    mediaKind: kind,
-    videoUrl: optional(form, "videoUrl"),
-    album: str(form, "album", "general"),
-    status: str(form, "status", "PUBLISHED") as "DRAFT" | "PUBLISHED" | "ARCHIVED",
-    sortOrder: num(form, "sortOrder", 0),
-  };
-
-  if (id) await db.galleryItem.update({ where: { id }, data });
-  else await db.galleryItem.create({ data });
+  const failure = await persist(() =>
+    id ? db.galleryItem.update({ where: { id }, data }) : db.galleryItem.create({ data })
+  );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/gallery");
 }
 
-export async function deleteGalleryItem(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().galleryItem.delete({ where: { id } });
-    bust();
-  }
+export async function deleteGalleryItem(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.galleryItem.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/gallery");
 }
 
@@ -398,34 +335,20 @@ export async function deleteGalleryItem(form: FormData) {
 /* Media library / 媒体库                                                 */
 /* ====================================================================== */
 
-export async function deleteMediaAsset(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  const storageKey = optional(form, "storageKey");
-  const redirectTo = str(form, "redirectTo", "/admin/media");
+export async function deleteMediaAsset(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data } = ready;
 
-  const db = requireDb();
-  const asset = id ? await db.mediaAsset.findUnique({ where: { id } }) : null;
-
-  if (asset) {
-    await db.mediaAsset.delete({ where: { id: asset.id } });
+  // The storage key always comes from the database record, never from the form,
+  // so a crafted request cannot delete arbitrary files.
+  const failure = await persist(async () => {
+    const asset = await db.mediaAsset.delete({ where: { id: data.id } });
     await deleteObject(asset.storageKey);
-  } else if (storageKey) {
-    await deleteObject(storageKey);
-  }
+  });
+  if (failure) return failure;
 
   bust();
-  redirect(redirectTo);
-}
-
-export async function updateMediaMeta(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (!id) redirect("/admin/media");
-  await requireDb().mediaAsset.update({
-    where: { id },
-    data: { alt: optional(form, "alt"), folder: str(form, "folder", "general") },
-  });
   redirect("/admin/media");
 }
 
@@ -433,24 +356,22 @@ export async function updateMediaMeta(form: FormData) {
 /* Inquiries / 询盘                                                       */
 /* ====================================================================== */
 
-export async function updateInquiry(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (!id) redirect("/admin/inquiries");
-  await requireDb().inquiry.update({
-    where: { id },
-    data: {
-      status: str(form, "status", "NEW") as "NEW" | "IN_PROGRESS" | "DONE" | "SPAM",
-      note: optional(form, "note"),
-    },
-  });
+export async function updateInquiry(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(inquiryUpdateSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data } = ready;
+  const failure = await persist(() =>
+    db.inquiry.update({ where: { id: data.id }, data: { status: data.status, note: data.note } })
+  );
+  if (failure) return failure;
   redirect("/admin/inquiries");
 }
 
-export async function deleteInquiry(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) await requireDb().inquiry.delete({ where: { id } });
+export async function deleteInquiry(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.inquiry.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
   redirect("/admin/inquiries");
 }
 
@@ -458,30 +379,27 @@ export async function deleteInquiry(form: FormData) {
 /* Partners / 合作伙伴                                                    */
 /* ====================================================================== */
 
-export async function savePartner(form: FormData) {
-  await guard();
-  const db = requireDb();
-  const id = optional(form, "id");
-  const data = {
-    name: str(form, "name"),
-    logoUrl: optional(form, "logoUrl"),
-    url: optional(form, "url"),
-    active: bool(form, "active"),
-    sortOrder: num(form, "sortOrder", 0),
-  };
-  if (id) await db.partner.update({ where: { id }, data });
-  else await db.partner.create({ data });
+export async function savePartner(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(partnerSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data: input } = ready;
+  const { id, ...data } = input;
+
+  const failure = await persist(() =>
+    id ? db.partner.update({ where: { id }, data }) : db.partner.create({ data })
+  );
+  if (failure) return failure;
+
   bust();
   redirect("/admin/partners");
 }
 
-export async function deletePartner(form: FormData) {
-  await guard();
-  const id = str(form, "id");
-  if (id) {
-    await requireDb().partner.delete({ where: { id } });
-    bust();
-  }
+export async function deletePartner(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(idSchema, form);
+  if (!ready.ok) return ready.failure;
+  const failure = await persist(() => ready.db.partner.delete({ where: { id: ready.data.id } }));
+  if (failure) return failure;
+  bust();
   redirect("/admin/partners");
 }
 
@@ -489,30 +407,24 @@ export async function deletePartner(form: FormData) {
 /* Site settings / 站点设置                                               */
 /* ====================================================================== */
 
-export async function saveSettings(form: FormData) {
-  await guard();
-  const db = requireDb();
+export async function saveSettings(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const ready = await prepare(settingsSchema, form);
+  if (!ready.ok) return ready.failure;
+  const { db, data } = ready;
 
-  const entries: Record<string, unknown> = {
-    heroVideoUrl: optional(form, "heroVideoUrl"),
-    heroPosterUrl: optional(form, "heroPosterUrl"),
-    contactPhone: str(form, "contactPhone"),
-    contactEmail: str(form, "contactEmail"),
-    contactAddressZh: str(form, "contactAddressZh"),
-    contactAddressEn: str(form, "contactAddressEn"),
-    icp: str(form, "icp"),
-    analyticsId: optional(form, "analyticsId"),
-  };
-
-  await Promise.all(
-    Object.entries(entries).map(([key, value]) =>
-      db.siteSetting.upsert({
-        where: { key },
-        create: { key, value: value as never },
-        update: { value: value as never },
-      })
+  const failure = await persist(() =>
+    db.$transaction(
+      Object.entries(data).map(([key, value]) =>
+        db.siteSetting.upsert({
+          where: { key },
+          // SiteSetting.value is a non-nullable Json column, so "unset" is stored as "".
+          create: { key, value: value ?? "" },
+          update: { value: value ?? "" },
+        })
+      )
     )
   );
+  if (failure) return failure;
 
   bust();
   redirect("/admin/settings?saved=1");

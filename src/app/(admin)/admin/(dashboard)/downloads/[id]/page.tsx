@@ -17,7 +17,7 @@ export default async function AdminDownloadEditorPage({ params }: { params: Prom
       <>
         <AdminPageHeader title={isNew ? "上传资料" : "编辑资料"} />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理下载资料。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理下载资料。</p>
         </SetupNotice>
       </>
     );

@@ -18,7 +18,7 @@ export default async function AdminMediaPage({
       <>
         <AdminPageHeader title="媒体库" description="统一管理图片、视频与文档资源。" />
         <SetupNotice title="数据库尚未连接">
-          <p>媒体库需要数据库来索引文件。请先配置 DATABASE_URL 并执行 pnpm db:push。</p>
+          <p>媒体库需要数据库来索引文件。请先配置 DATABASE_URL 并执行 pnpm db:deploy。</p>
         </SetupNotice>
       </>
     );
@@ -54,7 +54,7 @@ export default async function AdminMediaPage({
         <AdminPageHeader title="媒体库" description="统一管理图片、视频与文档资源。" />
         <SetupNotice title="无法读取媒体库">
           <p className="font-mono text-xs">{error}</p>
-          <p>请确认数据库已迁移：pnpm db:push</p>
+          <p>请确认数据库已迁移：pnpm db:deploy</p>
         </SetupNotice>
       </>
     );

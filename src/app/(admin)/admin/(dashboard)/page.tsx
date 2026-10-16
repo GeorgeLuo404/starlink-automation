@@ -21,7 +21,7 @@ export default async function AdminDashboardPage() {
           <ol className="list-decimal space-y-1.5 pl-5 font-mono text-xs">
             <li>复制 .env.example 为 .env，并填写 DATABASE_URL</li>
             <li>docker compose up -d db （或使用本机 / 阿里云 RDS 的 PostgreSQL）</li>
-            <li>pnpm db:push</li>
+            <li>pnpm db:deploy</li>
             <li>pnpm db:seed</li>
             <li>pnpm admin:create</li>
           </ol>

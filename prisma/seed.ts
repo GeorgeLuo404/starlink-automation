@@ -1,13 +1,17 @@
 /**
  * 数据初始化 / Database seed
  *
- *   pnpm db:push && pnpm db:seed
+ *   pnpm db:deploy && pnpm db:seed
  *
  * 内容来源为 src/content/defaults.ts —— 与站点在无数据库时使用的兜底内容完全一致，
  * 因此初始化后的数据库与站点默认展示不会出现差异。
  *
- * The seed is idempotent: running it repeatedly updates the same rows instead of
- * creating duplicates.
+ * 默认只写入空表：某张表已有数据（例如已在后台编辑过）时整张表跳过，不会覆盖。
+ * 需要用 defaults.ts 覆盖同 slug 的记录时，显式执行：pnpm db:seed --force
+ *
+ * By default each table is seeded only while it is empty, so re-running the seed
+ * never clobbers content edited in the admin. Pass --force to overwrite the
+ * seeded rows (matched by slug) with the bundled defaults.
  */
 import path from "node:path";
 import { getPrisma } from "../src/lib/prisma";
@@ -34,6 +38,19 @@ const CATEGORY_SLUGS: Record<string, string> = {
   技术分享: "technical-notes",
 };
 
+const FORCE = process.argv.includes("--force");
+
+/** Seed one table only while it is empty, unless --force asks to overwrite. */
+async function seedTable(label: string, count: () => Promise<number>, run: () => Promise<void>) {
+  const existing = await count();
+  if (existing > 0 && !FORCE) {
+    console.log(`→ Skipping ${label}: already has ${existing} row(s) (use --force to overwrite)`);
+    return;
+  }
+  console.log(`→ Seeding ${label}…`);
+  await run();
+}
+
 function pair(value: { zh: string; en: string }) {
   return { zh: value.zh, en: value.en || value.zh };
 }
@@ -45,7 +62,7 @@ async function main() {
   if (!db) {
     console.error(
       "\n✗ DATABASE_URL is not set. Copy .env.example to .env, start PostgreSQL\n" +
-        "  (docker compose up -d db), then run: pnpm db:push && pnpm db:seed\n"
+        "  (docker compose up -d db), then run: pnpm db:deploy && pnpm db:seed\n"
     );
     process.exit(1);
   }
@@ -60,7 +77,7 @@ async function main() {
     const row = await db.category.upsert({
       where: { kind_slug: { kind: "ARTICLE", slug } },
       create: { kind: "ARTICLE", slug, nameZh, nameEn: source.category.en, sortOrder: index },
-      update: { nameZh, nameEn: source.category.en, sortOrder: index },
+      update: FORCE ? { nameZh, nameEn: source.category.en, sortOrder: index } : {},
     });
     categoryIds.set(nameZh, row.id);
   }
@@ -71,118 +88,124 @@ async function main() {
     update: {},
   });
 
-  console.log("→ Seeding services…");
-  for (const [index, service] of services.entries()) {
-    const data = {
-      titleZh: service.title.zh,
-      titleEn: service.title.en,
-      summaryZh: service.summary.zh,
-      summaryEn: service.summary.en,
-      contentZh: service.content.zh,
-      contentEn: service.content.en,
-      icon: service.icon,
-      coverUrl: `/media/service-${service.slug}.svg`,
-      features: service.features.map(pair),
-      deliverables: service.deliverables.map(pair),
-      faq: service.faq.map((entry) => ({ q: pair(entry.q), a: pair(entry.a) })),
-      published: true,
-      sortOrder: index,
-    };
-    await db.service.upsert({ where: { slug: service.slug }, create: { slug: service.slug, ...data }, update: data });
-  }
+  await seedTable("services", () => db.service.count(), async () => {
+    for (const [index, service] of services.entries()) {
+      const data = {
+        titleZh: service.title.zh,
+        titleEn: service.title.en,
+        summaryZh: service.summary.zh,
+        summaryEn: service.summary.en,
+        contentZh: service.content.zh,
+        contentEn: service.content.en,
+        icon: service.icon,
+        coverUrl: `/media/service-${service.slug}.svg`,
+        features: service.features.map(pair),
+        deliverables: service.deliverables.map(pair),
+        faq: service.faq.map((entry) => ({ q: pair(entry.q), a: pair(entry.a) })),
+        published: true,
+        sortOrder: index,
+      };
+      await db.service.upsert({ where: { slug: service.slug }, create: { slug: service.slug, ...data }, update: data });
+    }
+  });
 
-  console.log("→ Seeding projects…");
-  for (const [index, item] of cases.entries()) {
-    const data = {
-      titleZh: item.title.zh,
-      titleEn: item.title.en,
-      clientZh: item.client.zh,
-      clientEn: item.client.en,
-      industryZh: item.industry.zh,
-      industryEn: item.industry.en,
-      summaryZh: item.summary.zh,
-      summaryEn: item.summary.en,
-      contentZh: item.content.zh,
-      contentEn: item.content.en,
-      coverUrl: `/media/case-${item.slug}.svg`,
-      gallery: [] as string[],
-      tags: item.tags,
-      scope: item.scope.map(packLocalized),
-      metrics: item.metrics.map((metric) => ({ value: metric.value, label: pair(metric.label) })),
-      year: item.year,
-      location: packLocalized(item.location),
-      status: "PUBLISHED" as const,
-      featured: item.featured,
-      sortOrder: index,
-    };
-    await db.project.upsert({ where: { slug: item.slug }, create: { slug: item.slug, ...data }, update: data });
-  }
+  await seedTable("projects", () => db.project.count(), async () => {
+    for (const [index, item] of cases.entries()) {
+      const data = {
+        titleZh: item.title.zh,
+        titleEn: item.title.en,
+        clientZh: item.client.zh,
+        clientEn: item.client.en,
+        industryZh: item.industry.zh,
+        industryEn: item.industry.en,
+        summaryZh: item.summary.zh,
+        summaryEn: item.summary.en,
+        contentZh: item.content.zh,
+        contentEn: item.content.en,
+        coverUrl: `/media/case-${item.slug}.svg`,
+        gallery: [] as string[],
+        tags: item.tags,
+        scope: item.scope.map(packLocalized),
+        metrics: item.metrics.map((metric) => ({ value: metric.value, label: pair(metric.label) })),
+        year: item.year,
+        location: packLocalized(item.location),
+        status: "PUBLISHED" as const,
+        featured: item.featured,
+        sortOrder: index,
+      };
+      await db.project.upsert({ where: { slug: item.slug }, create: { slug: item.slug, ...data }, update: data });
+    }
+  });
 
-  console.log("→ Seeding articles…");
-  for (const [index, article] of articles.entries()) {
-    const data = {
-      titleZh: article.title.zh,
-      titleEn: article.title.en,
-      excerptZh: article.excerpt.zh,
-      excerptEn: article.excerpt.en,
-      contentZh: article.content.zh,
-      contentEn: article.content.en,
-      coverUrl: `/media/article-${article.slug}.svg`,
-      tags: article.tags,
-      status: "PUBLISHED" as const,
-      featured: article.featured,
-      pinned: index === 0,
-      readMinutes: article.readMinutes,
-      publishedAt: new Date(article.publishedAt),
-      categoryId: categoryIds.get(article.category.zh) ?? null,
-    };
-    await db.article.upsert({ where: { slug: article.slug }, create: { slug: article.slug, ...data }, update: data });
-  }
+  await seedTable("articles", () => db.article.count(), async () => {
+    for (const [index, article] of articles.entries()) {
+      const data = {
+        titleZh: article.title.zh,
+        titleEn: article.title.en,
+        excerptZh: article.excerpt.zh,
+        excerptEn: article.excerpt.en,
+        contentZh: article.content.zh,
+        contentEn: article.content.en,
+        coverUrl: `/media/article-${article.slug}.svg`,
+        tags: article.tags,
+        status: "PUBLISHED" as const,
+        featured: article.featured,
+        pinned: index === 0,
+        readMinutes: article.readMinutes,
+        publishedAt: new Date(article.publishedAt),
+        categoryId: categoryIds.get(article.category.zh) ?? null,
+      };
+      await db.article.upsert({ where: { slug: article.slug }, create: { slug: article.slug, ...data }, update: data });
+    }
+  });
 
-  console.log("→ Seeding downloads…");
-  for (const item of downloads) {
-    const data = {
-      titleZh: item.title.zh,
-      titleEn: item.title.en,
-      descriptionZh: item.description.zh,
-      descriptionEn: item.description.en,
-      fileUrl: "#",
-      fileType: item.fileType,
-      fileSize: item.fileSize,
-      version: item.version,
-      status: "PUBLISHED" as const,
-      sortOrder: item.sortOrder,
-      categoryId: downloadCategory.id,
-    };
-    await db.downloadFile.upsert({ where: { slug: item.slug }, create: { slug: item.slug, ...data }, update: data });
-  }
+  await seedTable("downloads", () => db.downloadFile.count(), async () => {
+    for (const item of downloads) {
+      const data = {
+        titleZh: item.title.zh,
+        titleEn: item.title.en,
+        descriptionZh: item.description.zh,
+        descriptionEn: item.description.en,
+        fileUrl: "", // no file yet → the download route serves a placeholder PDF
+        fileType: item.fileType,
+        fileSize: item.fileSize,
+        version: item.version,
+        status: "PUBLISHED" as const,
+        sortOrder: item.sortOrder,
+        categoryId: downloadCategory.id,
+      };
+      await db.downloadFile.upsert({ where: { slug: item.slug }, create: { slug: item.slug, ...data }, update: data });
+    }
+  });
 
-  console.log("→ Seeding gallery…");
-  for (const [index, item] of galleryItems.entries()) {
-    const url = `/media/gallery-${String(index + 1).padStart(2, "0")}.svg`;
-    const existing = await db.galleryItem.findFirst({ where: { url } });
-    const data = {
-      titleZh: item.title.zh,
-      titleEn: item.title.en,
-      captionZh: item.caption.zh,
-      captionEn: item.caption.en,
-      url,
-      mediaKind: item.mediaKind,
-      album: item.album.zh,
-      status: "PUBLISHED" as const,
-      sortOrder: index,
-    };
-    if (existing) await db.galleryItem.update({ where: { id: existing.id }, data });
-    else await db.galleryItem.create({ data });
-  }
+  await seedTable("gallery", () => db.galleryItem.count(), async () => {
+    for (const [index, item] of galleryItems.entries()) {
+      const url = `/media/gallery-${String(index + 1).padStart(2, "0")}.svg`;
+      const existing = await db.galleryItem.findFirst({ where: { url } });
+      const data = {
+        titleZh: item.title.zh,
+        titleEn: item.title.en,
+        captionZh: item.caption.zh,
+        captionEn: item.caption.en,
+        url,
+        mediaKind: item.mediaKind,
+        album: item.album.zh,
+        status: "PUBLISHED" as const,
+        sortOrder: index,
+      };
+      if (existing) await db.galleryItem.update({ where: { id: existing.id }, data });
+      else await db.galleryItem.create({ data });
+    }
+  });
 
-  console.log("→ Seeding partners…");
-  for (const [index, partner] of partners.entries()) {
-    const existing = await db.partner.findFirst({ where: { name: partner.name } });
-    const data = { name: partner.name, sortOrder: index, active: true };
-    if (existing) await db.partner.update({ where: { id: existing.id }, data });
-    else await db.partner.create({ data });
-  }
+  await seedTable("partners", () => db.partner.count(), async () => {
+    for (const [index, partner] of partners.entries()) {
+      const existing = await db.partner.findFirst({ where: { name: partner.name } });
+      const data = { name: partner.name, sortOrder: index, active: true };
+      if (existing) await db.partner.update({ where: { id: existing.id }, data });
+      else await db.partner.create({ data });
+    }
+  });
 
   console.log("→ Seeding site settings…");
   const settings: Record<string, string> = {

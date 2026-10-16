@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
  * or — when no file has been uploaded yet — streams a generated placeholder PDF
  * so the download button always does something useful.
  */
-export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = await getDownload(slug);
   if (!item) {
@@ -21,8 +21,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
 
   await incrementDownloadCount(slug);
 
-  if (item.fileUrl) {
-    return NextResponse.redirect(item.fileUrl, 302);
+  // "#" is the legacy "no file yet" marker; relative paths (local storage driver)
+  // must be resolved against the request because redirects need absolute URLs.
+  if (item.fileUrl && item.fileUrl !== "#") {
+    return NextResponse.redirect(new URL(item.fileUrl, request.url), 302);
   }
 
   const pdf = buildPlaceholderPdf({

@@ -1,4 +1,5 @@
 import { saveGalleryItem } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
 
@@ -19,7 +20,7 @@ type GalleryRecord = {
 
 export function GalleryForm({ record }: { record?: GalleryRecord }) {
   return (
-    <form action={saveGalleryItem} className="space-y-6">
+    <ActionForm action={saveGalleryItem} className="space-y-6">
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="图片信息">
@@ -61,6 +62,6 @@ export function GalleryForm({ record }: { record?: GalleryRecord }) {
       </FormSection>
 
       <FormActions cancelHref="/admin/gallery" submitLabel={record ? "保存修改" : "添加到图库"} />
-    </form>
+    </ActionForm>
   );
 }

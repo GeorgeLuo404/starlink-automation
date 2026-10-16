@@ -1,4 +1,5 @@
 import { saveService } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
 
@@ -53,7 +54,7 @@ function featuresToText(features: unknown) {
 
 export function ServiceForm({ record }: { record?: ServiceRecord }) {
   return (
-    <form action={saveService} className="space-y-6">
+    <ActionForm action={saveService} className="space-y-6">
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="业务信息">
@@ -127,6 +128,6 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
       </FormSection>
 
       <FormActions cancelHref="/admin/services" submitLabel={record ? "保存修改" : "创建业务"} />
-    </form>
+    </ActionForm>
   );
 }
