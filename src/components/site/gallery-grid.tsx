@@ -53,12 +53,14 @@ export function GalleryGrid({ items }: { items: GalleryView[] }) {
               i % 7 === 0 ? "col-span-2 row-span-2" : ""
             )}
           >
-            <div className={cn("relative", i % 7 === 0 ? "aspect-square" : "aspect-4/3")}>
+            {/* Spacer sets the minimum height; the image fills whatever the grid row stretches to. */}
+            <div className="aspect-4/3" />
+            <div className="absolute inset-0">
               <Image
                 src={item.url ?? `/media/gallery-${String((i % 9) + 1).padStart(2, "0")}.svg`}
                 alt={item.title}
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes={i % 7 === 0 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 50vw, 25vw"}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </div>

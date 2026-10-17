@@ -30,8 +30,8 @@ export function SiteHeader() {
             : "border-b border-transparent bg-transparent"
         )}
       >
-        <div className="container-x flex h-16 items-center justify-between gap-6 md:h-20">
-          <Link href="/" className="shrink-0" aria-label={copy.meta.siteName}>
+        <div className="container-x flex h-16 items-center justify-between gap-6 md:h-20 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+          <Link href="/" className="shrink-0 justify-self-start" aria-label={copy.meta.siteName}>
             <Logo size="md" />
           </Link>
 
@@ -114,7 +114,7 @@ export function SiteHeader() {
             )}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-self-end">
             <Link href="/contact" className="btn btn-primary hidden h-9 px-4 text-xs lg:inline-flex">
               {copy.nav.cta}
             </Link>

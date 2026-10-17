@@ -33,12 +33,13 @@ export async function HomeGallery() {
                 href="/gallery"
                 className="group relative block size-full overflow-hidden rounded-(--radius) border border-border"
               >
-                <div className={i === 0 ? "relative aspect-square" : "relative aspect-4/3"}>
+                <div className="aspect-4/3" />
+                <div className="absolute inset-0">
                   <Image
                     src={item.url ?? `/media/gallery-${String(i + 1).padStart(2, "0")}.svg`}
                     alt={item.title}
                     fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    sizes={i === 0 ? "(max-width: 768px) 100vw, 33vw" : "(max-width: 768px) 50vw, 17vw"}
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
