@@ -3,14 +3,17 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { FieldError, SubmitButton, useFieldError } from "@/components/admin/action-form";
 
 /*
  * Field components for admin forms. They are client components so they can read
  * the validation state of the enclosing <ActionForm> and show inline errors.
  */
-
-const invalidClass = "border-destructive/60 focus:border-destructive/70";
 
 function errorProps(name: string, error: string | undefined) {
   return error ? { "aria-invalid": true, "aria-describedby": `${name}-error` } : {};
@@ -58,17 +61,16 @@ export function FormField({
   const error = useFieldError(name);
   return (
     <div className={className}>
-      <label className="field-label" htmlFor={name}>
+      <Label htmlFor={name}>
         {label} {required ? <span className="text-destructive">*</span> : null}
-      </label>
-      <input
+      </Label>
+      <Input
         id={name}
         name={name}
         type={type}
         required={required}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
-        className={cn("field", error && invalidClass)}
         {...errorProps(name, error)}
       />
       <FieldError name={name} />
@@ -99,17 +101,17 @@ export function FormTextarea({
   const error = useFieldError(name);
   return (
     <div>
-      <label className="field-label" htmlFor={name}>
+      <Label htmlFor={name}>
         {label} {required ? <span className="text-destructive">*</span> : null}
-      </label>
-      <textarea
+      </Label>
+      <Textarea
         id={name}
         name={name}
         rows={rows}
         required={required}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
-        className={cn("field resize-y leading-relaxed", mono && "font-mono text-xs", error && invalidClass)}
+        className={cn("min-h-0 resize-y", mono && "font-mono text-xs")}
         {...errorProps(name, error)}
       />
       <FieldError name={name} />
@@ -134,22 +136,19 @@ export function FormSelect({
   const error = useFieldError(name);
   return (
     <div>
-      <label className="field-label" htmlFor={name}>
-        {label}
-      </label>
-      <select
-        id={name}
-        name={name}
-        defaultValue={defaultValue ?? options[0]?.value}
-        className={cn("field appearance-none", error && invalidClass)}
-        {...errorProps(name, error)}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <Label htmlFor={name}>{label}</Label>
+      <Select name={name} defaultValue={defaultValue ?? options[0]?.value}>
+        <SelectTrigger id={name} {...errorProps(name, error)}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <FieldError name={name} />
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
@@ -169,17 +168,11 @@ export function FormCheckbox({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <input
-        id={name}
-        name={name}
-        type="checkbox"
-        defaultChecked={defaultChecked}
-        className="mt-0.5 size-4 shrink-0 cursor-pointer accent-primary"
-      />
+      <Checkbox id={name} name={name} defaultChecked={defaultChecked} className="mt-0.5 cursor-pointer" />
       <div>
-        <label htmlFor={name} className="cursor-pointer text-sm text-foreground">
+        <Label htmlFor={name} className="mb-0 cursor-pointer font-sans text-sm tracking-normal text-foreground normal-case">
           {label}
-        </label>
+        </Label>
         {description ? <p className="mt-1 text-xs text-faint">{description}</p> : null}
       </div>
     </div>

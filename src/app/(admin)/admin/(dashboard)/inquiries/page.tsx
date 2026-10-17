@@ -4,7 +4,10 @@ import { getPrisma } from "@/lib/prisma";
 import { deleteInquiry, updateInquiry } from "@/lib/admin-actions";
 import { ActionForm, SubmitButton } from "@/components/admin/action-form";
 import { ConfirmAction } from "@/components/admin/confirm-action";
-import { AdminCard, AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AdminPageHeader, EmptyState, SetupNotice, StatusPill, iconDanger } from "@/components/admin/ui";
 import { cn, formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -76,7 +79,7 @@ export default async function AdminInquiriesPage({
       ) : (
         <div className="space-y-4">
           {rows.map((row) => (
-            <AdminCard key={row.id} className="p-5">
+            <Card key={row.id} className="p-5">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2.5">
@@ -120,19 +123,19 @@ export default async function AdminInquiriesPage({
                 <div className="flex shrink-0 flex-col gap-2 lg:w-52">
                   <ActionForm action={updateInquiry} showSummary={false} className="space-y-2">
                     <input type="hidden" name="id" value={row.id} />
-                    <select name="status" defaultValue={row.status} className="field h-9 text-xs">
-                      {STATUSES.map((entry) => (
-                        <option key={entry} value={entry}>
-                          {entry === "NEW" ? "新询盘" : entry === "IN_PROGRESS" ? "跟进中" : entry === "DONE" ? "已完成" : "垃圾信息"}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      name="note"
-                      defaultValue={row.note ?? ""}
-                      placeholder="跟进备注…"
-                      className="field h-9 text-xs"
-                    />
+                    <Select name="status" defaultValue={row.status}>
+                      <SelectTrigger className="h-9 text-xs" aria-label="状态">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUSES.map((entry) => (
+                          <SelectItem key={entry} value={entry} className="text-xs">
+                            {entry === "NEW" ? "新询盘" : entry === "IN_PROGRESS" ? "跟进中" : entry === "DONE" ? "已完成" : "垃圾信息"}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input name="note" defaultValue={row.note ?? ""} placeholder="跟进备注…" aria-label="跟进备注" className="h-9 text-xs" />
                     <SubmitButton size="sm" className="h-9 w-full">
                       更新状态
                     </SubmitButton>
@@ -144,14 +147,14 @@ export default async function AdminInquiriesPage({
                     title="删除询盘"
                     description={`确定删除询盘「${row.name}」吗？此操作不可撤销。`}
                     triggerLabel="删除"
-                    triggerClassName="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-border text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
+                    triggerClassName={cn(iconDanger, "h-9 w-full gap-1.5 text-xs")}
                   >
                     <Trash2 className="size-3.5" />
                       删除
                   </ConfirmAction>
                 </div>
               </div>
-            </AdminCard>
+            </Card>
           ))}
         </div>
       )}

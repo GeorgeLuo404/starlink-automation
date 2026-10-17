@@ -5,6 +5,9 @@ import { AlertCircle, Loader2, LogIn } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n";
 import { loginAction, type LoginState } from "@/lib/admin-actions";
 import { Logo } from "@/components/site/logo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function LoginForm({ dict }: { dict: Dictionary }) {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(loginAction, { error: null });
@@ -20,32 +23,26 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
 
       <form action={formAction} className="mt-9 space-y-5">
         <div>
-          <label className="field-label" htmlFor="email">
-            {dict.admin.email}
-          </label>
-          <input
+          <Label htmlFor="email">{dict.admin.email}</Label>
+          <Input
             id="email"
             name="email"
             type="email"
             required
             autoComplete="username"
             defaultValue="admin@starlink-auto.com"
-            className="field"
             placeholder="admin@starlink-auto.com"
           />
         </div>
 
         <div>
-          <label className="field-label" htmlFor="password">
-            {dict.admin.password}
-          </label>
-          <input
+          <Label htmlFor="password">{dict.admin.password}</Label>
+          <Input
             id="password"
             name="password"
             type="password"
             required
             autoComplete="current-password"
-            className="field"
             placeholder="••••••••"
           />
         </div>
@@ -59,7 +56,7 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
           </div>
         ) : null}
 
-        <button type="submit" disabled={pending} className="btn btn-primary h-11 w-full">
+        <Button type="submit" disabled={pending} className="h-11 w-full">
           {pending ? (
             <>
               <Loader2 className="size-4 animate-spin" />
@@ -71,7 +68,7 @@ export function LoginForm({ dict }: { dict: Dictionary }) {
               {dict.admin.signIn}
             </>
           )}
-        </button>
+        </Button>
       </form>
 
       <p className="mt-8 text-center font-mono text-[0.625rem] leading-relaxed tracking-wide text-ghost">

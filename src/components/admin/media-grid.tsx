@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { cn, formatBytes, formatDate } from "@/lib/utils";
 import { deleteMediaAsset } from "@/lib/admin-actions";
 import { ConfirmAction } from "@/components/admin/confirm-action";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export type MediaRow = {
   id: string;
@@ -68,27 +70,28 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
               </button>
             );
           })}
-          <select
-            value={folder}
-            onChange={(e) => setFolder(e.target.value)}
-            className="field h-8 w-auto py-0 text-xs"
-            aria-label="目录"
-          >
-            {folders.map((name) => (
-              <option key={name} value={name}>
-                {name === "ALL" ? "全部目录" : name}
-              </option>
-            ))}
-          </select>
+          <Select value={folder} onValueChange={setFolder}>
+            <SelectTrigger size="sm" className="w-auto text-xs" aria-label="目录">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {folders.map((name) => (
+                <SelectItem key={name} value={name} className="text-xs">
+                  {name === "ALL" ? "全部目录" : name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="relative w-full max-w-xs">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-faint" />
-          <input
+          <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="搜索文件名…"
-            className="field h-9 pl-9 text-xs"
+            aria-label="搜索文件名"
+            className="h-9 pl-9 text-xs"
           />
         </div>
       </div>

@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Badge, type badgeVariants } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import type { VariantProps } from "class-variance-authority";
 
 export function AdminPageHeader({
   title,
@@ -21,14 +24,12 @@ export function AdminPageHeader({
   );
 }
 
-export function AdminCard({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn("rounded-(--radius) border border-border bg-card", className)}
-      {...props}
-    />
-  );
-}
+/** Square icon button for table rows (edit, delete …). */
+export const iconAction = cn(buttonVariants({ variant: "outline", size: "icon-sm" }), "text-muted-foreground hover:text-primary");
+export const iconDanger = cn(
+  buttonVariants({ variant: "outline", size: "icon-sm" }),
+  "text-muted-foreground hover:border-destructive/40 hover:bg-destructive/8 hover:text-destructive-soft"
+);
 
 export function EmptyState({ title, description, action }: { title: string; description?: string; action?: React.ReactNode }) {
   return (
@@ -40,35 +41,21 @@ export function EmptyState({ title, description, action }: { title: string; desc
   );
 }
 
+type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
+
+const STATUS: Record<string, { label: string; variant: BadgeVariant }> = {
+  PUBLISHED: { label: "已发布", variant: "success" },
+  DRAFT: { label: "草稿", variant: "outline" },
+  ARCHIVED: { label: "已归档", variant: "signal" },
+  NEW: { label: "新询盘", variant: "default" },
+  IN_PROGRESS: { label: "跟进中", variant: "signal" },
+  DONE: { label: "已完成", variant: "success" },
+  SPAM: { label: "垃圾信息", variant: "destructive" },
+};
+
 export function StatusPill({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    PUBLISHED: "border-success/30 bg-success/10 text-success",
-    DRAFT: "border-muted-foreground/25 bg-white/5 text-muted-foreground",
-    ARCHIVED: "border-signal/30 bg-signal/10 text-signal",
-    NEW: "border-primary/30 bg-primary/10 text-primary",
-    IN_PROGRESS: "border-signal/30 bg-signal/10 text-signal",
-    DONE: "border-success/30 bg-success/10 text-success",
-    SPAM: "border-destructive/30 bg-destructive/10 text-destructive",
-  };
-  const labels: Record<string, string> = {
-    PUBLISHED: "已发布",
-    DRAFT: "草稿",
-    ARCHIVED: "已归档",
-    NEW: "新询盘",
-    IN_PROGRESS: "跟进中",
-    DONE: "已完成",
-    SPAM: "垃圾信息",
-  };
-  return (
-    <span
-      className={cn(
-        "inline-flex rounded-full border px-2.5 py-0.5 text-[0.6875rem] whitespace-nowrap",
-        map[status] ?? "border-border text-muted-foreground"
-      )}
-    >
-      {labels[status] ?? status}
-    </span>
-  );
+  const entry = STATUS[status];
+  return <Badge variant={entry?.variant ?? "outline"}>{entry?.label ?? status}</Badge>;
 }
 
 export function SetupNotice({ title, children }: { title: string; children?: React.ReactNode }) {

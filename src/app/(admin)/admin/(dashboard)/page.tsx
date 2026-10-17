@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ArrowUpRight, Briefcase, Download, FileText, Image as ImageIcon, Inbox, Plus } from "lucide-react";
 import { getPrisma, isDatabaseReady } from "@/lib/prisma";
-import { AdminCard, AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -58,10 +60,12 @@ export default async function AdminDashboardPage() {
         title="仪表盘"
         description="内容概览与最新的客户询盘。"
         action={
-          <Link href="/admin/articles/new" className="btn btn-primary h-10 px-4">
-            <Plus className="size-4" />
-            新建文章
-          </Link>
+          <Button asChild className="px-4">
+            <Link href="/admin/articles/new">
+              <Plus className="size-4" />
+              新建文章
+            </Link>
+          </Button>
         }
       />
 
@@ -70,7 +74,7 @@ export default async function AdminDashboardPage() {
           const Icon = stat.icon;
           return (
             <Link key={stat.label} href={stat.href} className="group">
-              <AdminCard className="corner-ticks h-full p-5 transition-colors group-hover:border-primary/40">
+              <Card className="corner-ticks h-full p-5 transition-colors group-hover:border-primary/40">
                 <div className="flex items-start justify-between">
                   <span className="inline-flex size-9 items-center justify-center rounded-(--radius) border border-border bg-surface text-primary">
                     <Icon className="size-4" strokeWidth={1.6} />
@@ -80,7 +84,7 @@ export default async function AdminDashboardPage() {
                 <p className="mt-5 text-2xl font-semibold text-white tabular-nums">{stat.value}</p>
                 <p className="mt-1 text-sm text-body">{stat.label}</p>
                 <p className="mt-0.5 font-mono text-[0.625rem] text-faint">{stat.sub}</p>
-              </AdminCard>
+              </Card>
             </Link>
           );
         })}
@@ -97,7 +101,7 @@ export default async function AdminDashboardPage() {
         {recent.length === 0 ? (
           <EmptyState title="暂无询盘" description="当访客通过网站表单提交需求后，会显示在这里。" />
         ) : (
-          <AdminCard className="divide-y divide-border">
+          <Card className="divide-y divide-border">
             {recent.map((inquiry) => (
               <div key={inquiry.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
@@ -116,7 +120,7 @@ export default async function AdminDashboardPage() {
                 </div>
               </div>
             ))}
-          </AdminCard>
+          </Card>
         )}
       </div>
     </>

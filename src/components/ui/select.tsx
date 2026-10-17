@@ -28,7 +28,8 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-full items-center justify-between gap-2 rounded-(--radius) border border-input bg-card px-3 text-sm whitespace-nowrap text-foreground transition-[color,box-shadow,border-color] outline-none data-[size=default]:h-10 data-[size=sm]:h-8",
+        "flex w-full items-center justify-between gap-2 rounded-(--radius) border border-input bg-card px-3.5 text-sm whitespace-nowrap text-foreground transition-[color,box-shadow,border-color] outline-none",
+        size === "sm" ? "h-8" : "h-11",
         "data-placeholder:text-faint focus-visible:border-primary/65 focus-visible:ring-3 focus-visible:ring-primary/14",
         "aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50",
         "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
