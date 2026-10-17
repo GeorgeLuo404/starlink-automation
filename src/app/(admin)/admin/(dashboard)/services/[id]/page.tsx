@@ -39,7 +39,7 @@ export default async function AdminServiceEditorPage({ params }: { params: Promi
         <ArrowLeft className="size-3.5" />
         返回业务列表
       </Link>
-      <AdminPageHeader title={isNew ? "新建业务" : "编辑业务"} description={isNew ? "添加一项新的业务能力。" : `正在编辑：${record?.titleZh}`} />
+      <AdminPageHeader title={isNew ? "新建业务" : "编辑业务"} description={isNew ? "添加一项新的业务能力。" : `正在编辑：${record?.title}`} />
       <ServiceForm record={record ?? undefined} />
     </>
   );

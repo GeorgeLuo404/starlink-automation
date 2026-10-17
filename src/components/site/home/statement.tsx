@@ -1,8 +1,8 @@
 import { ScrollHighlightText } from "@/components/motion";
-import type { Dictionary } from "@/lib/i18n";
+import copy from "@/content/copy.json";
 
-export function HomeStatement({ dict }: { dict: Dictionary }) {
-  const t = dict.home.statement;
+export function HomeStatement() {
+  const t = copy.home.statement;
   return (
     <section className="section-y relative overflow-hidden border-y border-border bg-surface">
       <div className="grid-blueprint-fine absolute inset-0 opacity-50" aria-hidden="true" />

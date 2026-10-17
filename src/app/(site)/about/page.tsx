@@ -3,47 +3,29 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Award, Quote } from "lucide-react";
-import { getDictionary, isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
 import { aboutValues, certifications, company, milestones, teamComposition } from "@/content/defaults";
 import { PageHero } from "@/components/site/page-hero";
 import { SectionHeading } from "@/components/site/section-heading";
-import { localeHref } from "@/components/site/nav-items";
 import { Counter, Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { getSiteSettings } from "@/lib/data";
+import copy from "@/content/copy.json";
 
 export const revalidate = 300;
 
-export function generateStaticParams() {
-  return [{ locale: "zh" }, { locale: "en" }];
-}
+export const metadata: Metadata = buildMetadata({ title: copy.about.title, description: copy.about.lead, path: "/about" });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
-  return buildMetadata({ locale, title: dict.about.title, description: dict.about.lead, path: "/about" });
-}
-
-export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale);
-  const t = dict.about;
+export default async function AboutPage() {
+  const t = copy.about;
   const settings = await getSiteSettings();
 
   return (
     <>
       <PageHero
-        locale={locale}
         eyebrow={t.eyebrow}
         title={t.title}
         description={t.lead}
-        crumbs={[{ label: dict.nav.about }]}
+        crumbs={[{ label: copy.nav.about }]}
       />
 
       {/* Stats ---------------------------------------------------------- */}
@@ -78,12 +60,12 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
             <Reveal delay={0.18}>
               <div className="mt-10 flex flex-wrap gap-3">
-                <Link href={localeHref(locale, "/contact")} className="btn btn-primary">
-                  {dict.nav.cta}
+                <Link href="/contact" className="btn btn-primary">
+                  {copy.nav.cta}
                   <ArrowRight className="size-4" />
                 </Link>
-                <Link href={localeHref(locale, "/cases")} className="btn btn-ghost">
-                  {dict.nav.cases}
+                <Link href="/cases" className="btn btn-ghost">
+                  {copy.nav.cases}
                 </Link>
               </div>
             </Reveal>
@@ -93,7 +75,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             <div className="relative aspect-4/3 overflow-hidden rounded-(--radius) border border-border">
               <Image
                 src="/media/factory.svg"
-                alt={locale === "zh" ? "作业现场" : "On the shop floor"}
+                alt="作业现场"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 loading="eager"
@@ -103,10 +85,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
             <div className="card-industrial mt-6 divide-y divide-border">
               {[
-                { label: locale === "zh" ? "公司名称" : "Company", value: locale === "zh" ? company.nameZh : company.nameEn },
-                { label: locale === "zh" ? "成立年份" : "Founded", value: String(company.founded) },
-                { label: dict.contact.address, value: settings.address[locale] },
-                { label: locale === "zh" ? "邮箱" : "Email", value: settings.email },
+                { label: "公司名称", value: company.name },
+                { label: "成立年份", value: String(company.founded) },
+                { label: copy.contact.address, value: settings.address },
+                { label: "邮箱", value: settings.email },
               ].map((row) => (
                 <div key={row.label} className="flex items-baseline justify-between gap-6 p-5">
                   <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
@@ -126,11 +108,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <SectionHeading eyebrow={t.eyebrow} title={t.valuesTitle} />
           <Stagger className="mt-14 grid gap-4 md:grid-cols-3" gap={0.1}>
             {aboutValues.map((value, i) => (
-              <StaggerItem key={value.title.zh} className="h-full">
+              <StaggerItem key={value.title} className="h-full">
                 <div className="card-industrial h-full p-7">
                   <Quote className="size-5 text-primary" strokeWidth={1.5} />
-                  <h3 className="mt-6 text-lg font-semibold text-white">{value.title[locale]}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{value.desc[locale]}</p>
+                  <h3 className="mt-6 text-lg font-semibold text-white">{value.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{value.desc}</p>
                   <span className="mt-6 block font-mono text-[0.625rem] tracking-[0.2em] text-ghost">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -147,11 +129,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <SectionHeading eyebrow={t.eyebrow} title={t.milestonesTitle} />
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {milestones.map((milestone, i) => (
-              <Reveal key={milestone.title.en} delay={i * 0.05}>
+              <Reveal key={milestone.title} delay={i * 0.05}>
                 <div className="border-t border-border pt-6">
                   <div className="font-mono text-sm tracking-[0.2em] text-primary">{milestone.year}</div>
-                  <h3 className="mt-3 text-base font-semibold text-white">{milestone.title[locale]}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{milestone.desc[locale]}</p>
+                  <h3 className="mt-3 text-base font-semibold text-white">{milestone.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{milestone.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -166,12 +148,12 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             <h2 className="text-display text-2xl text-white">{t.teamTitle}</h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
               {teamComposition.map((item) => (
-                <div key={item.label.zh} className="border-l border-border pl-5">
+                <div key={item.label} className="border-l border-border pl-5">
                   <div className="text-display text-3xl text-white tabular-nums">
                     <Counter value={item.value} />
                     {item.suffix}
                   </div>
-                  <p className="mt-2 text-[0.8125rem] text-muted-foreground">{item.label[locale]}</p>
+                  <p className="mt-2 text-[0.8125rem] text-muted-foreground">{item.label}</p>
                 </div>
               ))}
             </div>
@@ -182,11 +164,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             <ul className="mt-8 space-y-3">
               {certifications.map((item) => (
                 <li
-                  key={item.zh}
+                  key={item}
                   className="flex items-center gap-3 rounded-(--radius) border border-border bg-card p-4"
                 >
                   <Award className="size-4 shrink-0 text-primary" strokeWidth={1.5} />
-                  <span className="text-sm text-body">{item[locale]}</span>
+                  <span className="text-sm text-body">{item}</span>
                 </li>
               ))}
             </ul>
@@ -195,8 +177,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <h3 className="text-sm font-semibold text-white">{t.contactTitle}</h3>
               <p className="mt-2 text-sm text-subtle">{settings.phone}</p>
               <p className="text-sm text-subtle">{settings.email}</p>
-              <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-5 h-10 px-4">
-                {dict.nav.contact}
+              <Link href="/contact" className="btn btn-primary mt-5 h-10 px-4">
+                {copy.nav.contact}
                 <ArrowRight className="size-4" />
               </Link>
             </div>

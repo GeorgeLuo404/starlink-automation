@@ -39,7 +39,7 @@ export default async function AdminGalleryEditorPage({ params }: { params: Promi
         <ArrowLeft className="size-3.5" />
         返回图库
       </Link>
-      <AdminPageHeader title={isNew ? "添加图片" : "编辑图片"} description={isNew ? "添加一张现场照片或视频。" : `正在编辑：${record?.titleZh}`} />
+      <AdminPageHeader title={isNew ? "添加图片" : "编辑图片"} description={isNew ? "添加一张现场照片或视频。" : `正在编辑：${record?.title}`} />
       <GalleryForm record={record ?? undefined} />
     </>
   );

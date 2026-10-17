@@ -39,7 +39,7 @@ export default async function AdminCaseEditorPage({ params }: { params: Promise<
         <ArrowLeft className="size-3.5" />
         返回案例列表
       </Link>
-      <AdminPageHeader title={isNew ? "新建案例" : "编辑案例"} description={isNew ? "记录一个已交付的项目。" : `正在编辑：${record?.titleZh}`} />
+      <AdminPageHeader title={isNew ? "新建案例" : "编辑案例"} description={isNew ? "记录一个已交付的项目。" : `正在编辑：${record?.title}`} />
       <CaseForm record={record ?? undefined} />
     </>
   );

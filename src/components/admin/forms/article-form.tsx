@@ -6,12 +6,9 @@ import { UploadField } from "@/components/admin/upload-field";
 type ArticleRecord = {
   id: string;
   slug: string;
-  titleZh: string;
-  titleEn: string | null;
-  excerptZh: string | null;
-  excerptEn: string | null;
-  contentZh: string;
-  contentEn: string | null;
+  title: string;
+  excerpt: string | null;
+  content: string;
   coverUrl: string | null;
   tags: string[];
   status: string;
@@ -35,9 +32,8 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
     <ActionForm action={saveArticle} className="space-y-6">
       {article ? <input type="hidden" name="id" value={article.id} /> : null}
 
-      <FormSection title="基本信息" description="中文为必填，英文留空时会自动回退到中文内容。">
-        <FormField label="标题（中文）" name="titleZh" required defaultValue={article?.titleZh} placeholder="例如：公司完成某头部电池企业热压机产线交付" />
-        <FormField label="标题（英文）" name="titleEn" defaultValue={article?.titleEn} placeholder="English title" />
+      <FormSection title="基本信息">
+        <FormField label="标题" name="title" required defaultValue={article?.title} placeholder="例如：公司完成某头部电池企业热压机产线交付" />
         <FormField
           label="URL 别名 / Slug"
           name="slug"
@@ -45,8 +41,7 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
           placeholder="留空则根据中文标题自动生成"
           description="用于生成链接：/zh/news/你的-slug"
         />
-        <FormTextarea label="摘要（中文）" name="excerptZh" rows={3} defaultValue={article?.excerptZh} placeholder="列表页与分享卡片上显示的简介" />
-        <FormTextarea label="摘要（英文）" name="excerptEn" rows={3} defaultValue={article?.excerptEn} />
+        <FormTextarea label="摘要" name="excerpt" rows={3} defaultValue={article?.excerpt} placeholder="列表页与分享卡片上显示的简介" />
       </FormSection>
 
       <FormSection title="封面" description="建议尺寸 1600×1000，支持上传到媒体库或直接填写 CDN 地址。">
@@ -57,8 +52,7 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
         title="正文"
         description="支持轻量标记：## 二级标题、### 三级标题、- 无序列表、1. 有序列表、> 引用、**加粗**、`代码`"
       >
-        <FormTextarea label="正文（中文）" name="contentZh" rows={16} required defaultValue={article?.contentZh} mono />
-        <FormTextarea label="正文（英文）" name="contentEn" rows={12} defaultValue={article?.contentEn} mono />
+        <FormTextarea label="正文" name="content" rows={16} required defaultValue={article?.content} mono />
       </FormSection>
 
       <FormSection title="发布设置">

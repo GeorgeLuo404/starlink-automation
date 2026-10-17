@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
-import type { Dictionary, Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import copy from "@/content/copy.json";
 
 type Fields = { name: string; company: string; phone: string; email: string; service: string; message: string };
 
@@ -11,17 +11,13 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[+()\-\s\d]{6,20}$/;
 
 export function ContactForm({
-  locale,
-  dict,
   services,
   variant = "page",
 }: {
-  locale: Locale;
-  dict: Dictionary;
   services: string[];
   variant?: "page" | "inline";
 }) {
-  const t = dict.contact;
+  const t = copy.contact;
   const v = t.validation;
   const [fields, setFields] = useState<Fields>({
     name: "",
@@ -63,7 +59,7 @@ export function ContactForm({
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...fields, locale, source: "contact" }),
+        body: JSON.stringify({ ...fields, source: "contact" }),
       });
       if (!response.ok) throw new Error("request failed");
       setState("success");
@@ -214,7 +210,7 @@ export function ContactForm({
             </>
           )}
         </button>
-        <p className="text-xs text-faint">{dict.home.cta.note}</p>
+        <p className="text-xs text-faint">{copy.home.cta.note}</p>
       </div>
     </form>
   );

@@ -82,8 +82,6 @@ async function prepare<T extends z.ZodType>(schema: T, form: FormData) {
   return { ok: true, data: parsed.data as z.infer<T>, db } as const;
 }
 
-const bilingual = (row: string[]) => ({ zh: row[0] ?? "", en: row[1] || row[0] || "" });
-
 /* ====================================================================== */
 /* Auth                                                                   */
 /* ====================================================================== */
@@ -106,7 +104,7 @@ export async function loginAction(_prev: LoginState, form: FormData): Promise<Lo
   } catch (error) {
     console.error("[login] database unavailable:", error);
     return {
-      error: "数据库未连接，请先启动 PostgreSQL 并执行 pnpm db:deploy 与 pnpm db:seed / Database unavailable.",
+      error: "数据库未连接，请先启动 PostgreSQL 并执行 pnpm db:deploy 与 pnpm db:seed",
     };
   }
 
@@ -143,7 +141,7 @@ export async function saveArticle(_prev: ActionState, form: FormData): Promise<A
 
   const data = {
     ...fields,
-    slug: input.slug || slugify(input.titleZh),
+    slug: input.slug || slugify(input.title),
     publishedAt: input.publishedAt ?? (input.status === "PUBLISHED" ? new Date() : null),
   };
 
@@ -199,16 +197,8 @@ export async function saveCase(_prev: ActionState, form: FormData): Promise<Acti
 
   const data = {
     ...fields,
-    slug: input.slug || slugify(input.titleZh),
-    // Bilingual scope entries are stored packed as "zh||en" (see packLocalized).
-    scope: input.scope.map((row) => {
-      const { zh, en } = bilingual(row);
-      return `${zh}||${en}`;
-    }),
-    metrics: input.metrics.map((row) => ({
-      value: row[0],
-      label: { zh: row[1] || row[0], en: row[2] || row[1] || row[0] },
-    })),
+    slug: input.slug || slugify(input.title),
+    metrics: input.metrics.map(([value, label]) => ({ value, label })),
   };
 
   const failure = await persist(() =>
@@ -241,13 +231,8 @@ export async function saveService(_prev: ActionState, form: FormData): Promise<A
 
   const data = {
     ...fields,
-    slug: input.slug || slugify(input.titleZh),
-    features: input.features.map(bilingual),
-    deliverables: input.deliverables.map(bilingual),
-    faq: input.faq.map((row) => ({
-      q: { zh: row[0], en: row[1] || row[0] },
-      a: { zh: row[2], en: row[3] || row[2] },
-    })),
+    slug: input.slug || slugify(input.title),
+    faq: input.faq.map(([q, a]) => ({ q, a })),
   };
 
   const failure = await persist(() =>
@@ -280,7 +265,7 @@ export async function saveDownload(_prev: ActionState, form: FormData): Promise<
 
   const data = {
     ...fields,
-    slug: input.slug || slugify(input.titleZh),
+    slug: input.slug || slugify(input.title),
     // Empty means "no file yet": the download route then serves a placeholder PDF.
     fileUrl: input.fileUrl ?? "",
   };

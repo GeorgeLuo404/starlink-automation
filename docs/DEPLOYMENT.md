@@ -93,7 +93,7 @@ DATABASE_URL="<云端连接串>" pnpm db:seed
 - **主办单位性质**：企业
 - **网站服务内容**：企业官网 / 单位门户网站
 - **服务项目**：仅选「网站应用」即可
-- **网站语言**：中文简体（同时有英文页面也仍选中文简体）
+- **网站语言**：中文简体
 
 审核时间：阿里云初审 1–2 个工作日 → 短信核验 → 管局审核 5–20 个工作日。
 期间保持手机畅通，管局可能电话核实。
@@ -297,7 +297,7 @@ echo "30 3 * * * /opt/starlink/scripts/backup.sh" | crontab -
 （`docker compose config` 可以打印最终解析结果）。
 
 **Q：中文 SEO 要做什么？**
-① `sitemap.xml` 提交百度；② 页面已有 `hreflang` 与 `canonical`；
+① `sitemap.xml` 提交百度；② 页面已有 `canonical`；
 ③ 首页 `<title>` 与 `description` 已包含「PLC 程序调试 / 机器人调试 / 锂电池检测 / 热压机」等关键词；
 ④ 建议再做一个「百度统计」ID 填入后台站点设置。
 

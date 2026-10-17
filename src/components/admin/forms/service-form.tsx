@@ -6,48 +6,25 @@ import { UploadField } from "@/components/admin/upload-field";
 type ServiceRecord = {
   id: string;
   slug: string;
-  titleZh: string;
-  titleEn: string | null;
-  summaryZh: string | null;
-  summaryEn: string | null;
-  contentZh: string | null;
-  contentEn: string | null;
+  title: string;
+  summary: string | null;
+  content: string | null;
   icon: string | null;
   coverUrl: string | null;
   videoUrl: string | null;
-  features: unknown;
-  deliverables: unknown;
+  features: string[];
+  deliverables: string[];
   faq: unknown;
   published: boolean;
   sortOrder: number;
 };
 
-function deliverablesToText(deliverables: unknown) {
-  if (!Array.isArray(deliverables)) return "";
-  return deliverables
-    .map((entry) => {
-      const item = entry as { zh?: string; en?: string };
-      return [item.zh ?? "", item.en ?? ""].join("|");
-    })
-    .join("\n");
-}
-
 function faqToText(faq: unknown) {
   if (!Array.isArray(faq)) return "";
   return faq
     .map((entry) => {
-      const item = entry as { q?: { zh?: string; en?: string }; a?: { zh?: string; en?: string } };
-      return [item.q?.zh ?? "", item.q?.en ?? "", item.a?.zh ?? "", item.a?.en ?? ""].join("|");
-    })
-    .join("\n");
-}
-
-function featuresToText(features: unknown) {
-  if (!Array.isArray(features)) return "";
-  return features
-    .map((entry) => {
-      const item = entry as { zh?: string; en?: string };
-      return [item.zh ?? "", item.en ?? ""].join("|");
+      const item = entry as { q?: string; a?: string };
+      return [item.q ?? "", item.a ?? ""].join("|");
     })
     .join("\n");
 }
@@ -58,8 +35,7 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="业务信息">
-        <FormField label="名称（中文）" name="titleZh" required defaultValue={record?.titleZh} placeholder="例如：PLC 程序调试" />
-        <FormField label="名称（英文）" name="titleEn" defaultValue={record?.titleEn} placeholder="PLC Programming & Commissioning" />
+        <FormField label="名称" name="title" required defaultValue={record?.title} placeholder="例如：PLC 程序调试" />
         <FormField label="URL 别名 / Slug" name="slug" defaultValue={record?.slug} placeholder="留空自动生成，例如 plc" />
         <div className="grid gap-5 sm:grid-cols-2">
           <FormSelect
@@ -76,8 +52,7 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
           />
           <FormField label="排序" name="sortOrder" type="number" defaultValue={record?.sortOrder ?? 0} />
         </div>
-        <FormTextarea label="简介（中文）" name="summaryZh" rows={2} defaultValue={record?.summaryZh} />
-        <FormTextarea label="简介（英文）" name="summaryEn" rows={2} defaultValue={record?.summaryEn} />
+        <FormTextarea label="简介" name="summary" rows={2} defaultValue={record?.summary} />
       </FormSection>
 
       <FormSection title="配图">
@@ -86,39 +61,38 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
       </FormSection>
 
       <FormSection title="详情" description="支持 ## 标题、- 列表等轻量标记。">
-        <FormTextarea label="详情（中文）" name="contentZh" rows={10} defaultValue={record?.contentZh} mono />
-        <FormTextarea label="详情（英文）" name="contentEn" rows={10} defaultValue={record?.contentEn} mono />
+        <FormTextarea label="详情" name="content" rows={10} defaultValue={record?.content} mono />
       </FormSection>
 
-      <FormSection title="服务内容" description="每行一条，格式：中文|English">
+      <FormSection title="服务内容" description="每行一条。">
         <FormTextarea
           label="服务内容清单"
           name="features"
           rows={8}
-          defaultValue={featuresToText(record?.features)}
-          placeholder={"控制方案与 I/O 清单编制|Control concept and I/O list\nPLC / HMI 程序开发|PLC & HMI development"}
+          defaultValue={record?.features.join("\n")}
+          placeholder={"控制方案与 I/O 清单编制\nPLC / HMI 程序开发"}
           mono
         />
       </FormSection>
 
-      <FormSection title="交付物" description="每行一条，格式：中文|English">
+      <FormSection title="交付物" description="每行一条。">
         <FormTextarea
           label="交付物清单"
           name="deliverables"
           rows={6}
-          defaultValue={deliverablesToText(record?.deliverables)}
-          placeholder={"带注释的程序源码与版本备份|Commented source code\nI/O 清单与信号地址表|I/O list"}
+          defaultValue={record?.deliverables.join("\n")}
+          placeholder={"带注释的程序源码与版本备份\nI/O 清单与信号地址表"}
           mono
         />
       </FormSection>
 
-      <FormSection title="常见问题" description="每行一条，格式：问题中文|Question EN|答案中文|Answer EN">
+      <FormSection title="常见问题" description="每行一条，格式：问题|答案">
         <FormTextarea
           label="FAQ"
           name="faq"
           rows={5}
           defaultValue={faqToText(record?.faq)}
-          placeholder={"可以在现有程序上二次开发吗？|Can you extend our program?|可以。|Yes."}
+          placeholder={"可以在现有程序上二次开发吗？|可以。"}
           mono
         />
       </FormSection>

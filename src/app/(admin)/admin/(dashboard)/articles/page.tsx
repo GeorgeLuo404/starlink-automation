@@ -37,7 +37,7 @@ export default async function AdminArticlesPage() {
     <>
       <AdminPageHeader
         title="文章 / 新闻"
-        description="发布公司动态与技术分享文章，支持中英双语与草稿状态。"
+        description="发布公司动态与技术分享文章，支持草稿与发布状态。"
         action={
           <Button asChild className="px-4">
             <Link href="/admin/articles/new">
@@ -78,7 +78,7 @@ export default async function AdminArticlesPage() {
                 <TableRow key={article.id}>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className="line-clamp-1 font-medium text-foreground">{article.titleZh}</span>
+                      <span className="line-clamp-1 font-medium text-foreground">{article.title}</span>
                       {article.featured ? (
                         <span className="rounded-full border border-primary/30 px-2 py-0.5 font-mono text-[0.5625rem] text-primary">
                           精选
@@ -120,7 +120,7 @@ export default async function AdminArticlesPage() {
                         action={deleteArticle}
                         id={article.id}
                         title="删除文章"
-                        description={`确定删除文章「${article.titleZh}」吗？此操作不可撤销。`}
+                        description={`确定删除文章「${article.title}」吗？此操作不可撤销。`}
                         triggerLabel="删除"
                         triggerClassName={iconDanger}
                       >

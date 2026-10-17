@@ -1,5 +1,5 @@
 /**
- * 生成工业风占位图 / Generate industrial-style placeholder artwork.
+ * 生成工业风占位图。
  *
  * 这些 SVG 是"看起来是有意设计"的占位物料，正式上线前请用真实照片替换：
  *   public/media/**  · 产线、设备与团队照片
@@ -136,28 +136,29 @@ function svg({ label, index, kind, seed, subtitle }) {
 }
 
 const services = [
-  ["plc", "PLC 程序调试", "PLC PROGRAMMING & COMMISSIONING"],
-  ["robot", "机器人调试", "ROBOT INTEGRATION"],
-  ["electrical", "电气图纸设计", "ELECTRICAL DRAWING DESIGN"],
-  ["battery", "锂电池检测", "LITHIUM BATTERY INSPECTION"],
-  ["hot-press", "热压机", "HOT PRESS MACHINE"],
+  ["plc", "PLC 程序调试"],
+  ["robot", "机器人调试"],
+  ["electrical", "电气图纸设计"],
+  ["battery", "锂电池检测"],
+  ["hot-press", "热压机"],
 ];
 
 const cases = [
-  ["cell-assembly-line-control", "方形铝壳电芯装配线", "CELL ASSEMBLY LINE"],
-  ["robot-tending-workstation", "六轴机器人上下料工作站", "ROBOT TENDING CELL"],
-  ["hot-press-temperature-pressure-loop", "电芯热压机温压闭环", "HOT PRESS CLOSED LOOP"],
-  ["auto-parts-vision-inspection", "汽车零部件视觉检测线", "VISION INSPECTION LINE"],
-  ["module-pack-mes-integration", "模组 PACK 线数据采集", "PACK LINE DATA & MES"],
+  ["cell-assembly-line-control", "方形铝壳电芯装配线"],
+  ["robot-tending-workstation", "六轴机器人上下料工作站"],
+  ["hot-press-temperature-pressure-loop", "电芯热压机温压闭环"],
+  ["auto-parts-vision-inspection", "汽车零部件视觉检测线"],
+  ["module-pack-mes-integration", "模组 PACK 线数据采集"],
 ];
 
+/** [slug, title, category] */
 const articles = [
-  ["hot-press-line-delivered", "热压机产线顺利交付", "NEWS"],
-  ["iso9001-certified", "通过 ISO 9001 认证", "NEWS"],
-  ["battery-inspection-methods", "锂电池检测方法选型", "TECHNICAL"],
-  ["plc-communication-troubleshooting", "PLC 通信故障排查", "TECHNICAL"],
-  ["robot-team-expansion", "机器人调试团队扩充", "NEWS"],
-  ["electrical-drawing-standard-v2", "电气图纸规范 v2.0", "NEWS"],
+  ["hot-press-line-delivered", "热压机产线顺利交付", "公司新闻"],
+  ["iso9001-certified", "通过 ISO 9001 认证", "公司新闻"],
+  ["battery-inspection-methods", "锂电池检测方法选型", "技术分享"],
+  ["plc-communication-troubleshooting", "PLC 通信故障排查", "技术分享"],
+  ["robot-team-expansion", "机器人调试团队扩充", "公司新闻"],
+  ["electrical-drawing-standard-v2", "电气图纸规范 v2.0", "公司新闻"],
 ];
 
 const gallery = [
@@ -176,19 +177,19 @@ async function main() {
   await mkdir(OUT, { recursive: true });
   const written = [];
 
-  for (const [i, [slug, zh, en]] of services.entries()) {
+  for (const [i, [slug, label]] of services.entries()) {
     const file = `service-${slug}.svg`;
-    await writeFile(path.join(OUT, file), svg({ label: zh, subtitle: en, index: `SVC-${String(i + 1).padStart(2, "0")}`, kind: "circuit", seed: 1000 + i }));
+    await writeFile(path.join(OUT, file), svg({ label, subtitle: "业务能力", index: `SVC-${String(i + 1).padStart(2, "0")}`, kind: "circuit", seed: 1000 + i }));
     written.push(file);
   }
-  for (const [i, [slug, zh, en]] of cases.entries()) {
+  for (const [i, [slug, label]] of cases.entries()) {
     const file = `case-${slug}.svg`;
-    await writeFile(path.join(OUT, file), svg({ label: zh, subtitle: en, index: `CASE-${String(i + 1).padStart(2, "0")}`, kind: "grid", seed: 2000 + i }));
+    await writeFile(path.join(OUT, file), svg({ label, subtitle: "项目案例", index: `CASE-${String(i + 1).padStart(2, "0")}`, kind: "grid", seed: 2000 + i }));
     written.push(file);
   }
-  for (const [i, [slug, zh, en]] of articles.entries()) {
+  for (const [i, [slug, label, category]] of articles.entries()) {
     const file = `article-${slug}.svg`;
-    await writeFile(path.join(OUT, file), svg({ label: zh, subtitle: en, index: `NOTE-${String(i + 1).padStart(2, "0")}`, kind: "rings", seed: 3000 + i }));
+    await writeFile(path.join(OUT, file), svg({ label, subtitle: category, index: `NOTE-${String(i + 1).padStart(2, "0")}`, kind: "rings", seed: 3000 + i }));
     written.push(file);
   }
   for (const [i, label] of gallery.entries()) {
@@ -197,8 +198,8 @@ async function main() {
     written.push(file);
   }
 
-  await writeFile(path.join(OUT, "hero-poster.svg"), svg({ label: "自动化产线", subtitle: "AUTOMATIC PRODUCTION LINE", index: "HERO", kind: "circuit", seed: 777 }));
-  await writeFile(path.join(OUT, "factory.svg"), svg({ label: "作业现场", subtitle: "ON THE SHOP FLOOR", index: "SITE", kind: "grid", seed: 888 }));
+  await writeFile(path.join(OUT, "hero-poster.svg"), svg({ label: "自动化产线", subtitle: "深圳市星链自动化有限公司", index: "HERO", kind: "circuit", seed: 777 }));
+  await writeFile(path.join(OUT, "factory.svg"), svg({ label: "作业现场", subtitle: "深圳市星链自动化有限公司", index: "SITE", kind: "grid", seed: 888 }));
   await writeFile(path.join(OUT, "og.svg"), svg({ label: "以自动化，链接智能制造", subtitle: "深圳市星链自动化有限公司", index: "STARLINK", kind: "rings", seed: 999 }));
 
   const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">

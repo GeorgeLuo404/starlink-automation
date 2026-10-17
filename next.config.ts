@@ -6,6 +6,13 @@ const nextConfig: NextConfig = {
   // Pin the workspace root — otherwise Next walks up to $HOME and warns about
   // unrelated lockfiles it finds there.
   turbopack: { root: process.cwd() },
+  // The site used to live under /zh and /en; keep old links and search results working.
+  async redirects() {
+    return [
+      { source: "/:locale(zh|en)", destination: "/", permanent: true },
+      { source: "/:locale(zh|en)/:path*", destination: "/:path*", permanent: true },
+    ];
+  },
   images: {
     remotePatterns: [
       // 阿里云 OSS / Aliyun OSS

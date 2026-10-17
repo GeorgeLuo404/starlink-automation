@@ -63,10 +63,10 @@ export default async function AdminCasesPage() {
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <span className="line-clamp-1 font-medium text-foreground">{row.titleZh}</span>
+                    <span className="line-clamp-1 font-medium text-foreground">{row.title}</span>
                     <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{row.slug}</span>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{row.industryZh ?? "—"}</TableCell>
+                  <TableCell className="text-muted-foreground">{row.industry ?? "—"}</TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">{row.year ?? "—"}</TableCell>
                   <TableCell><StatusPill status={row.status} /></TableCell>
                   <TableCell>
@@ -78,7 +78,7 @@ export default async function AdminCasesPage() {
                         action={deleteCase}
                         id={row.id}
                         title="删除案例"
-                        description={`确定删除案例「${row.titleZh}」吗？此操作不可撤销。`}
+                        description={`确定删除案例「${row.title}」吗？此操作不可撤销。`}
                         triggerLabel="删除"
                         triggerClassName={iconDanger}
                       >

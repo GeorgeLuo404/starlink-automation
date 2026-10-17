@@ -6,21 +6,19 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Dictionary, Locale } from "@/lib/i18n";
 import { services } from "@/content/defaults";
 import { Logo } from "./logo";
-import { LanguageSwitcher } from "./language-switcher";
-import { localeHref, navItems } from "./nav-items";
+import { navItems } from "./nav-items";
 import { useScrolled } from "@/components/motion";
+import copy from "@/content/copy.json";
 
-export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function SiteHeader() {
   const pathname = usePathname() ?? "";
   const scrolled = useScrolled(20);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
 
-  const stripped = `/${pathname.split("/").filter(Boolean).slice(1).join("/")}`;
-  const isActive = (href: string) => (href === "/" ? stripped === "/" : stripped.startsWith(href));
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
     <>
@@ -33,12 +31,12 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
         )}
       >
         <div className="container-x flex h-16 items-center justify-between gap-6 md:h-20">
-          <Link href={localeHref(locale, "/")} className="shrink-0" aria-label={dict.meta.siteName}>
+          <Link href="/" className="shrink-0" aria-label={copy.meta.siteName}>
             <Logo size="md" />
           </Link>
 
           {/* Desktop navigation */}
-          <nav className="hidden items-center gap-1 lg:flex" aria-label={dict.nav.menu}>
+          <nav className="hidden items-center gap-1 lg:flex" aria-label={copy.nav.menu}>
             {navItems.map((item) =>
               item.hasMenu ? (
                 <div
@@ -48,13 +46,13 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                   onMouseLeave={() => setServicesOpen(false)}
                 >
                   <Link
-                    href={localeHref(locale, item.href)}
+                    href={item.href}
                     className={cn(
                       "inline-flex items-center gap-1 rounded px-3 py-2 text-sm transition-colors",
                       isActive(item.href) ? "text-white" : "text-muted-foreground hover:text-white"
                     )}
                   >
-                    {dict.nav[item.key]}
+                    {copy.nav[item.key]}
                     <ChevronDown
                       className={cn("size-3.5 transition-transform", servicesOpen && "rotate-180")}
                     />
@@ -72,23 +70,23 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                           {services.map((service) => (
                             <Link
                               key={service.slug}
-                              href={localeHref(locale, `/services/${service.slug}`)}
+                              href={`/services/${service.slug}`}
                               className="group flex flex-col gap-1 rounded p-3 transition-colors hover:bg-white/4"
                             >
                               <span className="flex items-center gap-1.5 text-sm font-medium text-white">
-                                {service.title[locale]}
+                                {service.title}
                                 <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
                               </span>
                               <span className="line-clamp-1 text-xs text-muted-foreground">
-                                {service.summary[locale]}
+                                {service.summary}
                               </span>
                             </Link>
                           ))}
                           <Link
-                            href={localeHref(locale, "/services")}
+                            href="/services"
                             className="col-span-2 mt-1 rounded border border-dashed border-border p-2.5 text-center text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
                           >
-                            {dict.home.services.cta} →
+                            {copy.home.services.cta} →
                           </Link>
                         </div>
                       </motion.div>
@@ -98,13 +96,13 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               ) : (
                 <Link
                   key={item.key}
-                  href={localeHref(locale, item.href)}
+                  href={item.href}
                   className={cn(
                     "relative rounded px-3 py-2 text-sm transition-colors",
                     isActive(item.href) ? "text-white" : "text-muted-foreground hover:text-white"
                   )}
                 >
-                  {dict.nav[item.key]}
+                  {copy.nav[item.key]}
                   {isActive(item.href) ? (
                     <motion.span
                       layoutId="nav-active"
@@ -117,15 +115,14 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           </nav>
 
           <div className="flex items-center gap-2">
-            <LanguageSwitcher current={locale} className="hidden sm:inline-flex" />
-            <Link href={localeHref(locale, "/contact")} className="btn btn-primary hidden h-9 px-4 text-xs lg:inline-flex">
-              {dict.nav.cta}
+            <Link href="/contact" className="btn btn-primary hidden h-9 px-4 text-xs lg:inline-flex">
+              {copy.nav.cta}
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               className="inline-flex size-9 items-center justify-center rounded border border-border text-foreground lg:hidden"
-              aria-label={dict.nav.menu}
+              aria-label={copy.nav.menu}
             >
               <Menu className="size-4" />
             </button>
@@ -149,12 +146,12 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex size-9 items-center justify-center rounded border border-border"
-                aria-label={dict.nav.close}
+                aria-label={copy.nav.close}
               >
                 <X className="size-4" />
               </button>
             </div>
-            <nav className="container-x mt-6 flex flex-col" aria-label={dict.nav.menu}>
+            <nav className="container-x mt-6 flex flex-col" aria-label={copy.nav.menu}>
               {[{ key: "home" as const, href: "/" }, ...navItems.slice(1), { key: "contact" as const, href: "/contact" }].map(
                 (item, i) => (
                   <motion.div
@@ -164,24 +161,23 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                     transition={{ delay: 0.04 * i, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <Link
-                      href={localeHref(locale, item.href)}
+                      href={item.href}
                       onClick={() => setMobileOpen(false)}
                       className="flex items-center justify-between border-b border-border py-4 text-lg text-white"
                     >
-                      {dict.nav[item.key]}
+                      {copy.nav[item.key]}
                       <ArrowUpRight className="size-4 text-muted-foreground" />
                     </Link>
                   </motion.div>
                 )
               )}
-              <div className="mt-6 flex items-center justify-between">
-                <LanguageSwitcher current={locale} />
+              <div className="mt-6 flex justify-end">
                 <Link
-                  href={localeHref(locale, "/contact")}
+                  href="/contact"
                   onClick={() => setMobileOpen(false)}
                   className="btn btn-primary h-9 px-4 text-xs"
                 >
-                  {dict.nav.cta}
+                  {copy.nav.cta}
                 </Link>
               </div>
             </nav>

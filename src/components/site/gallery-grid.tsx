@@ -4,11 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
-import type { Locale } from "@/lib/i18n";
 import type { GalleryView } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: Locale }) {
+export function GalleryGrid({ items }: { items: GalleryView[] }) {
   const [index, setIndex] = useState<number | null>(null);
   const open = index !== null;
 
@@ -43,7 +42,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
         {items.map((item, i) => (
           <motion.button
             type="button"
-            key={`${item.title.zh}-${i}`}
+            key={`${item.title}-${i}`}
             onClick={() => setIndex(i)}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +56,7 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
             <div className={cn("relative", i % 7 === 0 ? "aspect-square" : "aspect-4/3")}>
               <Image
                 src={item.url ?? `/media/gallery-${String((i % 9) + 1).padStart(2, "0")}.svg`}
-                alt={item.title[locale]}
+                alt={item.title}
                 fill
                 sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -70,9 +69,9 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               </span>
             ) : null}
             <div className="absolute inset-x-4 bottom-4">
-              <p className="text-sm font-medium text-white">{item.title[locale]}</p>
-              {item.caption[locale] ? (
-                <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{item.caption[locale]}</p>
+              <p className="text-sm font-medium text-white">{item.title}</p>
+              {item.caption ? (
+                <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{item.caption}</p>
               ) : null}
             </div>
           </motion.button>
@@ -120,16 +119,16 @@ export function GalleryGrid({ items, locale }: { items: GalleryView[]; locale: L
               <div className="relative aspect-16/10 w-full overflow-hidden rounded-(--radius) border border-border">
                 <Image
                   src={current.url ?? `/media/gallery-${String(((index ?? 0) % 9) + 1).padStart(2, "0")}.svg`}
-                  alt={current.title[locale]}
+                  alt={current.title}
                   fill
                   sizes="90vw"
                   className="object-contain"
                 />
               </div>
               <div className="mt-4 text-center">
-                <p className="text-base font-medium text-white">{current.title[locale]}</p>
-                {current.caption[locale] ? (
-                  <p className="mt-1 text-sm text-muted-foreground">{current.caption[locale]}</p>
+                <p className="text-base font-medium text-white">{current.title}</p>
+                {current.caption ? (
+                  <p className="mt-1 text-sm text-muted-foreground">{current.caption}</p>
                 ) : null}
               </div>
             </motion.div>

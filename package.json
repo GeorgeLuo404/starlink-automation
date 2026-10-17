@@ -2,7 +2,7 @@
   "name": "starlink-automation",
   "version": "1.0.0",
   "private": true,
-  "description": "深圳市星链自动化有限公司 官网 / Shenzhen Starlink Automation corporate website",
+  "description": "深圳市星链自动化有限公司官网",
   "engines": {
     "node": ">=20.9.0"
   },

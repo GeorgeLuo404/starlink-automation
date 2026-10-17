@@ -1,10 +1,10 @@
-import type { Dictionary, Locale } from "@/lib/i18n";
 import { processSteps } from "@/content/defaults";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
+import copy from "@/content/copy.json";
 
-export function HomeProcess({ locale, dict }: { locale: Locale; dict: Dictionary }) {
-  const t = dict.home.process;
+export function HomeProcess() {
+  const t = copy.home.process;
   return (
     <section className="section-y relative overflow-hidden bg-surface">
       <div className="container-x relative">
@@ -19,8 +19,8 @@ export function HomeProcess({ locale, dict }: { locale: Locale; dict: Dictionary
                   <span className="relative z-10 inline-flex size-13 items-center justify-center rounded-full border border-border bg-background font-mono text-xs tracking-widest text-muted-foreground transition-colors duration-300 group-hover:border-primary/50 group-hover:text-primary">
                     {step.no}
                   </span>
-                  <h3 className="mt-6 text-base font-semibold text-white">{step.title[locale]}</h3>
-                  <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-muted-foreground">{step.desc[locale]}</p>
+                  <h3 className="mt-6 text-base font-semibold text-white">{step.title}</h3>
+                  <p className="mt-2.5 text-[0.8125rem] leading-relaxed text-muted-foreground">{step.desc}</p>
                 </div>
               </StaggerItem>
             ))}

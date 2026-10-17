@@ -6,10 +6,8 @@ import { UploadField } from "@/components/admin/upload-field";
 type DownloadRecord = {
   id: string;
   slug: string;
-  titleZh: string;
-  titleEn: string | null;
-  descriptionZh: string | null;
-  descriptionEn: string | null;
+  title: string;
+  description: string | null;
   fileUrl: string;
   storageKey: string | null;
   fileType: string;
@@ -26,11 +24,9 @@ export function DownloadForm({ record }: { record?: DownloadRecord }) {
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="资料信息">
-        <FormField label="标题（中文）" name="titleZh" required defaultValue={record?.titleZh} placeholder="例如：星链自动化公司宣传册 2026" />
-        <FormField label="标题（英文）" name="titleEn" defaultValue={record?.titleEn} />
+        <FormField label="标题" name="title" required defaultValue={record?.title} placeholder="例如：星链自动化公司宣传册 2026" />
         <FormField label="URL 别名 / Slug" name="slug" defaultValue={record?.slug} placeholder="留空自动生成，用于下载地址 /api/download/slug" />
-        <FormTextarea label="简介（中文）" name="descriptionZh" rows={3} defaultValue={record?.descriptionZh} />
-        <FormTextarea label="简介（英文）" name="descriptionEn" rows={3} defaultValue={record?.descriptionEn} />
+        <FormTextarea label="简介" name="description" rows={3} defaultValue={record?.description} />
       </FormSection>
 
       <FormSection title="文件" description="上传后会自动填入地址；若未上传文件，前台下载会生成一份占位 PDF。">

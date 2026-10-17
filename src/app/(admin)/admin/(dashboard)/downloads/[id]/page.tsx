@@ -39,7 +39,7 @@ export default async function AdminDownloadEditorPage({ params }: { params: Prom
         <ArrowLeft className="size-3.5" />
         返回资料列表
       </Link>
-      <AdminPageHeader title={isNew ? "上传资料" : "编辑资料"} description={isNew ? "添加一份可下载的资料。" : `正在编辑：${record?.titleZh}`} />
+      <AdminPageHeader title={isNew ? "上传资料" : "编辑资料"} description={isNew ? "添加一份可下载的资料。" : `正在编辑：${record?.title}`} />
       <DownloadForm record={record ?? undefined} />
     </>
   );

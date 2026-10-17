@@ -68,14 +68,9 @@ export default async function AdminSettingsPage({
             <FormField label="业务邮箱" name="contactEmail" defaultValue={read("contactEmail", "info@starlink-auto.com")} />
           </div>
           <FormField
-            label="公司地址（中文）"
-            name="contactAddressZh"
-            defaultValue={read("contactAddressZh", "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区")}
-          />
-          <FormField
-            label="公司地址（英文）"
-            name="contactAddressEn"
-            defaultValue={read("contactAddressEn", "Zone E, 9th Floor, Lilan Technology Building, Jiazitang Community, Fenghuang Subdistrict, Guangming District, Shenzhen, Guangdong, China")}
+            label="公司地址"
+            name="contactAddress"
+            defaultValue={read("contactAddress", "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区")}
           />
         </FormSection>
 

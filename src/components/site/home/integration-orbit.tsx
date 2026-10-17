@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { Dictionary } from "@/lib/i18n";
 import { LogoMark } from "@/components/site/logo";
 import { Reveal } from "@/components/motion";
 import { cn } from "@/lib/utils";
+import copy from "@/content/copy.json";
 
 /**
  * 集成能力环形示意图 / Integration orbit diagram
@@ -13,8 +13,8 @@ import { cn } from "@/lib/utils";
  * node counter-rotates so text always stays upright — the same trick the
  * reference site uses for its ecosystem diagram.
  */
-export function IntegrationOrbit({ dict }: { dict: Dictionary }) {
-  const t = dict.home.integration;
+export function IntegrationOrbit() {
+  const t = copy.home.integration;
   const [active, setActive] = useState<number | null>(null);
   // labels are localised in the dictionary — never hard-code them here
   const nodes = t.nodes;

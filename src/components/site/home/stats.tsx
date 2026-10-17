@@ -1,8 +1,8 @@
-import type { Dictionary } from "@/lib/i18n";
 import { Counter, Stagger, StaggerItem } from "@/components/motion";
+import copy from "@/content/copy.json";
 
-export function HomeStats({ dict }: { dict: Dictionary }) {
-  const t = dict.home.stats;
+export function HomeStats() {
+  const t = copy.home.stats;
   return (
     <section className="relative overflow-hidden border-y border-border bg-surface">
       <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />

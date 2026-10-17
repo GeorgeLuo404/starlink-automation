@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { locales, localeOgLocale, type Locale } from "@/lib/i18n/config";
+import copy from "@/content/copy.json";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.starlink-auto.com";
 
 export function buildMetadata({
-  locale,
   title,
   description,
   path = "",
@@ -13,7 +12,6 @@ export function buildMetadata({
   type = "website",
   publishedTime,
 }: {
-  locale: Locale;
   title: string;
   description: string;
   path?: string;
@@ -21,26 +19,20 @@ export function buildMetadata({
   type?: "website" | "article";
   publishedTime?: string;
 }): Metadata {
-  const clean = path === "/" ? "" : path;
-  const url = `${siteUrl}/${locale}${clean}`;
+  const url = `${siteUrl}${path === "/" ? "" : path}`;
   const ogImage = images?.[0] ?? "/media/og.svg";
 
   return {
     title,
     description,
-    alternates: {
-      canonical: url,
-      languages: Object.fromEntries(
-        locales.map((l) => [l === "zh" ? "zh-CN" : "en", `${siteUrl}/${l}${clean}`])
-      ),
-    },
+    alternates: { canonical: url },
     openGraph: {
       type,
       url,
       title,
       description,
-      siteName: locale === "zh" ? "深圳市星链自动化有限公司" : "Shenzhen Starlink Automation Co., Ltd.",
-      locale: localeOgLocale[locale],
+      siteName: copy.meta.siteName,
+      locale: "zh_CN",
       images: [{ url: ogImage, width: 1600, height: 1000, alt: title }],
       ...(publishedTime ? { publishedTime } : {}),
     },

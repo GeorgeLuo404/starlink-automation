@@ -5,8 +5,8 @@ import { z } from "zod";
  *
  * Server actions receive raw FormData, so each schema accepts strings (or a
  * missing key) and normalises them: blanks become null, numbers are coerced,
- * checkboxes become booleans and the "中文|English" line formats are split.
- * Messages are Chinese because the admin UI is Chinese-only.
+ * checkboxes become booleans and the "a|b" line formats are split.
+ * Messages are Chinese, like the rest of the site.
  */
 
 export const PUBLISH_STATUSES = ["DRAFT", "PUBLISHED", "ARCHIVED"] as const;
@@ -97,6 +97,17 @@ const list = (label: string, max = 5000) =>
       : []
   );
 
+/** One entry per line → string[]. */
+const lines = (label: string, max = 10000) =>
+  optional(label, max).transform((value) =>
+    value
+      ? value
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean)
+      : []
+  );
+
 /** One entry per line, fields separated by "|" → string[][]. */
 const pipeLines = (label: string, max = 10000) =>
   optional(label, max).transform((value) =>
@@ -113,13 +124,10 @@ const pipeLines = (label: string, max = 10000) =>
 
 export const articleSchema = z.object({
   id: recordId,
-  titleZh: required("中文标题"),
-  titleEn: optional("英文标题", 200),
+  title: required("标题"),
   slug,
-  excerptZh: optional("中文摘要", 500),
-  excerptEn: optional("英文摘要", 500),
-  contentZh: required("中文正文", 100_000),
-  contentEn: optional("英文正文", 100_000),
+  excerpt: optional("摘要", 500),
+  content: required("正文", 100_000),
   coverUrl: link("封面图片"),
   tags: list("标签", 500),
   status: publishStatus,
@@ -133,29 +141,24 @@ export const articleSchema = z.object({
 
 export const caseSchema = z.object({
   id: recordId,
-  titleZh: required("项目名称（中文）"),
-  titleEn: optional("项目名称（英文）", 200),
+  title: required("项目名称"),
   slug,
-  clientZh: optional("客户（中文）", 120),
-  clientEn: optional("客户（英文）", 120),
-  industryZh: optional("行业（中文）", 120),
-  industryEn: optional("行业（英文）", 120),
+  client: optional("客户", 120),
+  industry: optional("行业", 120),
   year: int("交付年份", 1990, 2100, new Date().getFullYear()),
   location: optional("项目地点", 200),
-  summaryZh: optional("项目简介（中文）", 2000),
-  summaryEn: optional("项目简介（英文）", 2000),
-  contentZh: optional("详情（中文）", 100_000),
-  contentEn: optional("详情（英文）", 100_000),
+  summary: optional("项目简介", 2000),
+  content: optional("详情", 100_000),
   coverUrl: link("封面图片"),
   videoUrl: link("项目视频"),
   gallery: list("图库链接").refine(
     (urls) => urls.every((url) => URL_OR_PATH_RE.test(url)),
     "图库链接中有无效地址：每项都必须是 http(s):// 网址或以 / 开头的路径"
   ),
-  scope: pipeLines("服务范围", 5000),
+  scope: lines("服务范围", 5000),
   metrics: pipeLines("关键指标", 5000).refine(
-    (rows) => rows.every((row) => row[0]),
-    "关键指标每行格式应为：数值|中文说明|English label"
+    (rows) => rows.every((row) => row[0] && row[1]),
+    "关键指标每行格式应为：数值|说明"
   ),
   tags: list("标签", 500),
   status: publishStatus,
@@ -165,33 +168,28 @@ export const caseSchema = z.object({
 
 export const serviceSchema = z.object({
   id: recordId,
-  titleZh: required("名称（中文）"),
-  titleEn: optional("名称（英文）", 200),
+  title: required("名称"),
   slug,
   icon: z.enum(SERVICE_ICONS, { error: "请选择有效的图标" }),
   sortOrder: int("排序", -9999, 9999, 0),
-  summaryZh: optional("简介（中文）", 2000),
-  summaryEn: optional("简介（英文）", 2000),
-  contentZh: optional("详情（中文）", 100_000),
-  contentEn: optional("详情（英文）", 100_000),
+  summary: optional("简介", 2000),
+  content: optional("详情", 100_000),
   coverUrl: link("封面图片"),
   videoUrl: link("介绍视频"),
-  features: pipeLines("服务内容"),
-  deliverables: pipeLines("交付物"),
+  features: lines("服务内容"),
+  deliverables: lines("交付物"),
   faq: pipeLines("FAQ").refine(
-    (rows) => rows.every((row) => row[0] && row[2]),
-    "FAQ 每行格式应为：问题中文|Question EN|答案中文|Answer EN（问题与答案的中文必填）"
+    (rows) => rows.every((row) => row[0] && row[1]),
+    "FAQ 每行格式应为：问题|答案（两项都必填）"
   ),
   published: checkbox,
 });
 
 export const downloadSchema = z.object({
   id: recordId,
-  titleZh: required("标题（中文）"),
-  titleEn: optional("标题（英文）", 200),
+  title: required("标题"),
   slug,
-  descriptionZh: optional("简介（中文）", 2000),
-  descriptionEn: optional("简介（英文）", 2000),
+  description: optional("简介", 2000),
   fileUrl: link("文件地址"),
   storageKey: optional("存储键", 500),
   fileType: z.enum(DOWNLOAD_FILE_TYPES, { error: "请选择有效的文件类型" }),
@@ -204,10 +202,8 @@ export const downloadSchema = z.object({
 
 export const gallerySchema = z.object({
   id: recordId,
-  titleZh: required("标题（中文）"),
-  titleEn: optional("标题（英文）", 200),
-  captionZh: optional("说明（中文）", 500),
-  captionEn: optional("说明（英文）", 500),
+  title: required("标题"),
+  caption: optional("说明", 500),
   mediaKind: z.enum(["IMAGE", "VIDEO"], { error: "请选择有效的类型" }),
   url: requiredLink("图片 / 视频封面"),
   thumbUrl: link("缩略图"),
@@ -237,8 +233,7 @@ export const settingsSchema = z.object({
     (value) => !value || EMAIL_RE.test(value),
     "业务邮箱格式不正确"
   ),
-  contactAddressZh: optional("公司地址（中文）", 300),
-  contactAddressEn: optional("公司地址（英文）", 300),
+  contactAddress: optional("公司地址", 300),
   icp: optional("ICP 备案号", 60),
   analyticsId: optional("统计代码 ID", 100).refine(
     (value) => !value || /^[\w-]+$/.test(value),
