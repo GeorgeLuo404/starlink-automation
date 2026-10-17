@@ -347,12 +347,11 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
 
 /* --------------------------------- 合作伙伴 -------------------------------- */
 
-export async function listPartners(): Promise<{ name: string; sub: string }[]> {
+export async function listPartners(): Promise<{ name: string; nameZh: string }[]> {
   return fromDb(async (db) => {
     const rows = await db.partner.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
     if (!rows.length) return defaultPartners;
-    // In the admin, Partner.url carries the Chinese brand name (see admin/partners).
-    return rows.map((r) => ({ name: r.name, sub: r.url || r.name }));
+    return rows.map((r) => ({ name: r.name, nameZh: r.nameZh ?? "" }));
   }, defaultPartners);
 }
 

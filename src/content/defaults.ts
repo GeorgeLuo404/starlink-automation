@@ -321,19 +321,19 @@ export const whyItems: WhyItem[] = [
 /* 合作伙伴 / Partners                                                 */
 /* ------------------------------------------------------------------ */
 
-export const partners: { name: string; sub: string }[] = [
-  { name: "SIEMENS", sub: "西门子" },
-  { name: "MITSUBISHI", sub: "三菱电机" },
-  { name: "OMRON", sub: "欧姆龙" },
-  { name: "INOVANCE", sub: "汇川技术" },
-  { name: "DELTA", sub: "台达电子" },
-  { name: "BECKHOFF", sub: "倍福自动化" },
-  { name: "FANUC", sub: "发那科" },
-  { name: "ABB", sub: "ABB 机器人" },
-  { name: "KUKA", sub: "库卡" },
-  { name: "YASKAWA", sub: "安川电机" },
-  { name: "EPSON", sub: "爱普生" },
-  { name: "UNIVERSAL ROBOTS", sub: "优傲机器人" },
+export const partners: { name: string; nameZh: string }[] = [
+  { name: "SIEMENS", nameZh: "西门子" },
+  { name: "MITSUBISHI", nameZh: "三菱电机" },
+  { name: "OMRON", nameZh: "欧姆龙" },
+  { name: "INOVANCE", nameZh: "汇川技术" },
+  { name: "DELTA", nameZh: "台达电子" },
+  { name: "BECKHOFF", nameZh: "倍福自动化" },
+  { name: "FANUC", nameZh: "发那科" },
+  { name: "ABB", nameZh: "ABB 机器人" },
+  { name: "KUKA", nameZh: "库卡" },
+  { name: "YASKAWA", nameZh: "安川电机" },
+  { name: "EPSON", nameZh: "爱普生" },
+  { name: "UNIVERSAL ROBOTS", nameZh: "优傲机器人" },
 ];
 
 /* ------------------------------------------------------------------ */

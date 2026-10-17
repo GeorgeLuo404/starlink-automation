@@ -178,7 +178,7 @@ async function main() {
   await seedTable("partners", () => db.partner.count(), async () => {
     for (const [index, partner] of partners.entries()) {
       const existing = await db.partner.findFirst({ where: { name: partner.name } });
-      const data = { name: partner.name, sortOrder: index, active: true };
+      const data = { name: partner.name, nameZh: partner.nameZh, sortOrder: index, active: true };
       if (existing) await db.partner.update({ where: { id: existing.id }, data });
       else await db.partner.create({ data });
     }

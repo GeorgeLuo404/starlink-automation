@@ -231,8 +231,9 @@ model SiteSetting {
 model Partner {
   id        String   @id @default(cuid())
   name      String
+  /// Chinese brand name shown under the logo, e.g. 西门子
+  nameZh    String?
   logoUrl   String?
-  url       String?
   active    Boolean  @default(true)
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())

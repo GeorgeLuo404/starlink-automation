@@ -18,7 +18,9 @@ export async function HomePartners() {
         <span className="font-mono text-sm tracking-[0.12em] text-body transition-colors group-hover:text-white">
           {partner.name}
         </span>
-        <span className="mt-1.5 text-[0.6875rem] text-faint">{partner.sub}</span>
+        {partner.nameZh ? (
+          <span className="mt-1.5 text-[0.6875rem] text-faint">{partner.nameZh}</span>
+        ) : null}
       </div>
     ));
 

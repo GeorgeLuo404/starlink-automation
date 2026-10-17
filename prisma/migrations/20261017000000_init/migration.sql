@@ -209,8 +209,8 @@ CREATE TABLE "SiteSetting" (
 CREATE TABLE "Partner" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "nameZh" TEXT,
     "logoUrl" TEXT,
-    "url" TEXT,
     "active" BOOLEAN NOT NULL DEFAULT true,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

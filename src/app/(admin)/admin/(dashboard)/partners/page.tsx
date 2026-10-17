@@ -38,7 +38,7 @@ export default async function AdminPartnersPage() {
         {/* Re-keyed by row count so the inputs clear after a partner is added. */}
         <ActionForm key={rows.length} action={savePartner} className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <FormField label="名称" name="name" required placeholder="SIEMENS" />
-          <FormField label="品牌中文名" name="url" placeholder="西门子（可留空）" />
+          <FormField label="品牌中文名" name="nameZh" placeholder="西门子（可留空）" />
           <FormField label="Logo 地址" name="logoUrl" placeholder="https://…（可留空）" />
           <FormField label="排序" name="sortOrder" type="number" defaultValue={rows.length + 1} />
           <input type="hidden" name="active" value="on" />
@@ -57,7 +57,7 @@ export default async function AdminPartnersPage() {
               <li key={row.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
                 <div className="flex min-w-0 items-center gap-4">
                   <span className="font-mono text-sm tracking-wide text-foreground">{row.name}</span>
-                  {row.url ? <span className="text-xs text-muted-foreground">{row.url}</span> : null}
+                  {row.nameZh ? <span className="text-xs text-muted-foreground">{row.nameZh}</span> : null}
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-[0.625rem] text-faint">#{row.sortOrder}</span>
