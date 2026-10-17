@@ -11,7 +11,6 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const OUT = path.join(process.cwd(), "public", "media");
-const PUBLIC = path.join(process.cwd(), "public");
 
 const W = 1600;
 const H = 1000;
@@ -212,9 +211,9 @@ async function main() {
   <path d="M20 20V12M20 20l7.5 4.5M20 20l-7.5 4.5" stroke="${BRAND}" stroke-width="1.1" opacity="0.8"/>
 </svg>
 `;
-  await writeFile(path.join(PUBLIC, "favicon.svg"), favicon);
-  await writeFile(path.join(PUBLIC, "icon.svg"), favicon);
-  written.push("favicon.svg", "icon.svg", "og.svg");
+  // Next.js serves src/app/icon.svg as the favicon for every route (site and admin).
+  await writeFile(path.join(process.cwd(), "src", "app", "icon.svg"), favicon);
+  written.push("icon.svg", "og.svg");
 
   console.log(`Generated ${written.length} assets into public/`);
 }

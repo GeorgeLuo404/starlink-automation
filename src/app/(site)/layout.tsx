@@ -29,10 +29,6 @@ export const metadata: Metadata = {
   authors: [{ name: copy.meta.siteName }],
   creator: copy.meta.siteName,
   formatDetection: { telephone: true, address: true, email: true },
-  icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
-  },
   robots: { index: true, follow: true },
 };
 
