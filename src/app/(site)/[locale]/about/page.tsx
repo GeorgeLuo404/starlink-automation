@@ -96,6 +96,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 alt={locale === "zh" ? "作业现场" : "On the shop floor"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
+                loading="eager"
                 className="object-cover"
               />
             </div>
@@ -146,7 +147,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <SectionHeading eyebrow={t.eyebrow} title={t.milestonesTitle} />
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {milestones.map((milestone, i) => (
-              <Reveal key={milestone.year} delay={i * 0.05}>
+              <Reveal key={milestone.title.en} delay={i * 0.05}>
                 <div className="border-t border-border pt-6">
                   <div className="font-mono text-sm tracking-[0.2em] text-primary">{milestone.year}</div>
                   <h3 className="mt-3 text-base font-semibold text-white">{milestone.title[locale]}</h3>

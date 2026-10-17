@@ -109,7 +109,7 @@
 /* ==========================================================================
    3 · 暴露给 Tailwind / Exposed to Tailwind
    --------------------------------------------------------------------------
-   @theme inline 让 bg-primary 直接编译为 var(--primary)。
+   theme 块的 inline 关键字让 bg-primary 直接编译为 var(--primary)。
    The "inline" keyword makes bg-primary compile straight to var(--primary).
    ========================================================================== */
 
