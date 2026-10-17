@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { deleteGalleryItem } from "@/lib/admin-actions";
+import { Button } from "@/components/ui/button";
 import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 
@@ -33,10 +34,12 @@ export default async function AdminGalleryPage() {
         title="图库"
         description="现场照片与视频，按相册归类后展示在前台图库页。"
         action={
-          <Link href="/admin/gallery/new" className="btn btn-primary h-10 px-4">
-            <Plus className="size-4" />
-            添加图片
-          </Link>
+          <Button asChild className="px-4">
+            <Link href="/admin/gallery/new">
+              <Plus className="size-4" />
+              添加图片
+            </Link>
+          </Button>
         }
       />
 

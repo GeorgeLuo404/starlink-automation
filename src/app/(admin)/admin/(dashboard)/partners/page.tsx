@@ -3,7 +3,8 @@ import { getPrisma } from "@/lib/prisma";
 import { deletePartner, savePartner } from "@/lib/admin-actions";
 import { ActionForm, SubmitButton } from "@/components/admin/action-form";
 import { ConfirmAction } from "@/components/admin/confirm-action";
-import { AdminCard, AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
+import { Card } from "@/components/ui/card";
+import { AdminPageHeader, EmptyState, SetupNotice, iconDanger } from "@/components/admin/ui";
 import { FormField } from "@/components/admin/form-fields";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,7 @@ export default async function AdminPartnersPage() {
     <>
       <AdminPageHeader title="合作伙伴" description="首页滚动展示的技术平台与品牌伙伴。" />
 
-      <AdminCard className="mb-8 p-6">
+      <Card className="mb-8 p-6">
         <h2 className="text-sm font-semibold text-white">新增合作伙伴</h2>
         {/* Re-keyed by row count so the inputs clear after a partner is added. */}
         <ActionForm key={rows.length} action={savePartner} className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -45,12 +46,12 @@ export default async function AdminPartnersPage() {
             <SubmitButton>添加</SubmitButton>
           </div>
         </ActionForm>
-      </AdminCard>
+      </Card>
 
       {rows.length === 0 ? (
         <EmptyState title="还没有合作伙伴" description="添加品牌名称后，首页会以跑马灯形式展示。" />
       ) : (
-        <AdminCard>
+        <Card>
           <ul className="divide-y divide-border">
             {rows.map((row) => (
               <li key={row.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
@@ -66,7 +67,7 @@ export default async function AdminPartnersPage() {
                     title="删除合作伙伴"
                     description={`确定删除合作伙伴「${row.name}」吗？此操作不可撤销。`}
                     triggerLabel="删除"
-                    triggerClassName="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
+                    triggerClassName={iconDanger}
                   >
                     <Trash2 className="size-3.5" />
                   </ConfirmAction>
@@ -74,7 +75,7 @@ export default async function AdminPartnersPage() {
               </li>
             ))}
           </ul>
-        </AdminCard>
+        </Card>
       )}
     </>
   );

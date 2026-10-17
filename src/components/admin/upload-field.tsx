@@ -5,6 +5,9 @@ import { Check, Copy, Loader2, Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { FieldError, useFieldError } from "@/components/admin/action-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export type UploadResult = { url: string; key: string; size: number; kind: string; name: string };
 
@@ -84,9 +87,9 @@ export function UploadField({
   return (
     <div>
       <div className="mb-2 flex items-center justify-between">
-        <label className="field-label mb-0" htmlFor={name}>
+        <Label className="mb-0" htmlFor={name}>
           {label}
-        </label>
+        </Label>
         {url ? (
           <button
             type="button"
@@ -105,34 +108,24 @@ export function UploadField({
       </div>
 
       <div className="flex gap-2">
-        <input
+        <Input
           id={name}
           name={name}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="/uploads/... 或 https://cdn..."
-          className={cn("field flex-1 font-mono text-xs", error && "border-destructive/60")}
+          className="flex-1 font-mono text-xs"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${name}-error` : undefined}
         />
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          disabled={busy}
-          className="btn btn-ghost h-10 shrink-0 px-4"
-        >
-          {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />}
+        <Button type="button" variant="outline" onClick={() => inputRef.current?.click()} disabled={busy} className="h-11 px-4">
+          {busy ? <Loader2 className="animate-spin" /> : <Upload />}
           上传
-        </button>
+        </Button>
         {url ? (
-          <button
-            type="button"
-            onClick={() => setUrl("")}
-            className="btn btn-ghost h-10 shrink-0 px-3"
-            aria-label="清除"
-          >
-            <X className="size-4" />
-          </button>
+          <Button type="button" variant="outline" size="icon" onClick={() => setUrl("")} aria-label="清除" className="size-11">
+            <X />
+          </Button>
         ) : null}
       </div>
 
