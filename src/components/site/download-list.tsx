@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import type { Dictionary, Locale } from "@/lib/i18n";
 import type { DownloadView } from "@/lib/data";
 import { formatBytes, cn } from "@/lib/utils";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogBody, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -110,12 +110,13 @@ export function DownloadList({
         ))}
       </div>
 
-      <Dialog
-        open={pending !== null}
-        onOpenChange={(open) => !open && setPending(null)}
-        title={dict.downloads.requestTitle}
-        description={dict.downloads.requestDesc}
-      >
+      <Dialog open={pending !== null} onOpenChange={(open) => !open && setPending(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{dict.downloads.requestTitle}</DialogTitle>
+            <DialogDescription>{dict.downloads.requestDesc}</DialogDescription>
+          </DialogHeader>
+          <DialogBody>
         <form onSubmit={submitGate} className="space-y-4">
           <div>
             <Label htmlFor="dl-name">
@@ -169,6 +170,8 @@ export function DownloadList({
             </button>
           </div>
         </form>
+          </DialogBody>
+        </DialogContent>
       </Dialog>
     </>
   );

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { fontVariables } from "@/app/fonts";
+import { Toaster } from "@/components/ui/sonner";
 import { THEME_COLOR } from "@/lib/theme-color";
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const viewport: Viewport = {
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" className="dark" data-scroll-behavior="smooth">
+    <html lang="zh-CN" className={`dark ${fontVariables}`} data-scroll-behavior="smooth">
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
         <Toaster />

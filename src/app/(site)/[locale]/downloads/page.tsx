@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo";
 import { listDownloads } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { DownloadList } from "@/components/site/download-list";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
 
 export const revalidate = 120;
 

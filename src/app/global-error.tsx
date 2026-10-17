@@ -1,6 +1,7 @@
 "use client";
 
 import "@/app/globals.css";
+import { fontVariables } from "@/app/fonts";
 
 /**
  * Last-resort boundary for errors thrown by a root layout itself. It replaces
@@ -8,7 +9,7 @@ import "@/app/globals.css";
  */
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <html lang="zh-CN" className="dark">
+    <html lang="zh-CN" className={`dark ${fontVariables}`}>
       <body className="flex min-h-screen items-center justify-center bg-background p-6 text-center text-foreground antialiased">
         <div>
           <h1 className="text-xl font-semibold text-white">页面出错了 / Something went wrong</h1>

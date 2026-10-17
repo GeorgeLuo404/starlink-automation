@@ -3,7 +3,16 @@
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { FormAction } from "@/components/admin/action-form";
 
@@ -46,35 +55,33 @@ export function ConfirmAction({
   }
 
   return (
-    <>
-      <button type="button" onClick={() => setOpen(true)} className={triggerClassName} aria-label={triggerLabel}>
+    <AlertDialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!pending) setOpen(next);
+      }}
+    >
+      <AlertDialogTrigger className={triggerClassName} aria-label={triggerLabel}>
         {children}
-      </button>
-
-      <Dialog
-        open={open}
-        onOpenChange={(next) => {
-          if (!pending) setOpen(next);
-        }}
-        title={title}
-        description={description}
-        size="sm"
-      >
-        {!state.ok && state.message ? (
-          <p role="alert" className="mb-4 text-sm text-destructive-soft">
-            {state.message}
-          </p>
-        ) : null}
-        <div className="flex justify-end gap-2">
-          <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending} autoFocus>
-            取消
-          </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          {!state.ok && state.message ? (
+            <p role="alert" className="mr-auto self-center text-sm text-destructive-soft">
+              {state.message}
+            </p>
+          ) : null}
+          <AlertDialogCancel disabled={pending}>取消</AlertDialogCancel>
           <Button variant="destructive" onClick={confirm} disabled={pending}>
             {pending ? <Loader2 className="animate-spin" /> : <Trash2 />}
             {confirmLabel}
           </Button>
-        </div>
-      </Dialog>
-    </>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
