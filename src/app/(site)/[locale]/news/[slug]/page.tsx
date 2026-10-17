@@ -12,7 +12,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { ArticleCard } from "@/components/site/article-card";
 import { localeHref } from "@/components/site/nav-items";
-import { formatDate } from "@/lib/utils";
+import { coverSrc, formatDate } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
     title: article.title[locale],
     description: article.excerpt[locale],
     path: `/news/${slug}`,
-    images: [`/media/article-${slug}.svg`],
+    images: [coverSrc("article", article)],
     type: "article",
     publishedTime: article.publishedAt,
   });
@@ -87,7 +87,7 @@ export default async function ArticlePage({
         <div className="mx-auto max-w-3xl">
           <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-border">
             <Image
-              src={`/media/article-${slug}.svg`}
+              src={coverSrc("article", article)}
               alt={article.title[locale]}
               fill
               sizes="(max-width: 768px) 100vw, 768px"

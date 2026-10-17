@@ -10,6 +10,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { ServiceIcon } from "@/components/site/service-icon";
 import { localeHref } from "@/components/site/nav-items";
 import { Reveal } from "@/components/motion";
+import { coverSrc } from "@/lib/utils";
 
 export const revalidate = 120;
 
@@ -92,7 +93,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
 
                 <div className="relative aspect-16/10 overflow-hidden rounded-(--radius) border border-border lg:col-span-3 lg:aspect-auto lg:min-h-full">
                   <Image
-                    src={`/media/service-${service.slug}.svg`}
+                    src={coverSrc("service", service)}
                     alt={service.title[locale]}
                     fill
                     sizes="(max-width: 1024px) 100vw, 25vw"

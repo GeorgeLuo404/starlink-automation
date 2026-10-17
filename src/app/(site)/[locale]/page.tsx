@@ -14,6 +14,7 @@ import { HomePartners } from "@/components/site/home/partners-marquee";
 import { HomeNews } from "@/components/site/home/latest-news";
 import { HomeGallery } from "@/components/site/home/gallery-strip";
 import { HomeCta } from "@/components/site/home/cta-band";
+import { getSiteSettings } from "@/lib/data";
 
 export async function generateMetadata({
   params,
@@ -35,10 +36,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const dict = getDictionary(locale);
+  const settings = await getSiteSettings();
 
   return (
     <>
-      <HomeHero locale={locale} dict={dict} />
+      <HomeHero
+        locale={locale}
+        dict={dict}
+        videoUrl={settings.heroVideoUrl}
+        posterUrl={settings.heroPosterUrl ?? undefined}
+      />
       <HomeStatement dict={dict} />
       <HomeServices locale={locale} dict={dict} />
       <HomeStats dict={dict} />

@@ -5,6 +5,8 @@ import { fontVariables } from "@/app/fonts";
 import { getDictionary, isLocale, localeHtmlLang, locales, type Locale } from "@/lib/i18n";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { Analytics } from "@/components/site/analytics";
+import { getSiteSettings } from "@/lib/data";
 import { ScrollProgress } from "@/components/motion";
 import { siteUrl } from "@/lib/seo";
 import { THEME_COLOR } from "@/lib/theme-color";
@@ -60,6 +62,7 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound();
 
   const typedLocale = locale as Locale;
+  const settings = await getSiteSettings();
   const dict = getDictionary(typedLocale);
 
   // `data-scroll-behavior` tells Next.js that `scroll-behavior: smooth` comes from
@@ -81,7 +84,8 @@ export default async function LocaleLayout({
         <ScrollProgress />
         <SiteHeader locale={typedLocale} dict={dict} />
         <main id="main">{children}</main>
-        <SiteFooter locale={typedLocale} dict={dict} />
+        <SiteFooter locale={typedLocale} dict={dict} settings={settings} />
+        <Analytics id={settings.analyticsId} />
       </body>
     </html>
   );

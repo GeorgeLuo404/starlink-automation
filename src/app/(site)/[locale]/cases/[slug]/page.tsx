@@ -11,6 +11,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { localeHref } from "@/components/site/nav-items";
 import { Reveal } from "@/components/motion";
+import { coverSrc } from "@/lib/utils";
 
 export const revalidate = 120;
 
@@ -33,7 +34,7 @@ export async function generateMetadata({
     title: item.title[locale],
     description: item.summary[locale],
     path: `/cases/${slug}`,
-    images: [`/media/case-${slug}.svg`],
+    images: [coverSrc("case", item)],
   });
 }
 
@@ -74,7 +75,7 @@ export default async function CaseDetailPage({
         <Reveal>
           <div className="relative aspect-21/9 overflow-hidden rounded-(--radius) border border-border">
             <Image
-              src={`/media/case-${item.slug}.svg`}
+              src={coverSrc("case", item)}
               alt={item.title[locale]}
               fill
               sizes="100vw"
@@ -165,7 +166,7 @@ export default async function CaseDetailPage({
                   className="card-industrial corner-ticks group flex gap-4 p-5"
                 >
                   <div className="relative size-20 shrink-0 overflow-hidden rounded-(--radius)">
-                    <Image src={`/media/case-${other.slug}.svg`} alt={other.title[locale]} fill sizes="80px" className="object-cover" />
+                    <Image src={coverSrc("case", other)} alt={other.title[locale]} fill sizes="80px" className="object-cover" />
                   </div>
                   <div className="min-w-0">
                     <span className="font-mono text-[0.625rem] tracking-wider text-primary">
