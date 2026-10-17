@@ -32,7 +32,7 @@ export default async function CasesPage() {
 
       <div className="container-x py-16 md:py-24">
         <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" gap={0.08}>
-          {cases.map((item) => (
+          {cases.map((item, i) => (
             <StaggerItem key={item.slug} className="h-full">
               <Link
                 href={`/cases/${item.slug}`}
@@ -44,6 +44,8 @@ export default async function CasesPage() {
                     alt={item.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    // The first row sits above the fold and is the page's LCP image.
+                    loading={i < 3 ? "eager" : undefined}
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-background/85 via-transparent to-transparent" />
