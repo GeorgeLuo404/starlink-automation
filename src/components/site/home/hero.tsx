@@ -48,7 +48,7 @@ export function HomeHero({
             playsInline
           />
         ) : (
-          <img src={posterUrl} alt="" className="size-full object-cover opacity-40" />
+          <img src={posterUrl} alt="" className="size-full object-cover opacity-90" />
         )}
       </motion.div>
 
