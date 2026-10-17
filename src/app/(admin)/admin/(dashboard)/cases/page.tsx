@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { deleteCase } from "@/lib/admin-actions";
+import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminCard, AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ export default async function AdminCasesPage() {
       <>
         <AdminPageHeader title="项目案例" />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理案例。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理案例。</p>
         </SetupNotice>
       </>
     );
@@ -69,12 +70,16 @@ export default async function AdminCasesPage() {
                         <Link href={`/admin/cases/${row.id}`} className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary" aria-label="编辑">
                           <Edit3 className="size-3.5" />
                         </Link>
-                        <form action={deleteCase}>
-                          <input type="hidden" name="id" value={row.id} />
-                          <button type="submit" className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft" aria-label="删除">
-                            <Trash2 className="size-3.5" />
-                          </button>
-                        </form>
+                        <ConfirmAction
+                          action={deleteCase}
+                          id={row.id}
+                          title="删除案例"
+                          description={`确定删除案例「${row.titleZh}」吗？此操作不可撤销。`}
+                          triggerLabel="删除"
+                          triggerClassName="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </ConfirmAction>
                       </div>
                     </td>
                   </tr>

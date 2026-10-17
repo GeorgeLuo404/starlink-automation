@@ -1,5 +1,6 @@
 import { getPrisma } from "@/lib/prisma";
 import { saveSettings } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { AdminPageHeader, SetupNotice } from "@/components/admin/ui";
 import { FormActions, FormField, FormSection } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
@@ -19,7 +20,7 @@ export default async function AdminSettingsPage({
       <>
         <AdminPageHeader title="站点设置" />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可保存站点设置。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可保存站点设置。</p>
         </SetupNotice>
       </>
     );
@@ -42,7 +43,7 @@ export default async function AdminSettingsPage({
         </div>
       ) : null}
 
-      <form action={saveSettings} className="space-y-6">
+      <ActionForm action={saveSettings} className="space-y-6">
         <FormSection title="首页 Hero" description="留空时使用内置的工业风占位图。">
           <UploadField
             name="heroVideoUrl"
@@ -90,7 +91,7 @@ export default async function AdminSettingsPage({
         </FormSection>
 
         <FormActions cancelHref="/admin" submitLabel="保存设置" />
-      </form>
+      </ActionForm>
     </>
   );
 }

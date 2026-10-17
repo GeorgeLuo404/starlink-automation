@@ -17,7 +17,7 @@ export default async function AdminCaseEditorPage({ params }: { params: Promise<
       <>
         <AdminPageHeader title={isNew ? "新建案例" : "编辑案例"} />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理案例。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理案例。</p>
         </SetupNotice>
       </>
     );

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { deleteArticle, setArticleStatus } from "@/lib/admin-actions";
+import { ActionForm, SubmitButton } from "@/components/admin/action-form";
+import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminCard, AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 import { formatDate } from "@/lib/utils";
 
@@ -15,7 +17,7 @@ export default async function AdminArticlesPage() {
       <>
         <AdminPageHeader title="文章 / 新闻" />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理文章。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理文章。</p>
         </SetupNotice>
       </>
     );
@@ -99,31 +101,28 @@ export default async function AdminArticlesPage() {
                           <Edit3 className="size-3.5" />
                         </Link>
 
-                        <form action={setArticleStatus}>
+                        <ActionForm action={setArticleStatus} showSummary={false}>
                           <input type="hidden" name="id" value={article.id} />
                           <input
                             type="hidden"
                             name="status"
                             value={article.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED"}
                           />
-                          <button
-                            type="submit"
-                            className="rounded border border-border px-2.5 py-1.5 font-mono text-[0.625rem] text-muted-foreground transition-colors hover:border-success/40 hover:text-success"
-                          >
+                          <SubmitButton variant="outline" size="sm" className="h-8 px-2.5 font-mono text-[0.625rem]">
                             {article.status === "PUBLISHED" ? "下架" : "发布"}
-                          </button>
-                        </form>
+                          </SubmitButton>
+                        </ActionForm>
 
-                        <form action={deleteArticle}>
-                          <input type="hidden" name="id" value={article.id} />
-                          <button
-                            type="submit"
-                            className="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
-                            aria-label="删除"
-                          >
-                            <Trash2 className="size-3.5" />
-                          </button>
-                        </form>
+                        <ConfirmAction
+                          action={deleteArticle}
+                          id={article.id}
+                          title="删除文章"
+                          description={`确定删除文章「${article.titleZh}」吗？此操作不可撤销。`}
+                          triggerLabel="删除"
+                          triggerClassName="inline-flex size-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </ConfirmAction>
                       </div>
                     </td>
                   </tr>

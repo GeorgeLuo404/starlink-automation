@@ -49,7 +49,7 @@ vercel link
 首次部署后执行建表与初始化（本地连同一个库）：
 
 ```bash
-DATABASE_URL="<云端连接串>" pnpm db:push
+DATABASE_URL="<云端连接串>" pnpm db:deploy
 DATABASE_URL="<云端连接串>" pnpm db:seed
 ```
 
@@ -228,16 +228,11 @@ echo "0 3 * * 1 docker compose -f /opt/starlink/docker-compose.prod.yml exec ngi
 
 ## 4. 数据库迁移与备份
 
-### 开发期
+所有结构变更都通过 `prisma/migrations` 中的迁移文件完成，不要使用 `prisma db push`
+（它不记录迁移历史，会导致本地与生产库结构漂移）。
 
 ```bash
-pnpm db:push          # 直接把 schema 推到库，不生成迁移文件
-```
-
-### 生产期（推荐）
-
-```bash
-# 本地生成迁移文件并提交到 Git
+# 修改 prisma/schema.prisma 后，在本地生成并应用迁移文件，然后提交到 Git
 pnpm db:migrate --name add_something
 
 # 服务器上应用迁移（compose 的 migrate 服务会自动执行）

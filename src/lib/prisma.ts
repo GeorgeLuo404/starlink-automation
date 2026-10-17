@@ -39,7 +39,7 @@ export function requireDb(): PrismaClient {
   const client = getPrisma();
   if (!client) {
     throw new Error(
-      "数据库未配置 / Database not configured: set DATABASE_URL in your environment, then run `pnpm db:push`."
+      "数据库未配置 / Database not configured: set DATABASE_URL in your environment, then run `pnpm db:deploy`."
     );
   }
   return client;

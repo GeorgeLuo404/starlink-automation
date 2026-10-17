@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Check, Copy, Loader2, Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { FieldError, useFieldError } from "@/components/admin/action-form";
 
 export type UploadResult = { url: string; key: string; size: number; kind: string; name: string };
 
@@ -38,6 +39,7 @@ export function UploadField({
   const [dragging, setDragging] = useState(false);
   const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const error = useFieldError(name);
 
   async function upload(file: File) {
     setBusy(true);
@@ -109,7 +111,9 @@ export function UploadField({
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="/uploads/... 或 https://cdn..."
-          className="field flex-1 font-mono text-xs"
+          className={cn("field flex-1 font-mono text-xs", error && "border-destructive/60")}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${name}-error` : undefined}
         />
         <button
           type="button"
@@ -131,6 +135,8 @@ export function UploadField({
           </button>
         ) : null}
       </div>
+
+      <FieldError name={name} />
 
       <input
         ref={inputRef}

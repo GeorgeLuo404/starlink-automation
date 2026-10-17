@@ -121,7 +121,7 @@
     },
     "services": {
       "eyebrow": "Capabilities",
-      "title": "Five core capabilities",
+      "title": "Core capabilities",
       "desc": "From drawings to programs, from a single machine to a full line — one continuous delivery chain.",
       "cta": "Explore the service"
     },
@@ -182,7 +182,7 @@
   "services": {
     "title": "Capabilities",
     "eyebrow": "Services",
-    "lead": "Five core services covering the full chain from electrical design to full-line commissioning.",
+    "lead": "Core services covering the full chain from electrical design to full-line commissioning.",
     "detailCta": "Ask about this service",
     "capabilities": "What we do",
     "deliverables": "Deliverables",

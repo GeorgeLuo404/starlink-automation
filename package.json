@@ -12,9 +12,9 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "admin:create": "tsx scripts/create-admin.ts",
@@ -22,9 +22,6 @@
     "postinstall": "prisma generate",
     "check:tokens": "node scripts/check-tokens.mjs",
     "check": "pnpm typecheck && pnpm check:tokens"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1149.0",

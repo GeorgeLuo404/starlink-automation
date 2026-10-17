@@ -5,6 +5,7 @@ import { Copy, FileText, Film, Image as ImageIcon, Search, Trash2 } from "lucide
 import { toast } from "sonner";
 import { cn, formatBytes, formatDate } from "@/lib/utils";
 import { deleteMediaAsset } from "@/lib/admin-actions";
+import { ConfirmAction } from "@/components/admin/confirm-action";
 
 export type MediaRow = {
   id: string;
@@ -123,21 +124,16 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
                   >
                     <Copy className="size-3.5" />
                   </button>
-                  <form action={deleteMediaAsset}>
-                    <input type="hidden" name="id" value={row.id} />
-                    <input type="hidden" name="storageKey" value={row.storageKey} />
-                    <input type="hidden" name="redirectTo" value="/admin/media" />
-                    <button
-                      type="submit"
-                      onClick={(e) => {
-                        if (!confirm("删除该资源？此操作不可撤销。")) e.preventDefault();
-                      }}
-                      className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft transition-colors hover:bg-destructive/15"
-                      aria-label="删除"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
-                  </form>
+                  <ConfirmAction
+                    action={deleteMediaAsset}
+                    id={row.id}
+                    title="删除资源"
+                    description={`确定删除「${row.originalName}」吗？文件会从存储中移除，此操作不可撤销。`}
+                    triggerLabel="删除"
+                    triggerClassName="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft transition-colors hover:bg-destructive/15"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </ConfirmAction>
                 </div>
               </div>
               <div className="p-3">

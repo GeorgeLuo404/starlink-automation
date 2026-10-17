@@ -1,4 +1,5 @@
 import { saveCase } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
 
@@ -21,6 +22,8 @@ type CaseRecord = {
   metrics: unknown;
   year: number | null;
   location: string | null;
+  gallery: string[];
+  scope: string[];
   status: string;
   featured: boolean;
   sortOrder: number;
@@ -36,9 +39,14 @@ function metricsToText(metrics: unknown) {
     .join("\n");
 }
 
+/** Stored as packed "zh||en" strings → one "中文|English" line each. */
+function scopeToText(scope: string[] | undefined) {
+  return (scope ?? []).map((entry) => entry.split("||").join("|")).join("\n");
+}
+
 export function CaseForm({ record }: { record?: CaseRecord }) {
   return (
-    <form action={saveCase} className="space-y-6">
+    <ActionForm action={saveCase} className="space-y-6">
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="项目信息">
@@ -60,7 +68,7 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
       <FormSection title="封面与影像">
         <UploadField name="coverUrl" label="封面图片" folder="cases" defaultValue={record?.coverUrl ?? ""} accept="image/*" />
         <UploadField name="videoUrl" label="项目视频" folder="cases" defaultValue={record?.videoUrl ?? ""} accept="video/*" />
-        <FormField label="图库链接" name="gallery" placeholder="用逗号分隔多个图片地址" description="可选，用于项目详情页的现场影像区" />
+        <FormField label="图库链接" name="gallery" defaultValue={record?.gallery?.join(", ")} placeholder="用逗号分隔多个图片地址" description="可选，用于项目详情页的现场影像区" />
       </FormSection>
 
       <FormSection title="项目详情" description="支持 ## 标题、- 列表、**加粗** 等轻量标记。">
@@ -70,6 +78,7 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
           label="服务范围"
           name="scope"
           rows={4}
+          defaultValue={scopeToText(record?.scope)}
           placeholder="每行一项，中文|English"
           description="每行一条，例如：整线控制方案与状态机设计|Full-line control concept"
           mono
@@ -106,6 +115,6 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
       </FormSection>
 
       <FormActions cancelHref="/admin/cases" submitLabel={record ? "保存修改" : "创建案例"} />
-    </form>
+    </ActionForm>
   );
 }

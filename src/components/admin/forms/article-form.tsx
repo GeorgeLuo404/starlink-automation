@@ -1,4 +1,5 @@
 import { saveArticle } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
 
@@ -31,7 +32,7 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
   const isEdit = Boolean(article);
 
   return (
-    <form action={saveArticle} className="space-y-6">
+    <ActionForm action={saveArticle} className="space-y-6">
       {article ? <input type="hidden" name="id" value={article.id} /> : null}
 
       <FormSection title="基本信息" description="中文为必填，英文留空时会自动回退到中文内容。">
@@ -88,6 +89,6 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
       </FormSection>
 
       <FormActions cancelHref="/admin/articles" submitLabel={isEdit ? "保存修改" : "创建文章"} />
-    </form>
+    </ActionForm>
   );
 }

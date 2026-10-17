@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Building2, Mail, Phone, Trash2 } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { deleteInquiry, updateInquiry } from "@/lib/admin-actions";
+import { ActionForm, SubmitButton } from "@/components/admin/action-form";
+import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminCard, AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 import { cn, formatDate } from "@/lib/utils";
 
@@ -22,7 +24,7 @@ export default async function AdminInquiriesPage({
       <>
         <AdminPageHeader title="客户询盘" />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可查看客户询盘。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可查看客户询盘。</p>
         </SetupNotice>
       </>
     );
@@ -116,7 +118,7 @@ export default async function AdminInquiriesPage({
                 </div>
 
                 <div className="flex shrink-0 flex-col gap-2 lg:w-52">
-                  <form action={updateInquiry} className="space-y-2">
+                  <ActionForm action={updateInquiry} showSummary={false} className="space-y-2">
                     <input type="hidden" name="id" value={row.id} />
                     <select name="status" defaultValue={row.status} className="field h-9 text-xs">
                       {STATUSES.map((entry) => (
@@ -131,21 +133,22 @@ export default async function AdminInquiriesPage({
                       placeholder="跟进备注…"
                       className="field h-9 text-xs"
                     />
-                    <button type="submit" className="btn btn-primary h-9 w-full px-3 text-xs">
+                    <SubmitButton size="sm" className="h-9 w-full">
                       更新状态
-                    </button>
-                  </form>
+                    </SubmitButton>
+                  </ActionForm>
 
-                  <form action={deleteInquiry}>
-                    <input type="hidden" name="id" value={row.id} />
-                    <button
-                      type="submit"
-                      className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-border text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
-                    >
-                      <Trash2 className="size-3.5" />
+                  <ConfirmAction
+                    action={deleteInquiry}
+                    id={row.id}
+                    title="删除询盘"
+                    description={`确定删除询盘「${row.name}」吗？此操作不可撤销。`}
+                    triggerLabel="删除"
+                    triggerClassName="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-(--radius) border border-border text-xs text-muted-foreground transition-colors hover:border-destructive/40 hover:text-destructive-soft"
+                  >
+                    <Trash2 className="size-3.5" />
                       删除
-                    </button>
-                  </form>
+                  </ConfirmAction>
                 </div>
               </div>
             </AdminCard>

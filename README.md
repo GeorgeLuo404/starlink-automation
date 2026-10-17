@@ -121,8 +121,8 @@ cp .env.example .env
 # 3. 启动数据库（本机已有 PostgreSQL 可跳过）
 docker compose up -d db
 
-# 4. 建表 + 导入内置内容 + 创建管理员
-pnpm db:push
+# 4. 建表（应用 prisma/migrations）+ 导入内置内容 + 创建管理员
+pnpm db:deploy
 pnpm db:seed
 
 # 5. 启动
@@ -150,11 +150,12 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 | `pnpm build` | 生产构建（含 prisma generate） |
 | `pnpm start` | 启动生产构建 |
 | `pnpm typecheck` | TypeScript 类型检查 |
-| `pnpm db:push` | 把 schema 同步到数据库（开发期） |
-| `pnpm db:migrate` | 生成迁移文件（生产建议用这个） |
-| `pnpm db:deploy` | 应用迁移（生产） |
-| `pnpm db:seed` | 导入内置内容（幂等，可重复执行） |
-| `pnpm db:studio` | Prisma Studio 可视化查看数据 |
+| `pnpm db:migrate --name <名称>` | 修改 `schema.prisma` 后生成并应用迁移文件（需提交到 Git） |
+| `pnpm db:deploy` | 应用已有迁移（首次建表、CI、生产） |
+| `pnpm db:reset` | 清空本地库，重新应用全部迁移并执行 seed（仅限开发） |
+| `pnpm db:seed` | 导入内置内容：只写入空表，不会覆盖后台已编辑的数据 |
+| `pnpm db:seed --force` | 用 `defaults.ts` 覆盖同 slug 的内置内容 |
+| `pnpm db:studio` | Prisma Studio 可视化查看数据（也可用 TablePlus 等客户端连接 `DATABASE_URL`） |
 | `pnpm admin:create` | 创建/重置管理员 |
 | `pnpm docker:db` | 启动本地 PostgreSQL |
 | `node scripts/generate-placeholders.mjs` | 重新生成占位图 |
@@ -377,7 +378,7 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | 配色 | **只改** `src/app/globals.css` 的色板（见下方第 6.1 节），组件无需改动 |
 | 圆角 / 字体 | `src/app/globals.css` 的 `--radius` 与 `--font-*` |
 | 首页文案 | `src/messages/zh.json` 与 `en.json` |
-| 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后重新 `pnpm db:seed`） |
+| 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后 `pnpm db:seed --force`，会覆盖后台对这些记录的修改） |
 | 占位图换成真实照片 | 直接覆盖 `public/media/*.svg`，或在后台媒体库上传后替换引用 |
 | 导航结构 | `src/components/site/nav-items.ts` |
 

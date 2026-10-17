@@ -1,4 +1,20 @@
+"use client";
+
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { FieldError, SubmitButton, useFieldError } from "@/components/admin/action-form";
+
+/*
+ * Field components for admin forms. They are client components so they can read
+ * the validation state of the enclosing <ActionForm> and show inline errors.
+ */
+
+const invalidClass = "border-destructive/60 focus:border-destructive/70";
+
+function errorProps(name: string, error: string | undefined) {
+  return error ? { "aria-invalid": true, "aria-describedby": `${name}-error` } : {};
+}
 
 export function FormSection({
   title,
@@ -39,6 +55,7 @@ export function FormField({
   description?: string;
   className?: string;
 }) {
+  const error = useFieldError(name);
   return (
     <div className={className}>
       <label className="field-label" htmlFor={name}>
@@ -51,8 +68,10 @@ export function FormField({
         required={required}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
-        className="field"
+        className={cn("field", error && invalidClass)}
+        {...errorProps(name, error)}
       />
+      <FieldError name={name} />
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
@@ -77,6 +96,7 @@ export function FormTextarea({
   description?: string;
   mono?: boolean;
 }) {
+  const error = useFieldError(name);
   return (
     <div>
       <label className="field-label" htmlFor={name}>
@@ -89,8 +109,10 @@ export function FormTextarea({
         required={required}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
-        className={cn("field resize-y leading-relaxed", mono && "font-mono text-xs")}
+        className={cn("field resize-y leading-relaxed", mono && "font-mono text-xs", error && invalidClass)}
+        {...errorProps(name, error)}
       />
+      <FieldError name={name} />
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
@@ -109,18 +131,26 @@ export function FormSelect({
   defaultValue?: string | null;
   description?: string;
 }) {
+  const error = useFieldError(name);
   return (
     <div>
       <label className="field-label" htmlFor={name}>
         {label}
       </label>
-      <select id={name} name={name} defaultValue={defaultValue ?? options[0]?.value} className="field appearance-none">
+      <select
+        id={name}
+        name={name}
+        defaultValue={defaultValue ?? options[0]?.value}
+        className={cn("field appearance-none", error && invalidClass)}
+        {...errorProps(name, error)}
+      >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
+      <FieldError name={name} />
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
     </div>
   );
@@ -159,12 +189,10 @@ export function FormCheckbox({
 export function FormActions({ cancelHref, submitLabel = "保存" }: { cancelHref: string; submitLabel?: string }) {
   return (
     <div className="sticky bottom-0 -mx-5 flex items-center justify-end gap-3 border-t border-border bg-background/95 px-5 py-4 backdrop-blur-xl lg:-mx-8 lg:px-8">
-      <a href={cancelHref} className="btn btn-ghost h-10 px-4">
+      <Link href={cancelHref} className={buttonVariants({ variant: "ghost" })}>
         取消
-      </a>
-      <button type="submit" className="btn btn-primary h-10 px-6">
-        {submitLabel}
-      </button>
+      </Link>
+      <SubmitButton className="px-6">{submitLabel}</SubmitButton>
     </div>
   );
 }

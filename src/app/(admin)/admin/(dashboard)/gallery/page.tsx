@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Edit3, Plus, Trash2 } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { deleteGalleryItem } from "@/lib/admin-actions";
+import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ export default async function AdminGalleryPage() {
       <>
         <AdminPageHeader title="图库" />
         <SetupNotice title="数据库尚未连接">
-          <p>配置 DATABASE_URL 并执行 pnpm db:push 后即可管理图库。</p>
+          <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理图库。</p>
         </SetupNotice>
       </>
     );
@@ -53,12 +54,16 @@ export default async function AdminGalleryPage() {
                   <Link href={`/admin/gallery/${row.id}`} className="inline-flex size-9 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10" aria-label="编辑">
                     <Edit3 className="size-3.5" />
                   </Link>
-                  <form action={deleteGalleryItem}>
-                    <input type="hidden" name="id" value={row.id} />
-                    <button type="submit" className="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft hover:bg-destructive/15" aria-label="删除">
-                      <Trash2 className="size-3.5" />
-                    </button>
-                  </form>
+                  <ConfirmAction
+                    action={deleteGalleryItem}
+                    id={row.id}
+                    title="删除图片"
+                    description={`确定删除图片「${row.titleZh}」吗？此操作不可撤销。`}
+                    triggerLabel="删除"
+                    triggerClassName="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft hover:bg-destructive/15"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </ConfirmAction>
                 </div>
               </div>
               <div className="p-3">

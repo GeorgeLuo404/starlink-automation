@@ -19,7 +19,8 @@ export default defineConfig({
   schema: path.join("prisma", "schema.prisma"),
   migrations: {
     path: path.join("prisma", "migrations"),
-    seed: "node --experimental-strip-types prisma/seed.ts",
+    // tsx (not plain node) so the seed can resolve the "@/..." path aliases used by src/lib.
+    seed: "tsx prisma/seed.ts",
   },
   datasource: {
     url: process.env.DATABASE_URL ?? "",

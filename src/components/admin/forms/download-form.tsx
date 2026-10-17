@@ -1,4 +1,5 @@
 import { saveDownload } from "@/lib/admin-actions";
+import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { UploadField } from "@/components/admin/upload-field";
 
@@ -21,7 +22,7 @@ type DownloadRecord = {
 
 export function DownloadForm({ record }: { record?: DownloadRecord }) {
   return (
-    <form action={saveDownload} className="space-y-6">
+    <ActionForm action={saveDownload} className="space-y-6">
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="资料信息">
@@ -69,6 +70,6 @@ export function DownloadForm({ record }: { record?: DownloadRecord }) {
       </FormSection>
 
       <FormActions cancelHref="/admin/downloads" submitLabel={record ? "保存修改" : "创建资料"} />
-    </form>
+    </ActionForm>
   );
 }
