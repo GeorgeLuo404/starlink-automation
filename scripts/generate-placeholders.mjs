@@ -11,7 +11,6 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const OUT = path.join(process.cwd(), "public", "media");
-const PUBLIC = path.join(process.cwd(), "public");
 
 const W = 1600;
 const H = 1000;
@@ -103,7 +102,7 @@ function art(seed, kind) {
   return parts.join("");
 }
 
-function svg({ label, index, kind, seed, subtitle }) {
+function svg({ label, index, kind, seed, subtitle, showLabel = true }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">
   <defs>
     <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
@@ -128,7 +127,7 @@ function svg({ label, index, kind, seed, subtitle }) {
     <path d="M40 ${H - 70}V${H - 40}H70"/><path d="M${W - 70} ${H - 40}H${W - 40}V${H - 70}"/>
   </g>
   <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="${BRAND}">${esc(index)}</text>
-  <text x="56" y="${H - 96}" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="${WHITE}">${esc(label)}</text>
+  ${showLabel ? `<text x="56" y="${H - 96}" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="${WHITE}">${esc(label)}</text>` : ""}
   ${subtitle ? `<text x="56" y="${H - 54}" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="${PAPER_500}">${esc(subtitle)}</text>` : ""}
   <text x="${W - 56}" y="${H - 54}" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="${WATERMARK}">STARLINK AUTOMATION</text>
 </svg>
@@ -194,7 +193,7 @@ async function main() {
   }
   for (const [i, label] of gallery.entries()) {
     const file = `gallery-${String(i + 1).padStart(2, "0")}.svg`;
-    await writeFile(path.join(OUT, file), svg({ label, subtitle: "", index: `IMG-${String(i + 1).padStart(2, "0")}`, kind: i % 3 === 0 ? "circuit" : "grid", seed: 4000 + i }));
+    await writeFile(path.join(OUT, file), svg({ label, showLabel: false, subtitle: "", index: `IMG-${String(i + 1).padStart(2, "0")}`, kind: i % 3 === 0 ? "circuit" : "grid", seed: 4000 + i }));
     written.push(file);
   }
 
@@ -212,9 +211,9 @@ async function main() {
   <path d="M20 20V12M20 20l7.5 4.5M20 20l-7.5 4.5" stroke="${BRAND}" stroke-width="1.1" opacity="0.8"/>
 </svg>
 `;
-  await writeFile(path.join(PUBLIC, "favicon.svg"), favicon);
-  await writeFile(path.join(PUBLIC, "icon.svg"), favicon);
-  written.push("favicon.svg", "icon.svg", "og.svg");
+  // Next.js serves src/app/icon.svg as the favicon for every route (site and admin).
+  await writeFile(path.join(process.cwd(), "src", "app", "icon.svg"), favicon);
+  written.push("icon.svg", "og.svg");
 
   console.log(`Generated ${written.length} assets into public/`);
 }

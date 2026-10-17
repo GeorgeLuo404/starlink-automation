@@ -216,7 +216,7 @@ export const gallerySchema = z.object({
 export const partnerSchema = z.object({
   id: recordId,
   name: required("名称", 80),
-  url: optional("品牌中文名", 80),
+  nameZh: optional("品牌中文名", 80),
   logoUrl: link("Logo 地址"),
   active: checkbox,
   sortOrder: int("排序", -9999, 9999, 0),

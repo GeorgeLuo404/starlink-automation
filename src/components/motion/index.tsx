@@ -315,7 +315,7 @@ export function Marquee({
         className={cn(
           "flex w-max",
           reverse ? "animate-marquee-reverse" : "animate-marquee",
-          pauseOnHover && "group-hover:[animation-play-state:paused]"
+          pauseOnHover && "group-hover:paused"
         )}
         style={{ animationDuration: `${duration}s` }}
       >
