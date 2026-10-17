@@ -5,8 +5,8 @@
  * generates a valid one-page document on the fly. Replace it with your real
  * assets by uploading them in the admin → 资料下载 section.
  *
- * The writer produces ASCII-only pages (base-14 Helvetica has no CJK glyphs);
- * callers should pass a transliterated or English title.
+ * The writer produces ASCII-only pages (base-14 Helvetica has no CJK glyphs),
+ * so callers pass ASCII text such as the download slug.
  */
 
 function escapePdfText(text: string) {

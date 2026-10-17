@@ -23,7 +23,6 @@ import {
   galleryItems,
   partners,
   services,
-  packLocalized,
 } from "../src/content/defaults";
 
 try {
@@ -51,12 +50,6 @@ async function seedTable(label: string, count: () => Promise<number>, run: () =>
   await run();
 }
 
-function pair(value: { zh: string; en: string }) {
-  return { zh: value.zh, en: value.en || value.zh };
-}
-
-/* Bilingual single-column fields are packed as "zh||en" (see packLocalized). */
-
 async function main() {
   const db = getPrisma();
   if (!db) {
@@ -68,40 +61,36 @@ async function main() {
   }
 
   console.log("→ Seeding categories…");
-  const articleCategories = [...new Set(articles.map((a) => a.category.zh))];
+  const articleCategories = [...new Set(articles.map((a) => a.category))];
   const categoryIds = new Map<string, string>();
 
-  for (const [index, nameZh] of articleCategories.entries()) {
-    const source = articles.find((a) => a.category.zh === nameZh)!;
-    const slug = CATEGORY_SLUGS[nameZh] ?? `category-${index + 1}`;
+  for (const [index, name] of articleCategories.entries()) {
+    const slug = CATEGORY_SLUGS[name] ?? `category-${index + 1}`;
     const row = await db.category.upsert({
       where: { kind_slug: { kind: "ARTICLE", slug } },
-      create: { kind: "ARTICLE", slug, nameZh, nameEn: source.category.en, sortOrder: index },
-      update: FORCE ? { nameZh, nameEn: source.category.en, sortOrder: index } : {},
+      create: { kind: "ARTICLE", slug, name, sortOrder: index },
+      update: FORCE ? { name, sortOrder: index } : {},
     });
-    categoryIds.set(nameZh, row.id);
+    categoryIds.set(name, row.id);
   }
 
   const downloadCategory = await db.category.upsert({
     where: { kind_slug: { kind: "DOWNLOAD", slug: "brochures" } },
-    create: { kind: "DOWNLOAD", slug: "brochures", nameZh: "宣传资料", nameEn: "Brochures & datasheets" },
+    create: { kind: "DOWNLOAD", slug: "brochures", name: "宣传资料" },
     update: {},
   });
 
   await seedTable("services", () => db.service.count(), async () => {
     for (const [index, service] of services.entries()) {
       const data = {
-        titleZh: service.title.zh,
-        titleEn: service.title.en,
-        summaryZh: service.summary.zh,
-        summaryEn: service.summary.en,
-        contentZh: service.content.zh,
-        contentEn: service.content.en,
+        title: service.title,
+        summary: service.summary,
+        content: service.content,
         icon: service.icon,
         coverUrl: `/media/service-${service.slug}.svg`,
-        features: service.features.map(pair),
-        deliverables: service.deliverables.map(pair),
-        faq: service.faq.map((entry) => ({ q: pair(entry.q), a: pair(entry.a) })),
+        features: service.features,
+        deliverables: service.deliverables,
+        faq: service.faq,
         published: true,
         sortOrder: index,
       };
@@ -112,23 +101,18 @@ async function main() {
   await seedTable("projects", () => db.project.count(), async () => {
     for (const [index, item] of cases.entries()) {
       const data = {
-        titleZh: item.title.zh,
-        titleEn: item.title.en,
-        clientZh: item.client.zh,
-        clientEn: item.client.en,
-        industryZh: item.industry.zh,
-        industryEn: item.industry.en,
-        summaryZh: item.summary.zh,
-        summaryEn: item.summary.en,
-        contentZh: item.content.zh,
-        contentEn: item.content.en,
+        title: item.title,
+        client: item.client,
+        industry: item.industry,
+        summary: item.summary,
+        content: item.content,
         coverUrl: `/media/case-${item.slug}.svg`,
         gallery: [] as string[],
         tags: item.tags,
-        scope: item.scope.map(packLocalized),
-        metrics: item.metrics.map((metric) => ({ value: metric.value, label: pair(metric.label) })),
+        scope: item.scope,
+        metrics: item.metrics,
         year: item.year,
-        location: packLocalized(item.location),
+        location: item.location,
         status: "PUBLISHED" as const,
         featured: item.featured,
         sortOrder: index,
@@ -140,12 +124,9 @@ async function main() {
   await seedTable("articles", () => db.article.count(), async () => {
     for (const [index, article] of articles.entries()) {
       const data = {
-        titleZh: article.title.zh,
-        titleEn: article.title.en,
-        excerptZh: article.excerpt.zh,
-        excerptEn: article.excerpt.en,
-        contentZh: article.content.zh,
-        contentEn: article.content.en,
+        title: article.title,
+        excerpt: article.excerpt,
+        content: article.content,
         coverUrl: `/media/article-${article.slug}.svg`,
         tags: article.tags,
         status: "PUBLISHED" as const,
@@ -153,7 +134,7 @@ async function main() {
         pinned: index === 0,
         readMinutes: article.readMinutes,
         publishedAt: new Date(article.publishedAt),
-        categoryId: categoryIds.get(article.category.zh) ?? null,
+        categoryId: categoryIds.get(article.category) ?? null,
       };
       await db.article.upsert({ where: { slug: article.slug }, create: { slug: article.slug, ...data }, update: data });
     }
@@ -162,10 +143,8 @@ async function main() {
   await seedTable("downloads", () => db.downloadFile.count(), async () => {
     for (const item of downloads) {
       const data = {
-        titleZh: item.title.zh,
-        titleEn: item.title.en,
-        descriptionZh: item.description.zh,
-        descriptionEn: item.description.en,
+        title: item.title,
+        description: item.description,
         fileUrl: "", // no file yet → the download route serves a placeholder PDF
         fileType: item.fileType,
         fileSize: item.fileSize,
@@ -183,13 +162,11 @@ async function main() {
       const url = `/media/gallery-${String(index + 1).padStart(2, "0")}.svg`;
       const existing = await db.galleryItem.findFirst({ where: { url } });
       const data = {
-        titleZh: item.title.zh,
-        titleEn: item.title.en,
-        captionZh: item.caption.zh,
-        captionEn: item.caption.en,
+        title: item.title,
+        caption: item.caption,
         url,
         mediaKind: item.mediaKind,
-        album: item.album.zh,
+        album: item.album,
         status: "PUBLISHED" as const,
         sortOrder: index,
       };
@@ -211,8 +188,7 @@ async function main() {
   const settings: Record<string, string> = {
     contactPhone: "138-0000-0000",
     contactEmail: "info@starlink-auto.com",
-    contactAddressZh: "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区",
-    contactAddressEn: "Zone E, 9th Floor, Lilan Technology Building, Jiazitang Community, Fenghuang Subdistrict, Guangming District, Shenzhen, Guangdong, China",
+    contactAddress: "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区",
     icp: "粤ICP备00000000号",
   };
   for (const [key, value] of Object.entries(settings)) {
@@ -237,7 +213,7 @@ async function main() {
     console.log(`  · created administrator ${email} with password "${password}" — change it after first login`);
   }
 
-  console.log("\n✓ Seed complete. 后台地址 / Admin: http://localhost:3000/admin\n");
+  console.log("\n✓ Seed complete. 后台地址：http://localhost:3000/admin\n");
 }
 
 main()

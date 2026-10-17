@@ -64,7 +64,7 @@ export default async function AdminDownloadsPage() {
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <span className="font-medium text-foreground">{row.titleZh}</span>
+                    <span className="font-medium text-foreground">{row.title}</span>
                     <span className="mt-1 block font-mono text-[0.625rem] text-faint">{row.slug}</span>
                   </TableCell>
                   <TableCell className="font-mono text-xs text-primary">{row.fileType}</TableCell>
@@ -80,7 +80,7 @@ export default async function AdminDownloadsPage() {
                         action={deleteDownload}
                         id={row.id}
                         title="删除资料"
-                        description={`确定删除资料「${row.titleZh}」吗？此操作不可撤销。`}
+                        description={`确定删除资料「${row.title}」吗？此操作不可撤销。`}
                         triggerLabel="删除"
                         triggerClassName={iconDanger}
                       >

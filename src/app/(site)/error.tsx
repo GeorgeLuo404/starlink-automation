@@ -2,32 +2,18 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { RotateCcw } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { defaultLocale, isLocale } from "@/lib/i18n/config";
 
-const copy = {
-  zh: {
-    title: "页面暂时无法显示",
-    body: "加载内容时出现了问题，请稍后重试。",
-    retry: "重试",
-    home: "返回首页",
-  },
-  en: {
-    title: "Something went wrong",
-    body: "We could not load this page. Please try again in a moment.",
-    retry: "Try again",
-    home: "Back home",
-  },
+const t = {
+  title: "页面暂时无法显示",
+  body: "加载内容时出现了问题，请稍后重试。",
+  retry: "重试",
+  home: "返回首页",
 };
 
 /** Error boundary for the public site — rendered inside the header/footer layout. */
 export default function SiteError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const params = useParams<{ locale?: string }>();
-  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
-  const t = copy[locale];
-
   useEffect(() => {
     console.error("[site] page error:", error);
   }, [error]);
@@ -44,7 +30,7 @@ export default function SiteError({ error, reset }: { error: Error & { digest?: 
             <RotateCcw />
             {t.retry}
           </Button>
-          <Link href={`/${locale}`} className={buttonVariants({ variant: "outline" })}>
+          <Link href="/" className={buttonVariants({ variant: "outline" })}>
             {t.home}
           </Link>
         </div>

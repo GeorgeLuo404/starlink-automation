@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Download } from "lucide-react";
-import type { Dictionary, Locale } from "@/lib/i18n";
-import { localeHref } from "@/components/site/nav-items";
 import { Magnetic, Reveal } from "@/components/motion";
+import copy from "@/content/copy.json";
 
-export function HomeCta({ locale, dict }: { locale: Locale; dict: Dictionary }) {
-  const t = dict.home.cta;
+export function HomeCta() {
+  const t = copy.home.cta;
   return (
     <section className="relative overflow-hidden border-t border-border bg-surface">
       <div className="grid-blueprint absolute inset-0 opacity-50" aria-hidden="true" />
@@ -32,12 +31,12 @@ export function HomeCta({ locale, dict }: { locale: Locale; dict: Dictionary }) 
         <Reveal delay={0.18}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Magnetic>
-              <Link href={localeHref(locale, "/contact")} className="btn btn-primary group h-12 px-7">
+              <Link href="/contact" className="btn btn-primary group h-12 px-7">
                 {t.primary}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Magnetic>
-            <Link href={localeHref(locale, "/downloads")} className="btn btn-ghost h-12 px-7">
+            <Link href="/downloads" className="btn btn-ghost h-12 px-7">
               <Download className="size-4" />
               {t.secondary}
             </Link>

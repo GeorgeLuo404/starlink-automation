@@ -2,7 +2,6 @@
   "meta": {
     "siteName": "深圳市星链自动化有限公司",
     "siteShort": "星链自动化",
-    "siteNameEn": "Shenzhen Starlink Automation Co., Ltd.",
     "tagline": "以自动化，链接智能制造",
     "description": "深圳市星链自动化有限公司专注 PLC 程序调试、机器人调试、电气图纸设计、锂电池检测与热压机产线交付，为锂电、3C、汽车零部件行业提供从电气设计到整线联调的一站式自动化服务。",
     "keywords": "PLC程序调试,机器人调试,电气图纸设计,锂电池检测,热压机,深圳自动化公司,产线集成,锂电设备",
@@ -19,7 +18,6 @@
     "contact": "联系我们",
     "cta": "获取方案",
     "admin": "后台管理",
-    "language": "语言",
     "menu": "菜单",
     "close": "关闭"
   },

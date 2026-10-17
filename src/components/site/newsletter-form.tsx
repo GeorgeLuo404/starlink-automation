@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import copy from "@/content/copy.json";
 
-export function NewsletterForm({ dict, className }: { dict: Dictionary; className?: string }) {
+export function NewsletterForm({ className }: { className?: string }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
 
@@ -30,7 +30,7 @@ export function NewsletterForm({ dict, className }: { dict: Dictionary; classNam
     return (
       <p className={cn("flex items-center gap-2 text-sm text-success", className)}>
         <Check className="size-4" />
-        {dict.footer.subscribeSuccess}
+        {copy.footer.subscribeSuccess}
       </p>
     );
   }
@@ -42,15 +42,15 @@ export function NewsletterForm({ dict, className }: { dict: Dictionary; classNam
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder={dict.footer.subscribePlaceholder}
+        placeholder={copy.footer.subscribePlaceholder}
         className="field h-10 flex-1"
-        aria-label={dict.footer.subscribePlaceholder}
+        aria-label={copy.footer.subscribePlaceholder}
       />
       <button
         type="submit"
         disabled={status === "loading"}
         className="inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius) bg-primary text-primary-foreground transition-colors hover:bg-white disabled:opacity-50"
-        aria-label={dict.footer.subscribeButton}
+        aria-label={copy.footer.subscribeButton}
       >
         <ArrowRight className="size-4" />
       </button>

@@ -1,50 +1,34 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
-import { getDictionary, isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
 import { services as defaultServices } from "@/content/defaults";
 import { getSiteSettings, listServices } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { ContactForm } from "@/components/site/contact-form";
 import { Reveal } from "@/components/motion";
+import copy from "@/content/copy.json";
 
 export const revalidate = 300;
 
-export function generateStaticParams() {
-  return [{ locale: "zh" }, { locale: "en" }];
-}
+export const metadata: Metadata = buildMetadata({ title: copy.contact.title, description: copy.contact.lead, path: "/contact" });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  if (!isLocale(locale)) return {};
-  const dict = getDictionary(locale);
-  return buildMetadata({ locale, title: dict.contact.title, description: dict.contact.lead, path: "/contact" });
-}
-
-export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
-  const dict = getDictionary(locale);
-  const t = dict.contact;
+export default async function ContactPage() {
+  const t = copy.contact;
   const settings = await getSiteSettings();
 
   let serviceNames: string[];
   try {
-    serviceNames = (await listServices()).map((service) => service.title[locale]);
+    serviceNames = (await listServices()).map((service) => service.title);
   } catch {
-    serviceNames = defaultServices.map((service) => service.title[locale]);
+    serviceNames = defaultServices.map((service) => service.title);
   }
 
   const info = [
     {
       icon: MapPin,
       label: t.address,
-      value: settings.address[locale],
+      value: settings.address,
       href: undefined as string | undefined,
     },
     { icon: Phone, label: t.phoneLabel, value: settings.phone, href: `tel:${settings.phone}` },
@@ -56,11 +40,10 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   return (
     <>
       <PageHero
-        locale={locale}
         eyebrow={t.eyebrow}
         title={t.title}
         description={t.lead}
-        crumbs={[{ label: dict.nav.contact }]}
+        crumbs={[{ label: copy.nav.contact }]}
       />
 
       <div className="container-x py-16 md:py-20">
@@ -71,7 +54,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                 <h2 className="text-display text-2xl text-white">{t.formTitle}</h2>
                 <p className="mt-3 text-sm text-muted-foreground">{t.formDesc}</p>
                 <div className="mt-8">
-                  <ContactForm locale={locale} dict={dict} services={serviceNames} />
+                  <ContactForm services={serviceNames} />
                 </div>
               </div>
             </Reveal>
@@ -115,14 +98,14 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   </span>
                   <p className="mt-4 text-sm font-medium text-white">{t.mapTitle}</p>
                   <p className="mt-1 font-mono text-[0.625rem] tracking-wider text-faint">
-                    {settings.address[locale]}
+                    {settings.address}
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="mt-6 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-faint">
-              {dict.home.cta.note}
+              {copy.home.cta.note}
             </p>
           </aside>
         </div>

@@ -1,8 +1,6 @@
 # 深圳市星链自动化有限公司 · 官方网站
 
-工业风企业官网 + 内容管理后台。中英双语（以中文为主），支持文章、案例、图库、视频与文件上传下载。
-
-> Industrial-style corporate website with a full content admin. Bilingual (Chinese-first), with articles, case studies, galleries, video and file upload/download.
+工业风企业官网 + 内容管理后台。仅提供中文内容，支持文章、案例、图库、视频与文件上传下载。
 
 ---
 
@@ -68,7 +66,7 @@ Prisma 7 相比 6 有两个破坏性变更，本项目已经处理好：
 
 ## 2. 功能清单
 
-### 前台（中英双语）
+### 前台
 
 - **首页**：视频首屏 + 遮罩揭示标题、滚动点亮大字、五项业务能力、数字滚动统计、
   六步交付流程、精选案例、**环形集成能力图**（节点公转、文字始终正向）、
@@ -83,8 +81,9 @@ Prisma 7 相比 6 有两个破坏性变更，本项目已经处理好：
 
 技术细节：
 
-- 完整的 **hreflang / canonical / OpenGraph / Twitter Card**；
+- 完整的 **canonical / OpenGraph / Twitter Card**；
   自动生成 `sitemap.xml` 与 `robots.txt`（robots 已屏蔽 `/admin`）
+- 旧的 `/zh/...`、`/en/...` 地址会 308 永久跳转到不带语言前缀的新地址
 - 语义化标签、跳转到主内容的 skip link、`prefers-reduced-motion` 全量降级
 - **数据库不可用时自动降级**到内置内容，站点永远不会白屏或 500
 
@@ -126,7 +125,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-- 前台：<http://localhost:3000> （会跳转到 <http://localhost:3000/zh>）
+- 前台：<http://localhost:3000>
 - 后台：<http://localhost:3000/admin>
 - 默认账号：`admin@starlink-auto.com` / `Starlink@2026` —— **上线前务必修改**
 
@@ -172,7 +171,7 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 │   └── generate-placeholders.mjs
 ├── src/
 │   ├── app/
-│   │   ├── (site)/[locale]/   前台（多根布局之一）
+│   │   ├── (site)/            前台（多根布局之一）
 │   │   ├── (admin)/admin/     后台（多根布局之二）
 │   │   ├── api/               contact / subscribe / upload / download / media / views
 │   │   ├── sitemap.ts robots.ts
@@ -182,15 +181,15 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 │   │   ├── site/              前台组件
 │   │   ├── admin/             后台组件
 │   │   └── ui/                基础组件（shadcn 风格）
-│   ├── content/defaults.ts    ★ 兜底内容 + 种子数据源
+│   ├── content/
+│   │   ├── defaults.ts        ★ 兜底内容 + 种子数据源
+│   │   └── copy.json          页面文案（导航、标题、按钮、表单提示等）
 │   ├── lib/
 │   │   ├── data.ts            内容仓库（先查库，失败回退默认内容）
 │   │   ├── storage.ts         存储抽象（本地 / S3）
 │   │   ├── auth.ts session.ts password.ts
-│   │   ├── prisma.ts          Prisma 7 客户端工厂
-│   │   └── i18n/              语言配置与字典
-│   ├── messages/zh.json en.json
-│   └── proxy.ts               Next.js 16 proxy（前身 middleware）
+│   │   └── prisma.ts          Prisma 7 客户端工厂
+│   └── proxy.ts               Next.js 16 proxy（前身 middleware），守卫 /admin
 └── docs/
     ├── DEPLOYMENT.md          部署与备案（重点看这个）
     └── ADMIN-GUIDE.md         后台使用说明
@@ -374,7 +373,7 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | 公司名、电话、邮箱、地址 | `src/content/defaults.ts` 的 `company`，或后台「站点设置」 |
 | 配色 | **只改** `src/app/globals.css` 的色板（见下方第 6.1 节），组件无需改动 |
 | 圆角 / 字体 | `src/app/globals.css` 的 `--radius` 与 `--font-*` |
-| 首页文案 | `src/messages/zh.json` 与 `en.json` |
+| 页面文案 | `src/content/copy.json` |
 | 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后 `pnpm db:seed --force`，会覆盖后台对这些记录的修改） |
 | 占位图换成真实照片 | 直接覆盖 `public/media/*.svg`，或在后台媒体库上传后替换引用 |
 | 导航结构 | `src/components/site/nav-items.ts` |

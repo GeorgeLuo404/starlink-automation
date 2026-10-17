@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Reveal } from "@/components/motion";
 import { cn } from "@/lib/utils";
-import { localeHref } from "./nav-items";
 
 export type Crumb = { label: string; href?: string };
 
@@ -11,7 +10,6 @@ export function PageHero({
   title,
   description,
   crumbs = [],
-  locale,
   children,
   className,
 }: {
@@ -19,7 +17,6 @@ export function PageHero({
   title: string;
   description?: string;
   crumbs?: Crumb[];
-  locale: string;
   children?: React.ReactNode;
   className?: string;
 }) {
@@ -32,8 +29,8 @@ export function PageHero({
       />
       <div className="container-x relative pt-36 pb-14 md:pt-44 md:pb-20">
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-xs text-faint">
-          <Link href={localeHref(locale, "/")} className="transition-colors hover:text-muted-foreground">
-            {locale === "zh" ? "首页" : "Home"}
+          <Link href="/" className="transition-colors hover:text-muted-foreground">
+            首页
           </Link>
           {crumbs.map((crumb) => (
             <span key={crumb.label} className="flex items-center gap-1.5">

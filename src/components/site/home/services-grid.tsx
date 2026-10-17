@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { Dictionary, Locale } from "@/lib/i18n";
 import { listServices } from "@/lib/data";
-import { localeHref } from "@/components/site/nav-items";
 import { ServiceIcon } from "@/components/site/service-icon";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Reveal, Stagger, StaggerItem, TiltCard } from "@/components/motion";
+import copy from "@/content/copy.json";
 
-export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export async function HomeServices() {
   const services = await listServices();
-  const t = dict.home.services;
+  const t = copy.home.services;
 
   return (
     <section className="section-y relative" id="capabilities">
@@ -27,7 +26,7 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
               */}
               <TiltCard max={3} className="h-full">
                 <Link
-                  href={localeHref(locale, `/services/${service.slug}`)}
+                  href={`/services/${service.slug}`}
                   className="group corner-ticks relative flex h-full flex-col p-7 transition-colors hover:bg-card lg:p-8"
                 >
                   <div className="flex items-start justify-between">
@@ -39,19 +38,19 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
                     </span>
                   </div>
 
-                  <h3 className="mt-7 text-xl font-semibold tracking-tight text-white">{service.title[locale]}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{service.summary[locale]}</p>
+                  <h3 className="mt-7 text-xl font-semibold tracking-tight text-white">{service.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{service.summary}</p>
 
                   <div className="mt-7 flex flex-wrap gap-x-4 gap-y-1.5">
                     {service.features.slice(0, 3).map((feature) => (
-                      <span key={feature.zh} className="font-mono text-[0.625rem] tracking-wide text-faint">
-                        · {feature[locale]}
+                      <span key={feature} className="font-mono text-[0.625rem] tracking-wide text-faint">
+                        · {feature}
                       </span>
                     ))}
                   </div>
 
                   <span className="mt-7 inline-flex items-center gap-1.5 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                    {dict.home.services.cta}
+                    {copy.home.services.cta}
                     <ArrowUpRight className="size-3.5" />
                   </span>
                 </Link>
@@ -62,11 +61,11 @@ export async function HomeServices({ locale, dict }: { locale: Locale; dict: Dic
           <StaggerItem className="bg-surface">
             <Reveal className="flex h-full flex-col justify-between bg-card p-7 lg:p-8">
               <div>
-                <h3 className="text-xl font-semibold tracking-tight text-white">{dict.nav.cta}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{dict.home.cta.desc}</p>
+                <h3 className="text-xl font-semibold tracking-tight text-white">{copy.nav.cta}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy.home.cta.desc}</p>
               </div>
-              <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-8 w-fit">
-                {dict.home.cta.primary}
+              <Link href="/contact" className="btn btn-primary mt-8 w-fit">
+                {copy.home.cta.primary}
                 <ArrowUpRight className="size-4" />
               </Link>
             </Reveal>

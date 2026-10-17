@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 /** 1234567 -> "1,234,567" */
 export function formatNumber(n: number) {
-  return new Intl.NumberFormat("en-US").format(n);
+  return new Intl.NumberFormat("zh-CN").format(n);
 }
 
 export function formatBytes(bytes: number, decimals = 1) {
@@ -18,11 +18,11 @@ export function formatBytes(bytes: number, decimals = 1) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(decimals))} ${sizes[i]}`;
 }
 
-export function formatDate(date: Date | string | null | undefined, locale = "zh-CN") {
+export function formatDate(date: Date | string | null | undefined) {
   if (!date) return "";
   const d = typeof date === "string" ? new Date(date) : date;
   if (Number.isNaN(d.getTime())) return "";
-  return new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
+  return new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -42,13 +42,6 @@ export function slugify(input: string) {
 export function truncate(text: string, max = 120) {
   const clean = text.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
   return clean.length > max ? `${clean.slice(0, max)}…` : clean;
-}
-
-/** Pick the localized field from a bilingual record, falling back to Chinese. */
-export function pick<T extends Record<string, unknown>>(row: T, field: string, locale: string): string {
-  const localized = row[`${field}${locale === "en" ? "En" : "Zh"}`];
-  const fallback = row[`${field}Zh`];
-  return ((localized as string) || (fallback as string) || "") as string;
 }
 
 /** Cover image for an article, case or service: the uploaded one, else the bundled placeholder. */

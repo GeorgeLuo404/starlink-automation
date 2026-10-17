@@ -5,10 +5,8 @@ import { UploadField } from "@/components/admin/upload-field";
 
 type GalleryRecord = {
   id: string;
-  titleZh: string;
-  titleEn: string | null;
-  captionZh: string | null;
-  captionEn: string | null;
+  title: string;
+  caption: string | null;
   url: string;
   thumbUrl: string | null;
   mediaKind: string;
@@ -24,10 +22,8 @@ export function GalleryForm({ record }: { record?: GalleryRecord }) {
       {record ? <input type="hidden" name="id" value={record.id} /> : null}
 
       <FormSection title="图片信息">
-        <FormField label="标题（中文）" name="titleZh" required defaultValue={record?.titleZh} placeholder="例如：电芯装配线整线调试" />
-        <FormField label="标题（英文）" name="titleEn" defaultValue={record?.titleEn} />
-        <FormTextarea label="说明（中文）" name="captionZh" rows={2} defaultValue={record?.captionZh} />
-        <FormTextarea label="说明（英文）" name="captionEn" rows={2} defaultValue={record?.captionEn} />
+        <FormField label="标题" name="title" required defaultValue={record?.title} placeholder="例如：电芯装配线整线调试" />
+        <FormTextarea label="说明" name="caption" rows={2} defaultValue={record?.caption} />
       </FormSection>
 
       <FormSection title="资源">

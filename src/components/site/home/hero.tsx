@@ -4,18 +4,13 @@ import Link from "next/link";
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowDown, ArrowRight, Play } from "lucide-react";
-import type { Dictionary, Locale } from "@/lib/i18n";
-import { localeHref } from "@/components/site/nav-items";
 import { Magnetic } from "@/components/motion";
+import copy from "@/content/copy.json";
 
 export function HomeHero({
-  locale,
-  dict,
   videoUrl,
   posterUrl = "/media/hero-poster.png",
 }: {
-  locale: Locale;
-  dict: Dictionary;
   videoUrl?: string | null;
   posterUrl?: string;
 }) {
@@ -27,7 +22,7 @@ export function HomeHero({
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -70]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
-  const t = dict.home.hero;
+  const t = copy.home.hero;
 
   return (
     <section ref={ref} className="relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-8">
@@ -129,12 +124,12 @@ export function HomeHero({
             className="mt-9 flex flex-wrap items-center gap-3"
           >
             <Magnetic>
-              <Link href={localeHref(locale, "/contact")} className="btn btn-primary group h-12 px-6">
+              <Link href="/contact" className="btn btn-primary group h-12 px-6">
                 {t.ctaPrimary}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </Magnetic>
-            <Link href={localeHref(locale, "/cases")} className="btn btn-ghost h-12 px-6 backdrop-blur-sm">
+            <Link href="/cases" className="btn btn-ghost h-12 px-6 backdrop-blur-sm">
               <Play className="size-3.5" />
               {t.ctaSecondary}
             </Link>

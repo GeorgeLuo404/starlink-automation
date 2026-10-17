@@ -49,7 +49,7 @@ export default async function AdminArticleEditorPage({
 
       <AdminPageHeader
         title={isNew ? "新建文章" : "编辑文章"}
-        description={isNew ? "撰写一篇新的公司动态或技术分享。" : `正在编辑：${article?.titleZh}`}
+        description={isNew ? "撰写一篇新的公司动态或技术分享。" : `正在编辑：${article?.title}`}
       />
 
       <ArticleForm article={article ?? undefined} />

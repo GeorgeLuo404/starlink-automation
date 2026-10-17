@@ -28,11 +28,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
   }
 
   const pdf = buildPlaceholderPdf({
-    title: item.title.en && /^[\x20-\x7E]+$/.test(item.title.en) ? item.title.en : slug,
+    // Base-14 Helvetica has no CJK glyphs, so the placeholder is titled by its slug.
+    title: slug,
     subtitle: item.version ? `Version ${item.version}` : undefined,
     lines: [
-      item.description.en || "",
-      "",
       "File type:  " + item.fileType,
       "Version:    " + (item.version || "-"),
       "",

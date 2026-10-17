@@ -1,6 +1,5 @@
 import { cache } from "react";
 import { getPrisma } from "@/lib/prisma";
-import type { Locale } from "@/lib/i18n/config";
 import {
   articles as defaultArticles,
   cases as defaultCases,
@@ -13,9 +12,7 @@ import {
   type CaseContent,
   type DownloadContent,
   type GalleryContent,
-  type Localized,
   type ServiceContent,
-  unpackLocalized,
 } from "@/content/defaults";
 
 /**
@@ -41,27 +38,18 @@ async function fromDb<T>(query: (db: NonNullable<ReturnType<typeof getPrisma>>) 
   }
 }
 
-function localPair<T extends Record<string, unknown>>(row: T, field: string) {
-  return {
-    zh: String(row[`${field}Zh`] ?? ""),
-    en: String(row[`${field}En`] ?? row[`${field}Zh`] ?? ""),
-  };
-}
-
 /* --------------------------------- 业务能力 -------------------------------- */
 
 function toService(row: Record<string, unknown>): ServiceContent {
   return {
     slug: String(row.slug),
-    title: localPair(row, "title"),
-    summary: localPair(row, "summary"),
-    content: localPair(row, "content"),
+    title: String(row.title ?? ""),
+    summary: String(row.summary ?? ""),
+    content: String(row.content ?? ""),
     icon: String(row.icon ?? "Cpu"),
     coverUrl: (row.coverUrl as string | null) ?? null,
-    features: Array.isArray(row.features) ? (row.features as ServiceContent["features"]) : [],
-    deliverables: Array.isArray(row.deliverables)
-      ? (row.deliverables as ServiceContent["deliverables"])
-      : [],
+    features: Array.isArray(row.features) ? (row.features as string[]) : [],
+    deliverables: Array.isArray(row.deliverables) ? (row.deliverables as string[]) : [],
     faq: Array.isArray(row.faq) ? (row.faq as ServiceContent["faq"]) : [],
   };
 }
@@ -85,20 +73,17 @@ export async function getService(slug: string): Promise<ServiceContent | null> {
 /* --------------------------------- 项目案例 -------------------------------- */
 
 function toCase(row: Record<string, unknown>): CaseContent {
-  const metrics = Array.isArray(row.metrics)
-    ? (row.metrics as { value: string; label: { zh: string; en: string } }[])
-    : [];
   return {
     slug: String(row.slug),
-    title: localPair(row, "title"),
-    client: localPair(row, "client"),
-    industry: localPair(row, "industry"),
+    title: String(row.title ?? ""),
+    client: String(row.client ?? ""),
+    industry: String(row.industry ?? ""),
     year: Number(row.year ?? new Date().getFullYear()),
-    location: unpackLocalized(String(row.location ?? "")),
-    summary: { zh: String(row.summaryZh ?? ""), en: String(row.summaryEn ?? row.summaryZh ?? "") },
-    content: { zh: String(row.contentZh ?? ""), en: String(row.contentEn ?? row.contentZh ?? "") },
-    scope: Array.isArray(row.scope) ? (row.scope as string[]).map(unpackLocalized) : [],
-    metrics,
+    location: String(row.location ?? ""),
+    summary: String(row.summary ?? ""),
+    content: String(row.content ?? ""),
+    scope: Array.isArray(row.scope) ? (row.scope as string[]) : [],
+    metrics: Array.isArray(row.metrics) ? (row.metrics as CaseContent["metrics"]) : [],
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     featured: Boolean(row.featured),
     coverUrl: (row.coverUrl as string | null) ?? null,
@@ -134,19 +119,17 @@ export async function getCase(slug: string): Promise<CaseContent | null> {
 
 /* ---------------------------------- 新闻 ---------------------------------- */
 
-export type ArticleView = ArticleContent & { id?: string; views?: number; coverUrl?: string | null; categoryLabel?: { zh: string; en: string } };
+export type ArticleView = ArticleContent & { id?: string; views?: number; coverUrl?: string | null };
 
 function toArticle(row: Record<string, unknown>): ArticleView {
   const category = row.category as Record<string, unknown> | undefined | null;
   return {
     id: String(row.id ?? ""),
     slug: String(row.slug),
-    title: localPair(row, "title"),
-    excerpt: localPair(row, "excerpt"),
-    content: localPair(row, "content"),
-    category: category
-      ? { zh: String(category.nameZh ?? ""), en: String(category.nameEn ?? category.nameZh ?? "") }
-      : { zh: "公司新闻", en: "Company news" },
+    title: String(row.title ?? ""),
+    excerpt: String(row.excerpt ?? ""),
+    content: String(row.content ?? ""),
+    category: category ? String(category.name ?? "") : "公司新闻",
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     publishedAt: row.publishedAt ? new Date(row.publishedAt as string).toISOString() : new Date().toISOString(),
     readMinutes: Number(row.readMinutes ?? 3),
@@ -169,12 +152,10 @@ export async function listArticles(options?: {
   const fallbackAll = (() => {
     let items: ArticleView[] = defaultArticles.map((a) => ({ ...a }));
     if (options?.featuredOnly) items = items.filter((a) => a.featured);
-    if (options?.category) items = items.filter((a) => a.category.zh === options.category);
+    if (options?.category) items = items.filter((a) => a.category === options.category);
     if (options?.query) {
       const q = options.query.toLowerCase();
-      items = items.filter(
-        (a) => a.title.zh.toLowerCase().includes(q) || a.title.en.toLowerCase().includes(q) || a.excerpt.zh.includes(q)
-      );
+      items = items.filter((a) => a.title.toLowerCase().includes(q) || a.excerpt.toLowerCase().includes(q));
     }
     items.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
     return items;
@@ -195,8 +176,8 @@ export async function listArticles(options?: {
       ...(options?.query
         ? {
             OR: [
-              { titleZh: { contains: options.query, mode: "insensitive" as const } },
-              { titleEn: { contains: options.query, mode: "insensitive" as const } },
+              { title: { contains: options.query, mode: "insensitive" as const } },
+              { excerpt: { contains: options.query, mode: "insensitive" as const } },
             ],
           }
         : {}),
@@ -233,16 +214,12 @@ export async function getArticle(slug: string): Promise<ArticleView | null> {
   }, defaultArticles.find((a) => a.slug === slug) ?? null);
 }
 
-export async function listArticleCategories(): Promise<{ slug: string; nameZh: string; nameEn: string }[]> {
-  const fallback = [...new Set(defaultArticles.map((a) => a.category.zh))].map((zh) => ({
-    slug: zh,
-    nameZh: zh,
-    nameEn: defaultArticles.find((a) => a.category.zh === zh)?.category.en ?? zh,
-  }));
+export async function listArticleCategories(): Promise<{ slug: string; name: string }[]> {
+  const fallback = [...new Set(defaultArticles.map((a) => a.category))].map((name) => ({ slug: name, name }));
   return fromDb(async (db) => {
     const rows = await db.category.findMany({ where: { kind: "ARTICLE" }, orderBy: { sortOrder: "asc" } });
     if (!rows.length) return fallback;
-    return rows.map((r) => ({ slug: r.slug, nameZh: r.nameZh, nameEn: r.nameEn }));
+    return rows.map((r) => ({ slug: r.slug, name: r.name }));
   }, fallback);
 }
 
@@ -251,7 +228,7 @@ export async function listArticleCategories(): Promise<{ slug: string; nameZh: s
 export type GalleryView = GalleryContent & { url?: string; thumbUrl?: string };
 
 export async function listGallery(album?: string): Promise<GalleryView[]> {
-  const fallback = album && album !== "all" ? defaultGallery.filter((g) => g.album.zh === album) : defaultGallery;
+  const fallback = album && album !== "all" ? defaultGallery.filter((g) => g.album === album) : defaultGallery;
   return fromDb(async (db) => {
     const rows = await db.galleryItem.findMany({
       where: { status: "PUBLISHED", ...(album && album !== "all" ? { album } : {}) },
@@ -259,9 +236,9 @@ export async function listGallery(album?: string): Promise<GalleryView[]> {
     });
     if (!rows.length) return fallback;
     return rows.map((r) => ({
-      title: { zh: r.titleZh, en: r.titleEn ?? r.titleZh },
-      caption: { zh: r.captionZh ?? "", en: r.captionEn ?? r.captionZh ?? "" },
-      album: { zh: r.album, en: r.album },
+      title: r.title,
+      caption: r.caption ?? "",
+      album: r.album,
       mediaKind: r.mediaKind === "VIDEO" ? "VIDEO" : "IMAGE",
       url: r.url,
       thumbUrl: r.thumbUrl ?? r.url,
@@ -290,8 +267,8 @@ export async function listDownloads(): Promise<DownloadView[]> {
     return rows.map((r) => ({
       id: r.id,
       slug: r.slug,
-      title: { zh: r.titleZh, en: r.titleEn ?? r.titleZh },
-      description: { zh: r.descriptionZh ?? "", en: r.descriptionEn ?? r.descriptionZh ?? "" },
+      title: r.title,
+      description: r.description ?? "",
       fileType: r.fileType,
       fileSize: r.fileSize,
       version: r.version ?? "",
@@ -310,8 +287,8 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
     return {
       id: r.id,
       slug: r.slug,
-      title: { zh: r.titleZh, en: r.titleEn ?? r.titleZh },
-      description: { zh: r.descriptionZh ?? "", en: r.descriptionEn ?? r.descriptionZh ?? "" },
+      title: r.title,
+      description: r.description ?? "",
       fileType: r.fileType,
       fileSize: r.fileSize,
       version: r.version ?? "",
@@ -329,7 +306,7 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
 export type SiteSettings = {
   phone: string;
   email: string;
-  address: Localized;
+  address: string;
   /** null → the placeholder in messages (footer.icp). */
   icp: string | null;
   analyticsId: string | null;
@@ -340,7 +317,7 @@ export type SiteSettings = {
 const defaultSettings: SiteSettings = {
   phone: company.phone,
   email: company.email,
-  address: { zh: company.addressZh, en: company.addressEn },
+  address: company.address,
   icp: null,
   analyticsId: null,
   heroVideoUrl: null,
@@ -359,10 +336,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     return {
       phone: read("contactPhone") ?? defaultSettings.phone,
       email: read("contactEmail") ?? defaultSettings.email,
-      address: {
-        zh: read("contactAddressZh") ?? defaultSettings.address.zh,
-        en: read("contactAddressEn") ?? read("contactAddressZh") ?? defaultSettings.address.en,
-      },
+      address: read("contactAddress") ?? defaultSettings.address,
       icp: read("icp"),
       analyticsId: read("analyticsId"),
       heroVideoUrl: read("heroVideoUrl"),
@@ -373,13 +347,12 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
 
 /* --------------------------------- 合作伙伴 -------------------------------- */
 
-export async function listPartners(): Promise<{ name: string; sub: Localized }[]> {
+export async function listPartners(): Promise<{ name: string; sub: string }[]> {
   return fromDb(async (db) => {
     const rows = await db.partner.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
     if (!rows.length) return defaultPartners;
-    // In the admin, Partner.url carries the Chinese brand name (see admin/partners),
-    // so it doubles as the localised secondary line.
-    return rows.map((r) => ({ name: r.name, sub: { zh: r.url ?? r.name, en: r.name } }));
+    // In the admin, Partner.url carries the Chinese brand name (see admin/partners).
+    return rows.map((r) => ({ name: r.name, sub: r.url || r.name }));
   }, defaultPartners);
 }
 
@@ -392,7 +365,6 @@ export type InquiryInput = {
   email?: string;
   service?: string;
   message: string;
-  locale?: Locale;
   source?: string;
 };
 
@@ -412,7 +384,6 @@ export async function createInquiry(input: InquiryInput): Promise<{ ok: boolean;
         email: input.email || null,
         service: input.service || null,
         message: input.message,
-        locale: input.locale ?? "zh",
         source: input.source ?? "contact",
       },
     });

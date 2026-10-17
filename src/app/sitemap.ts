@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { locales } from "@/lib/i18n/config";
 import { siteUrl } from "@/lib/seo";
 import { listArticles, listCases, listServices } from "@/lib/data";
 
@@ -21,17 +20,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const all = [...staticPaths, ...dynamicPaths];
   const now = new Date();
 
-  return locales.flatMap((locale) =>
-    all.map((path) => ({
-      url: `${siteUrl}/${locale}${path}`,
-      lastModified: now,
-      changeFrequency: path === "" ? ("weekly" as const) : ("monthly" as const),
-      priority: path === "" ? 1 : 0.7,
-      alternates: {
-        languages: Object.fromEntries(
-          locales.map((l) => [l === "zh" ? "zh-CN" : "en", `${siteUrl}/${l}${path}`])
-        ),
-      },
-    }))
-  );
+  return all.map((path) => ({
+    url: `${siteUrl}${path}`,
+    lastModified: now,
+    changeFrequency: path === "" ? ("weekly" as const) : ("monthly" as const),
+    priority: path === "" ? 1 : 0.7,
+  }));
 }

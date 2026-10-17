@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Minus, Plus } from "lucide-react";
-import type { Dictionary, Locale } from "@/lib/i18n";
 import { whyItems } from "@/content/defaults";
 import { SectionHeading } from "@/components/site/section-heading";
 import { cn } from "@/lib/utils";
+import copy from "@/content/copy.json";
 
-export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function HomeWhy() {
   const [open, setOpen] = useState<string | null>(whyItems[0]?.no ?? null);
-  const t = dict.home.why;
+  const t = copy.home.why;
 
   return (
     <section className="section-y relative">
@@ -42,7 +42,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                       isOpen ? "text-white" : "text-body group-hover:text-white"
                     )}
                   >
-                    {item.title[locale]}
+                    {item.title}
                   </span>
                   <span
                     className={cn(
@@ -64,7 +64,7 @@ export function HomeWhy({ locale, dict }: { locale: Locale; dict: Dictionary }) 
                       className="overflow-hidden"
                     >
                       <p className="max-w-3xl pb-7 pl-11 text-[0.9375rem] leading-relaxed text-muted-foreground lg:pl-12">
-                        {item.desc[locale]}
+                        {item.desc}
                       </p>
                     </motion.div>
                   ) : null}

@@ -1,11 +1,7 @@
 import { Suspense } from "react";
-import { getDictionary } from "@/lib/i18n";
-import { defaultLocale } from "@/lib/i18n/config";
 import { LoginForm } from "./login-form";
 
 export default function AdminLoginPage() {
-  const dict = getDictionary(defaultLocale);
-
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-16">
       {/*
@@ -20,7 +16,7 @@ export default function AdminLoginPage() {
         aria-hidden="true"
       />
       <Suspense fallback={null}>
-        <LoginForm dict={dict} />
+        <LoginForm />
       </Suspense>
     </div>
   );

@@ -51,7 +51,7 @@ export default async function AdminGalleryPage() {
             <div key={row.id} className="group overflow-hidden rounded-(--radius) border border-border bg-card">
               <div className="relative aspect-4/3 bg-surface">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={row.url} alt={row.titleZh} className="size-full object-cover" />
+                <img src={row.url} alt={row.title} className="size-full object-cover" />
                 {/* opacity-0 still receives clicks, so keep it inert until hovered */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center gap-2 bg-black/70 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
                   <Link href={`/admin/gallery/${row.id}`} className="inline-flex size-9 items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10" aria-label="编辑">
@@ -61,7 +61,7 @@ export default async function AdminGalleryPage() {
                     action={deleteGalleryItem}
                     id={row.id}
                     title="删除图片"
-                    description={`确定删除图片「${row.titleZh}」吗？此操作不可撤销。`}
+                    description={`确定删除图片「${row.title}」吗？此操作不可撤销。`}
                     triggerLabel="删除"
                     triggerClassName="inline-flex size-9 items-center justify-center rounded-full border border-destructive/40 text-destructive-soft hover:bg-destructive/15"
                   >
@@ -70,7 +70,7 @@ export default async function AdminGalleryPage() {
                 </div>
               </div>
               <div className="p-3">
-                <p className="truncate text-xs font-medium text-foreground">{row.titleZh}</p>
+                <p className="truncate text-xs font-medium text-foreground">{row.title}</p>
                 <div className="mt-2 flex items-center justify-between">
                   <span className="font-mono text-[0.5625rem] text-faint">{row.album}</span>
                   <StatusPill status={row.status} />

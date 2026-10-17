@@ -63,7 +63,7 @@ export default async function AdminServicesPage() {
               {rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <span className="font-medium text-foreground">{row.titleZh}</span>
+                    <span className="font-medium text-foreground">{row.title}</span>
                     <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{row.slug}</span>
                   </TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">{row.icon ?? "—"}</TableCell>
@@ -80,7 +80,7 @@ export default async function AdminServicesPage() {
                         action={deleteService}
                         id={row.id}
                         title="删除业务"
-                        description={`确定删除业务「${row.titleZh}」吗？此操作不可撤销。`}
+                        description={`确定删除业务「${row.title}」吗？此操作不可撤销。`}
                         triggerLabel="删除"
                         triggerClassName={iconDanger}
                       >

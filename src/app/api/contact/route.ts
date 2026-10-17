@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createInquiry } from "@/lib/data";
-import { isLocale } from "@/lib/i18n/config";
 
 export const runtime = "nodejs";
 
@@ -15,7 +14,6 @@ const schema = z.object({
   email: z.string().trim().max(128).optional().or(z.literal("")),
   service: z.string().trim().max(128).optional().or(z.literal("")),
   message: z.string().trim().min(1).max(4000),
-  locale: z.string().optional(),
   source: z.string().max(32).optional(),
 });
 
@@ -50,7 +48,6 @@ export async function POST(request: Request) {
     email: data.email || undefined,
     service: data.service || undefined,
     message: data.message,
-    locale: isLocale(data.locale) ? data.locale : "zh",
     source: data.source || "contact",
   });
 

@@ -1,5 +1,4 @@
-// 深圳市星链自动化有限公司 — 数据模型
-// Shenzhen Starlink Automation Co., Ltd. — Data model
+// 深圳市星链自动化有限公司 — 数据模型（站点仅提供中文内容）
 
 // Prisma 7: the generated client lives in the repo (src/generated/prisma) and
 // the connection URL is supplied by prisma.config.ts, not by the schema.
@@ -62,8 +61,7 @@ model User {
 model Category {
   id        String       @id @default(cuid())
   slug      String
-  nameZh    String
-  nameEn    String
+  name      String
   kind      CategoryKind @default(ARTICLE)
   sortOrder Int          @default(0)
   createdAt DateTime     @default(now())
@@ -78,12 +76,9 @@ model Category {
 model Article {
   id         String        @id @default(cuid())
   slug       String        @unique
-  titleZh    String
-  titleEn    String?
-  excerptZh  String?
-  excerptEn  String?
-  contentZh  String        @db.Text
-  contentEn  String?       @db.Text
+  title      String
+  excerpt    String?
+  content    String        @db.Text
   coverUrl   String?
   tags       String[]      @default([])
   status     PublishStatus @default(DRAFT)
@@ -109,16 +104,11 @@ model Article {
 model Project {
   id         String        @id @default(cuid())
   slug       String        @unique
-  titleZh    String
-  titleEn    String?
-  clientZh   String?
-  clientEn   String?
-  industryZh String?
-  industryEn String?
-  summaryZh  String?       @db.Text
-  summaryEn  String?       @db.Text
-  contentZh  String?       @db.Text
-  contentEn  String?       @db.Text
+  title      String
+  client     String?
+  industry   String?
+  summary    String?       @db.Text
+  content    String?       @db.Text
   coverUrl   String?
   gallery    String[]      @default([])
   videoUrl   String?
@@ -139,17 +129,14 @@ model Project {
 model Service {
   id        String   @id @default(cuid())
   slug      String   @unique
-  titleZh   String
-  titleEn   String?
-  summaryZh String?  @db.Text
-  summaryEn String?  @db.Text
-  contentZh String?  @db.Text
-  contentEn String?  @db.Text
+  title     String
+  summary   String?  @db.Text
+  content   String?  @db.Text
   icon         String?
   coverUrl     String?
   videoUrl     String?
-  features     Json?
-  deliverables Json?
+  features     String[] @default([])
+  deliverables String[] @default([])
   faq          Json?
   published    Boolean  @default(true)
   sortOrder Int      @default(0)
@@ -179,10 +166,8 @@ model MediaAsset {
 model DownloadFile {
   id            String        @id @default(cuid())
   slug          String        @unique
-  titleZh       String
-  titleEn       String?
-  descriptionZh String?       @db.Text
-  descriptionEn String?       @db.Text
+  title         String
+  description   String?       @db.Text
   fileUrl       String
   storageKey    String?
   fileType      String
@@ -203,10 +188,8 @@ model DownloadFile {
 
 model GalleryItem {
   id        String        @id @default(cuid())
-  titleZh   String
-  titleEn   String?
-  captionZh String?
-  captionEn String?
+  title     String
+  caption   String?
   url       String
   thumbUrl  String?
   mediaKind MediaKind     @default(IMAGE)
@@ -230,7 +213,6 @@ model Inquiry {
   email     String?
   service   String?
   message   String        @db.Text
-  locale    String        @default("zh")
   source    String        @default("contact")
   status    InquiryStatus @default(NEW)
   note      String?
