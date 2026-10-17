@@ -1,33 +1,27 @@
 "use client";
 
 import * as React from "react";
+import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-function Checkbox({
-  className,
-  checked,
-  onCheckedChange,
-  ...props
-}: Omit<React.ComponentProps<"button">, "onChange"> & {
-  checked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-}) {
+function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
-    <button
-      type="button"
-      role="checkbox"
-      aria-checked={checked}
-      onClick={() => onCheckedChange?.(!checked)}
+    <CheckboxPrimitive.Root
+      data-slot="checkbox"
       className={cn(
-        "inline-flex size-4 shrink-0 items-center justify-center rounded border transition-colors",
-        checked ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card",
+        "peer size-4 shrink-0 rounded border border-border bg-card transition-colors outline-none",
+        "data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+        "focus-visible:ring-3 focus-visible:ring-ring/40 aria-invalid:border-destructive",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
     >
-      {checked ? <Check className="size-3" strokeWidth={3} /> : null}
-    </button>
+      <CheckboxPrimitive.Indicator data-slot="checkbox-indicator" className="flex items-center justify-center">
+        <Check className="size-3" strokeWidth={3} />
+      </CheckboxPrimitive.Indicator>
+    </CheckboxPrimitive.Root>
   );
 }
 

@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | 前端框架 | **Next.js 16**（App Router）+ **TypeScript 5.9** | 服务端组件负责取数与 SEO，客户端组件只负责交互与动画 |
 | 样式 | **Tailwind CSS v4** + 自建设计系统 | 工业深色主题写在 `src/app/globals.css` 的 `@theme` 与 `@layer components` 中 |
-| 组件 | **shadcn/ui 风格**（手写实现） | 见下方「为什么没有直接用 Radix」 |
+| 组件 | **shadcn/ui**（Radix UI） | `src/components/ui`，配色接入下方设计令牌；新增组件用 `npx shadcn@latest add <component>` |
 | 动画 | **motion**（原 framer-motion） | 首屏遮罩揭示、滚动点亮大字、数字滚动、轨道旋转、磁吸按钮等 |
 | 数据库 | **PostgreSQL** + **Prisma 7** | 见下方「Prisma 7 的变化」 |
 | 认证 | `jose`（JWT）+ `node:crypto` scrypt | 无第三方认证服务依赖，会话存 HttpOnly Cookie |
@@ -23,13 +23,10 @@
 
 你的选型整体是**合理的**，我基本沿用了它，只做了两处调整，另外有几点需要在动手前想清楚：
 
-1. **shadcn/ui 没有直接引入 Radix UI**（调整一）
-   shadcn/ui 本身只是「复制到你项目里的组件源码」，真正提供无头交互的是 Radix。本项目手写了
-   Button / Input / Dialog / Dropdown / Tabs / Select / Switch / Badge / Card / Table 等基础件，
-   保留了 shadcn 的 `cva + cn + data-slot` 约定和 `components.json`。
-   **好处**：少了 15 个依赖包与随之而来的版本漂移风险，首屏 JS 更小。
-   **仍然兼容**：后续想加别的 shadcn 组件，直接 `npx shadcn@latest add <component>` 即可，
-   它会自动把 Radix 依赖装进来。
+1. **shadcn/ui 组件基于 Radix UI**（调整一）
+   `src/components/ui` 是 shadcn/ui 组件源码（`radix-ui` 提供焦点管理与键盘交互），
+   颜色只使用 `globals.css` 中的语义令牌。字体 Inter / JetBrains Mono 由 `next/font/local`
+   从 `src/app/fonts/` 自托管，构建时不访问 Google Fonts。
 
 2. **没有引入 markdown 渲染库**（调整二）
    后台正文使用一套轻量标记（`##`、`###`、`- `、`1. `、`> `、`**加粗**`、`` `代码` ``），

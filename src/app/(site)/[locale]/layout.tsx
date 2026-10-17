@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import "@/app/globals.css";
+import { fontVariables } from "@/app/fonts";
 import { getDictionary, isLocale, localeHtmlLang, locales, type Locale } from "@/lib/i18n";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -66,7 +67,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={localeHtmlLang[typedLocale]}
-      className="dark"
+      className={`dark ${fontVariables}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
