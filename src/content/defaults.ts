@@ -60,6 +60,8 @@ export function localizeTag(tag: string, locale: "zh" | "en") {
 
 export type ServiceContent = {
   slug: string;
+  /** Uploaded cover; when empty the bundled /media placeholder is used. */
+  coverUrl?: string | null;
   title: Localized;
   summary: Localized;
   content: Localized;
@@ -71,6 +73,8 @@ export type ServiceContent = {
 
 export type CaseContent = {
   slug: string;
+  /** Uploaded cover; when empty the bundled /media placeholder is used. */
+  coverUrl?: string | null;
   title: Localized;
   client: Localized;
   industry: Localized;
@@ -86,6 +90,8 @@ export type CaseContent = {
 
 export type ArticleContent = {
   slug: string;
+  /** Uploaded cover; when empty the bundled /media placeholder is used. */
+  coverUrl?: string | null;
   title: Localized;
   excerpt: Localized;
   content: Localized;

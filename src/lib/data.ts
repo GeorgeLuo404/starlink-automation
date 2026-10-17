@@ -1,8 +1,10 @@
+import { cache } from "react";
 import { getPrisma } from "@/lib/prisma";
 import type { Locale } from "@/lib/i18n/config";
 import {
   articles as defaultArticles,
   cases as defaultCases,
+  company,
   downloads as defaultDownloads,
   galleryItems as defaultGallery,
   partners as defaultPartners,
@@ -55,6 +57,7 @@ function toService(row: Record<string, unknown>): ServiceContent {
     summary: localPair(row, "summary"),
     content: localPair(row, "content"),
     icon: String(row.icon ?? "Cpu"),
+    coverUrl: (row.coverUrl as string | null) ?? null,
     features: Array.isArray(row.features) ? (row.features as ServiceContent["features"]) : [],
     deliverables: Array.isArray(row.deliverables)
       ? (row.deliverables as ServiceContent["deliverables"])
@@ -98,6 +101,7 @@ function toCase(row: Record<string, unknown>): CaseContent {
     metrics,
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     featured: Boolean(row.featured),
+    coverUrl: (row.coverUrl as string | null) ?? null,
   };
 }
 
@@ -267,7 +271,13 @@ export async function listGallery(album?: string): Promise<GalleryView[]> {
 
 /* --------------------------------- 下载资料 -------------------------------- */
 
-export type DownloadView = DownloadContent & { id?: string; fileUrl?: string; downloadCount?: number };
+export type DownloadView = DownloadContent & {
+  id?: string;
+  fileUrl?: string;
+  downloadCount?: number;
+  /** Ask for name and a contact method before the download starts. */
+  requiresForm?: boolean;
+};
 
 export async function listDownloads(): Promise<DownloadView[]> {
   const fallback: DownloadView[] = defaultDownloads.map((d) => ({ ...d }));
@@ -288,6 +298,7 @@ export async function listDownloads(): Promise<DownloadView[]> {
       sortOrder: r.sortOrder,
       fileUrl: r.fileUrl,
       downloadCount: r.downloadCount,
+      requiresForm: r.requiresForm,
     }));
   }, fallback);
 }
@@ -307,9 +318,58 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
       sortOrder: r.sortOrder,
       fileUrl: r.fileUrl,
       downloadCount: r.downloadCount,
+      requiresForm: r.requiresForm,
     };
   }, defaultDownloads.find((d) => d.slug === slug) ?? null);
 }
+
+/* --------------------------------- 站点设置 -------------------------------- */
+
+/** Values edited under 后台 → 站点设置. Empty strings fall back to the bundled defaults. */
+export type SiteSettings = {
+  phone: string;
+  email: string;
+  address: Localized;
+  /** null → the placeholder in messages (footer.icp). */
+  icp: string | null;
+  analyticsId: string | null;
+  heroVideoUrl: string | null;
+  heroPosterUrl: string | null;
+};
+
+const defaultSettings: SiteSettings = {
+  phone: company.phone,
+  email: company.email,
+  address: { zh: company.addressZh, en: company.addressEn },
+  icp: null,
+  analyticsId: null,
+  heroVideoUrl: null,
+  heroPosterUrl: null,
+};
+
+/** Cached per request, so the layout and the page share one query. */
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
+  return fromDb(async (db) => {
+    const rows = await db.siteSetting.findMany();
+    const map = new Map(rows.map((row) => [row.key, row.value]));
+    const read = (key: string) => {
+      const value = map.get(key);
+      return typeof value === "string" && value.trim() ? value.trim() : null;
+    };
+    return {
+      phone: read("contactPhone") ?? defaultSettings.phone,
+      email: read("contactEmail") ?? defaultSettings.email,
+      address: {
+        zh: read("contactAddressZh") ?? defaultSettings.address.zh,
+        en: read("contactAddressEn") ?? read("contactAddressZh") ?? defaultSettings.address.en,
+      },
+      icp: read("icp"),
+      analyticsId: read("analyticsId"),
+      heroVideoUrl: read("heroVideoUrl"),
+      heroPosterUrl: read("heroPosterUrl"),
+    };
+  }, defaultSettings);
+});
 
 /* --------------------------------- 合作伙伴 -------------------------------- */
 

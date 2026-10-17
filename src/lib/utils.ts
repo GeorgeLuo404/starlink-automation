@@ -50,3 +50,8 @@ export function pick<T extends Record<string, unknown>>(row: T, field: string, l
   const fallback = row[`${field}Zh`];
   return ((localized as string) || (fallback as string) || "") as string;
 }
+
+/** Cover image for an article, case or service: the uploaded one, else the bundled placeholder. */
+export function coverSrc(kind: "article" | "case" | "service", item: { slug: string; coverUrl?: string | null }) {
+  return item.coverUrl || `/media/${kind}-${item.slug}.svg`;
+}

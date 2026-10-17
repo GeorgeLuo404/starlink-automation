@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { buildMetadata } from "@/lib/seo";
-import { company, services as defaultServices } from "@/content/defaults";
-import { listServices } from "@/lib/data";
+import { services as defaultServices } from "@/content/defaults";
+import { getSiteSettings, listServices } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { ContactForm } from "@/components/site/contact-form";
 import { Reveal } from "@/components/motion";
@@ -31,6 +31,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   if (!isLocale(locale)) notFound();
   const dict = getDictionary(locale);
   const t = dict.contact;
+  const settings = await getSiteSettings();
 
   let serviceNames: string[];
   try {
@@ -43,11 +44,11 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     {
       icon: MapPin,
       label: t.address,
-      value: t.addressValue,
+      value: settings.address[locale],
       href: undefined as string | undefined,
     },
-    { icon: Phone, label: t.phoneLabel, value: company.phone, href: `tel:${company.phone}` },
-    { icon: Mail, label: t.emailLabel, value: company.email, href: `mailto:${company.email}` },
+    { icon: Phone, label: t.phoneLabel, value: settings.phone, href: `tel:${settings.phone}` },
+    { icon: Mail, label: t.emailLabel, value: settings.email, href: `mailto:${settings.email}` },
     { icon: Clock, label: t.hoursLabel, value: t.hoursValue, href: undefined },
     { icon: Zap, label: t.urgentLabel, value: t.urgentValue, href: undefined },
   ];
@@ -114,7 +115,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   </span>
                   <p className="mt-4 text-sm font-medium text-white">{t.mapTitle}</p>
                   <p className="mt-1 font-mono text-[0.625rem] tracking-wider text-faint">
-                    {locale === "zh" ? company.addressZh : company.addressEn}
+                    {settings.address[locale]}
                   </p>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import { listCases } from "@/lib/data";
 import { localeHref } from "@/components/site/nav-items";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
+import { coverSrc } from "@/lib/utils";
 
 export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const cases = await listCases({ limit: 5 });
@@ -35,7 +36,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
           >
             <div className="relative aspect-16/10 overflow-hidden lg:aspect-auto lg:min-h-104">
               <Image
-                src={`/media/case-${lead.slug}.svg`}
+                src={coverSrc("case", lead)}
                 alt={lead.title[locale]}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -83,7 +84,7 @@ export async function HomeCases({ locale, dict }: { locale: Locale; dict: Dictio
               >
                 <div className="relative size-24 shrink-0 overflow-hidden rounded-(--radius) sm:size-28">
                   <Image
-                    src={`/media/case-${item.slug}.svg`}
+                    src={coverSrc("case", item)}
                     alt={item.title[locale]}
                     fill
                     sizes="120px"

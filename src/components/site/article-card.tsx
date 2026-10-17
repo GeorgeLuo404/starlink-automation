@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import type { Dictionary, Locale } from "@/lib/i18n";
 import { localeHref } from "@/components/site/nav-items";
-import { formatDate } from "@/lib/utils";
+import { coverSrc, formatDate } from "@/lib/utils";
 import type { ArticleView } from "@/lib/data";
 
 export function ArticleCard({
@@ -24,7 +24,7 @@ export function ArticleCard({
     >
       <div className="relative aspect-video overflow-hidden">
         <Image
-          src={`/media/article-${article.slug}.svg`}
+          src={coverSrc("article", article)}
           alt={article.title[locale]}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"

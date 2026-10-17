@@ -100,7 +100,7 @@ export function DownloadList({
 
             <button
               type="button"
-              onClick={() => startDownload(item)}
+              onClick={() => (item.requiresForm ? setPending(item) : startDownload(item))}
               className="btn btn-ghost h-10 shrink-0 self-start px-4 sm:self-auto"
             >
               <Download className="size-4" />

@@ -10,6 +10,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { SectionHeading } from "@/components/site/section-heading";
 import { localeHref } from "@/components/site/nav-items";
 import { Counter, Reveal, Stagger, StaggerItem } from "@/components/motion";
+import { getSiteSettings } from "@/lib/data";
 
 export const revalidate = 300;
 
@@ -33,6 +34,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   if (!isLocale(locale)) notFound();
   const dict = getDictionary(locale);
   const t = dict.about;
+  const settings = await getSiteSettings();
 
   return (
     <>
@@ -102,8 +104,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               {[
                 { label: locale === "zh" ? "公司名称" : "Company", value: locale === "zh" ? company.nameZh : company.nameEn },
                 { label: locale === "zh" ? "成立年份" : "Founded", value: String(company.founded) },
-                { label: dict.contact.address, value: locale === "zh" ? company.addressZh : company.addressEn },
-                { label: locale === "zh" ? "邮箱" : "Email", value: company.email },
+                { label: dict.contact.address, value: settings.address[locale] },
+                { label: locale === "zh" ? "邮箱" : "Email", value: settings.email },
               ].map((row) => (
                 <div key={row.label} className="flex items-baseline justify-between gap-6 p-5">
                   <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
@@ -190,8 +192,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
             <div className="mt-8 rounded-(--radius) border border-primary/25 bg-primary/6 p-6">
               <h3 className="text-sm font-semibold text-white">{t.contactTitle}</h3>
-              <p className="mt-2 text-sm text-subtle">{company.phone}</p>
-              <p className="text-sm text-subtle">{company.email}</p>
+              <p className="mt-2 text-sm text-subtle">{settings.phone}</p>
+              <p className="text-sm text-subtle">{settings.email}</p>
               <Link href={localeHref(locale, "/contact")} className="btn btn-primary mt-5 h-10 px-4">
                 {dict.nav.contact}
                 <ArrowRight className="size-4" />

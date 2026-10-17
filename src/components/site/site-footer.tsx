@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import type { Dictionary, Locale } from "@/lib/i18n";
-import { company, services } from "@/content/defaults";
+import { services } from "@/content/defaults";
+import type { SiteSettings } from "@/lib/data";
 import { Logo } from "./logo";
 import { localeHref } from "./nav-items";
 import { NewsletterForm } from "./newsletter-form";
 
-export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function SiteFooter({ locale, dict, settings }: { locale: Locale; dict: Dictionary; settings: SiteSettings }) {
   const year = new Date().getFullYear();
 
   return (
@@ -19,22 +20,22 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{dict.footer.desc}</p>
             <div className="mt-6 space-y-2.5 text-sm">
               <a
-                href={`tel:${company.phone}`}
+                href={`tel:${settings.phone}`}
                 className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
               >
                 <Phone className="size-3.5 text-primary" />
-                {company.phone}
+                {settings.phone}
               </a>
               <a
-                href={`mailto:${company.email}`}
+                href={`mailto:${settings.email}`}
                 className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
               >
                 <Mail className="size-3.5 text-primary" />
-                {company.email}
+                {settings.email}
               </a>
               <p className="flex items-start gap-2.5 text-muted-foreground">
                 <MapPin className="mt-0.5 size-3.5 shrink-0 text-primary" />
-                {locale === "zh" ? company.addressZh : company.addressEn}
+                {settings.address[locale]}
               </p>
             </div>
           </div>
@@ -91,7 +92,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
               rel="noreferrer noopener"
               className="transition-colors hover:text-muted-foreground"
             >
-              {dict.footer.icp}
+              {settings.icp ?? dict.footer.icp}
             </a>
             <span className="hidden md:inline">|</span>
             <span>{dict.footer.police}</span>

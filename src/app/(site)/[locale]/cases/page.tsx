@@ -9,6 +9,7 @@ import { listCases } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { localeHref } from "@/components/site/nav-items";
 import { Stagger, StaggerItem } from "@/components/motion";
+import { coverSrc } from "@/lib/utils";
 
 export const revalidate = 120;
 
@@ -58,7 +59,7 @@ export default async function CasesPage({ params }: { params: Promise<{ locale: 
               >
                 <div className="relative aspect-16/10 overflow-hidden">
                   <Image
-                    src={`/media/case-${item.slug}.svg`}
+                    src={coverSrc("case", item)}
                     alt={item.title[locale]}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
