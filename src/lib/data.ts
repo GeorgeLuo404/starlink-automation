@@ -310,8 +310,6 @@ export type SiteSettings = {
   /** null → the placeholder in messages (footer.icp). */
   icp: string | null;
   analyticsId: string | null;
-  heroVideoUrl: string | null;
-  heroPosterUrl: string | null;
 };
 
 const defaultSettings: SiteSettings = {
@@ -320,8 +318,6 @@ const defaultSettings: SiteSettings = {
   address: company.address,
   icp: null,
   analyticsId: null,
-  heroVideoUrl: null,
-  heroPosterUrl: null,
 };
 
 /** Cached per request, so the layout and the page share one query. */
@@ -339,8 +335,6 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
       address: read("contactAddress") ?? defaultSettings.address,
       icp: read("icp"),
       analyticsId: read("analyticsId"),
-      heroVideoUrl: read("heroVideoUrl"),
-      heroPosterUrl: read("heroPosterUrl"),
     };
   }, defaultSettings);
 });

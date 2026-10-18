@@ -5,20 +5,13 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowDown, ArrowRight, Play } from "lucide-react";
 import { Magnetic } from "@/components/motion";
+import { HeroConstellation } from "./hero-constellation";
 import copy from "@/content/copy.json";
 
-export function HomeHero({
-  videoUrl,
-  posterUrl = "/media/hero-poster.png",
-}: {
-  videoUrl?: string | null;
-  posterUrl?: string;
-}) {
+export function HomeHero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.04, 1.16]);
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -70]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
@@ -27,32 +20,9 @@ export function HomeHero({
   return (
     <section ref={ref} className="relative flex min-h-svh flex-col justify-end overflow-hidden pt-24 pb-8">
       {/* Background ---------------------------------------------------- */}
-      <motion.div
-        style={reduced ? undefined : { y: bgY, scale: bgScale }}
-        className="absolute inset-0 -z-10"
-        aria-hidden="true"
-      >
-        {videoUrl ? (
-          <video
-            className="size-full object-cover opacity-45"
-            src={videoUrl}
-            poster={posterUrl}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-        ) : (
-          <img src={posterUrl} alt="" className="size-full object-cover opacity-90" />
-        )}
-      </motion.div>
-
-      <div className="hero-scrim absolute inset-0 -z-10" aria-hidden="true" />
-      <div className="grid-blueprint absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
-      <div
-        className="absolute inset-x-0 top-0 -z-10 h-px animate-scan bg-linear-to-r from-transparent via-primary/50 to-transparent"
-        aria-hidden="true"
-      />
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <HeroConstellation />
+      </div>
 
       {/* Technical side annotations ------------------------------------ */}
       <div className="pointer-events-none absolute top-1/2 left-4 hidden -translate-y-1/2 xl:block" aria-hidden="true">
