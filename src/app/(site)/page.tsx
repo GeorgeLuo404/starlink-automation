@@ -13,7 +13,6 @@ import { HomePartners } from "@/components/site/home/partners-marquee";
 import { HomeNews } from "@/components/site/home/latest-news";
 import { HomeGallery } from "@/components/site/home/gallery-strip";
 import { HomeCta } from "@/components/site/home/cta-band";
-import { getSiteSettings } from "@/lib/data";
 import copy from "@/content/copy.json";
 
 export const metadata: Metadata = buildMetadata({
@@ -22,15 +21,10 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
 });
 
-export default async function HomePage() {
-  const settings = await getSiteSettings();
-
+export default function HomePage() {
   return (
     <>
-      <HomeHero
-        videoUrl={settings.heroVideoUrl}
-        posterUrl={settings.heroPosterUrl ?? undefined}
-      />
+      <HomeHero />
       <HomeStatement />
       <HomeServices />
       <HomeStats />

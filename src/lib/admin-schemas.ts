@@ -223,8 +223,6 @@ export const partnerSchema = z.object({
 });
 
 export const settingsSchema = z.object({
-  heroVideoUrl: link("首页背景视频"),
-  heroPosterUrl: link("视频封面图"),
   contactPhone: optional("业务电话", 32).refine(
     (value) => !value || PHONE_RE.test(value),
     "业务电话格式不正确"

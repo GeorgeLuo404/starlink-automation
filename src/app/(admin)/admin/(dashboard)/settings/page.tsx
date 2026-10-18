@@ -3,7 +3,6 @@ import { saveSettings } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
 import { AdminPageHeader, SetupNotice } from "@/components/admin/ui";
 import { FormActions, FormField, FormSection } from "@/components/admin/form-fields";
-import { UploadField } from "@/components/admin/upload-field";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +34,7 @@ export default async function AdminSettingsPage({
 
   return (
     <>
-      <AdminPageHeader title="站点设置" description="首页视频、联系方式与备案信息。保存后前台会自动刷新。" />
+      <AdminPageHeader title="站点设置" description="联系方式、备案与统计信息。保存后前台会自动刷新。" />
 
       {saved ? (
         <div className="mb-6 rounded-(--radius) border border-success/30 bg-success/8 px-4 py-3 text-sm text-success">
@@ -44,24 +43,6 @@ export default async function AdminSettingsPage({
       ) : null}
 
       <ActionForm action={saveSettings} className="space-y-6">
-        <FormSection title="首页 Hero" description="留空时使用内置的工业风占位图。">
-          <UploadField
-            name="heroVideoUrl"
-            label="首页背景视频"
-            folder="hero"
-            defaultValue={read("heroVideoUrl")}
-            accept="video/*"
-            description="建议 1920×1080、H.264 编码的 MP4，时长 10–20 秒并静音播放。"
-          />
-          <UploadField
-            name="heroPosterUrl"
-            label="视频封面图"
-            folder="hero"
-            defaultValue={read("heroPosterUrl")}
-            accept="image/*"
-          />
-        </FormSection>
-
         <FormSection title="联系方式">
           <div className="grid gap-5 sm:grid-cols-2">
             <FormField label="业务电话" name="contactPhone" defaultValue={read("contactPhone", "138-0000-0000")} />
