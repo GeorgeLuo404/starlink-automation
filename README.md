@@ -9,9 +9,9 @@
 | 层 | 选型 | 说明 |
 | --- | --- | --- |
 | 前端框架 | **Next.js 16**（App Router）+ **TypeScript 5.9** | 服务端组件负责取数与 SEO，客户端组件只负责交互与动画 |
-| 样式 | **Tailwind CSS v4** + 自建设计系统 | 工业深色主题写在 `src/app/globals.css` 的 `@theme` 与 `@layer components` 中 |
+| 样式 | **Tailwind CSS v4** + 自建设计系统 | 墨黑 / 纸白分区 + 朱砂橙单一强调色，写在 `src/app/globals.css`（见第 6 节） |
 | 组件 | **shadcn/ui**（Radix UI） | `src/components/ui`，配色接入下方设计令牌；新增组件用 `npx shadcn@latest add <component>` |
-| 动画 | **motion**（原 framer-motion） | 首屏遮罩揭示、滚动点亮大字、数字滚动、轨道旋转、磁吸按钮等 |
+| 动画 | CSS + **motion**（原 framer-motion） | 入场与滚动显现用纯 CSS（`.intro` / `.reveal`）；菜单、灯箱与数字滚动用 motion |
 | 数据库 | **PostgreSQL** + **Prisma 7** | 见下方「Prisma 7 的变化」 |
 | 认证 | `jose`（JWT）+ `node:crypto` scrypt | 无第三方认证服务依赖，会话存 HttpOnly Cookie |
 | 文件存储 | 本地磁盘 **或** S3 兼容对象存储 | 阿里云 OSS / MinIO / AWS S3 均可，通过 `STORAGE_DRIVER` 切换 |
@@ -24,7 +24,8 @@
 1. **shadcn/ui 组件基于 Radix UI**（调整一）
    `src/components/ui` 是 shadcn/ui 组件源码（`radix-ui` 提供焦点管理与键盘交互），
    颜色只使用 `globals.css` 中的语义令牌。字体 Inter / JetBrains Mono 由 `next/font/local`
-   从 `src/app/fonts/` 自托管，构建时不访问 Google Fonts。
+   从 `src/app/fonts/` 自托管；中文用 `@fontsource-variable/noto-sans-sc`（按 unicode-range
+   切片、随站点静态资源一起发布）。构建与访问都不依赖 Google Fonts，阿里云部署可直接使用。
 
 2. **没有引入 markdown 渲染库**（调整二）
    后台正文使用一套轻量标记（`##`、`###`、`- `、`1. `、`> `、`**加粗**`、`` `代码` ``），
@@ -154,7 +155,7 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 | `pnpm db:studio` | Prisma Studio 可视化查看数据（也可用 TablePlus 等客户端连接 `DATABASE_URL`） |
 | `pnpm admin:create` | 创建/重置管理员 |
 | `pnpm docker:db` | 启动本地 PostgreSQL |
-| `node scripts/generate-placeholders.mjs` | 重新生成占位图 |
+| `pnpm media:placeholders` | 重新生成线稿占位图（`public/media`，见第 6.5 节） |
 
 ---
 
@@ -165,10 +166,11 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 │   ├── schema.prisma          数据模型（11 张表）
 │   └── seed.ts                内容初始化脚本
 ├── prisma.config.ts           Prisma 7 配置（数据源 URL 在这里）
-├── public/media/              占位图（上线前替换为真实照片）
+├── public/media/              线稿占位图（后台上传真实照片后自动替换）
 ├── scripts/
 │   ├── create-admin.ts        管理员创建/重置
-│   └── generate-placeholders.mjs
+│   ├── generate-placeholders.ts  生成线稿占位图
+│   └── check-tokens.mjs       设计令牌守卫
 ├── src/
 │   ├── app/
 │   │   ├── (site)/            前台（多根布局之一）
@@ -177,8 +179,9 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 │   │   ├── sitemap.ts robots.ts
 │   │   └── globals.css        设计系统
 │   ├── components/
-│   │   ├── motion/            动画原语（Reveal / Stagger / ScrollHighlightText / Counter / Marquee / Magnetic / Parallax / TiltCard）
-│   │   ├── site/              前台组件
+│   │   ├── motion/            需要 JS 的动画（Counter / useScrolled）
+│   │   ├── site/              前台组件（kit.tsx 基础件、卡片、页头页脚）
+│   │   │   └── home/          首页各区块（首屏星座动画、六步折叠流程 …）
 │   │   ├── admin/             后台组件
 │   │   └── ui/                基础组件（shadcn 风格）
 │   ├── content/
@@ -186,6 +189,7 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 │   │   └── copy.json          页面文案（导航、标题、按钮、表单提示等）
 │   ├── lib/
 │   │   ├── data.ts            内容仓库（先查库，失败回退默认内容）
+│   │   ├── line-art/          线稿插画（几何 + 题材），页面内联与占位图共用
 │   │   ├── storage.ts         存储抽象（本地 / S3）
 │   │   ├── auth.ts session.ts password.ts
 │   │   └── prisma.ts          Prisma 7 客户端工厂
@@ -222,17 +226,17 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 ```css
 /* 1 · 原始色板 —— 唯一出现十六进制的地方 */
 :root {
-  --brand-500: #22e0ff;
-  --ink-950:   #08090b;
-  --paper-500: #8a929e;
+  --orange-500: #f24e1e;   /* 朱砂橙，唯一的强调色 */
+  --ink-950:    #0a0a0b;   /* 墨黑区块 */
+  --paper-100:  #f1f0ec;   /* 纸白区块 */
   /* … */
 }
 
 /* 2 · 语义角色 —— 组件只允许使用这一层 */
 :root {
-  --primary:          var(--brand-500);
+  --primary:          var(--orange-500);
   --background:       var(--ink-950);
-  --muted-foreground: var(--paper-500);
+  --muted-foreground: var(--stone-400);
   /* … */
 }
 ```
@@ -246,10 +250,10 @@ ADMIN_EMAIL=you@company.com ADMIN_PASSWORD='一个足够强的密码' pnpm admin
 </div>
 ```
 
-**换配色只需要改色板**，例如把主色从青色改成橙色：
+**换配色只需要改色板**，例如换一种橙色：
 
 ```css
---brand-500: #f97316;   /* 全站按钮、链接、高亮、图标、SVG 一起变 */
+--orange-500: #f97316;   /* 全站按钮、链接、高亮、图标、线稿一起变；占位图需重新生成 */
 ```
 
 ### 6.2 自动守卫
@@ -271,15 +275,45 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | 页面底色 / 正文 | `bg-background` `text-foreground` |
 | 交替区块底色 | `bg-surface` |
 | 卡片 / 面板 / 表单 | `bg-card` `border-border` |
-| 品牌主色 | `bg-primary` `text-primary` `border-primary/40` |
+| 品牌主色 | `bg-primary` `text-primary` `border-primary/40`；作文字用 `text-primary-text`（白底上自动加深） |
 | 次级面 / 悬停面 | `bg-secondary` `hover:bg-secondary-hover` |
 | 轨道 / 缩略图底 | `bg-raised` |
+| 悬停描边 | `hover:border-lifted` |
 | 正文分级 | `text-foreground` > `text-body` > `text-subtle` > `text-muted-foreground` > `text-faint` > `text-ghost` |
 | 状态 | `text-success` `text-signal` `text-destructive` `text-destructive-soft` |
 
 透明度直接用 Tailwind 语法：`bg-primary/10`、`border-destructive/40`。
 
-### 6.4 四条容易踩的坑（都已经踩过一次）
+### 6.4 区块主题、字号与基础件
+
+页面由黑白区块交替组成。区块加上主题类，内部所有工具类和 `ui/` 组件就跟着换色：
+
+| 类名 | 用途 |
+| --- | --- |
+| `theme-dark` | 墨黑区块（页头、首屏、业务能力、流程、页脚） |
+| `theme-light` | 纸白区块，卡片为白色（案例、新闻） |
+| `theme-white` | 白色区块，卡片为浅纸色（正文、表单） |
+
+字号：`display`（首页大标题）、`title-1`（内页标题）、`title-2`（区块标题）、`title-3`（卡片标题）、
+`lead`（导语）、`eyebrow`（小标），区块上下留白用 `section-y`。滚动显现加 `reveal`，首屏入场加 `intro`。
+
+`src/components/site/kit.tsx` 里是各页共用的基础件，全部基于 shadcn：`Eyebrow`、`SectionHead`、
+`PillLink`（胶囊按钮链接）、`FilterLink`（分类筛选）、`Cover`（封面图框）、`CornerArrow`、`EmptyState`。
+
+### 6.5 线稿插画与占位图
+
+`src/lib/line-art/` 是一套等轴测线稿（PLC 机架、机器人、装配线、视觉检测……），纯数据、不依赖 React：
+
+- 页面里内联绘制（`components/site/line-art.tsx`），颜色跟随区块主题；
+- `pnpm media:placeholders` 把同一批线稿写成 `public/media` 下的 SVG 占位图：
+  `service-<slug>.svg`、`case-<slug>.svg`、`article-<slug>.svg`、`gallery-01…09.svg`、`factory.svg`、`og.svg`，
+  以及 `src/app/icon.svg`。颜色读自 `globals.css` 色板，结果是确定的（重复运行文件不变）。
+
+业务能力、项目案例、新闻的封面都经过 `coverSrc()`（`src/lib/utils.ts`）：**后台上传了封面就用照片，
+没有就用对应的线稿占位图**，同一个图框，换图不会改变版式。新增一条业务 / 案例 / 文章时，
+在脚本的对照表里给它指定一个线稿题材再运行一次即可（未指定的会用默认题材）。
+
+### 6.6 四条容易踩的坑（都已经踩过一次）
 
 **① `next/image` 的 `fill` 必须放在 `relative` 的父元素里**
 
@@ -322,13 +356,13 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 ```tsx
 // ✗ 装饰层挡住表单：输入框完全无法交互
 <div className="relative flex min-h-screen items-center justify-center">
-  <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
+  <div className="grid-lines absolute inset-0 opacity-40" aria-hidden="true" />
   <form>...</form>            {/* 非定位 → 被上面的层盖住 */}
 </div>
 
 // ✓ 装饰层不接收指针事件；内容自身也定位，双保险
 <div className="relative flex min-h-screen items-center justify-center">
-  <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+  <div className="grid-lines pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
   <form className="relative">...</form>
 </div>
 ```
@@ -345,20 +379,15 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 `align-items: stretch` 被拉伸到整行高度（高度确定），所以它的**直接子元素**写 `h-full` 有效；
 但只要中间多一层没设高度的普通 `div`，这一层就退化成"内容高度"，后面所有 `h-full` 全部失效。
 
-本项目首页「业务能力」卡片就踩过：`StaggerItem`（网格项，被拉伸）→ `TiltCard`（普通 div，无高度）
-→ `Link h-full`，结果 Link 只有文字那么高，**鼠标移到卡片下方的空白区域没有 hover 反应**，
-`.corner-ticks` 的角标也画在了半空中。
+旧版首页「业务能力」卡片就踩过：网格项被拉伸，但中间一层动画容器没有高度，里面的链接 `h-full`
+失效，结果鼠标移到卡片下方的空白区域没有 hover 反应。现在的卡片结构是这样传递高度的：
 
 ```tsx
-// ✗ TiltCard 没有高度 → Link 的 h-full 失效
-<StaggerItem className="bg-surface">      {/* 网格项，被拉伸到整行高 */}
-  <TiltCard max={3}>                       {/* height: auto */}
-    <Link className="flex h-full ...">     {/* 100% of auto = 内容高度 */}
-
-// ✓ 把高度传递下去
-<StaggerItem className="bg-surface">
-  <TiltCard max={3} className="h-full">
-    <Link className="flex h-full ...">
+// ✓ 网格项（Link，被拉伸）→ Card h-full → 内容 flex-1
+<div className="grid md:grid-cols-3">
+  <Link className="group block">            {/* 网格项，被拉伸到整行高 */}
+    <Card className="h-full">                {/* 100% of 行高 */}
+      <div className="flex flex-1 flex-col">…</div>
 ```
 
 排查口诀：**从网格项到 `h-full` 元素之间，每一层都要能传递高度**（`h-full`、`flex-1`，
@@ -372,10 +401,10 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | --- | --- |
 | 公司名、电话、邮箱、地址 | `src/content/defaults.ts` 的 `company`，或后台「站点设置」 |
 | 配色 | **只改** `src/app/globals.css` 的色板（见下方第 6.1 节），组件无需改动 |
-| 圆角 / 字体 | `src/app/globals.css` 的 `--radius` 与 `--font-*` |
+| 圆角 / 字体 | `src/app/globals.css` 的 `--radius`（后台在 `.admin` 里单独收紧）与 `--font-*` |
 | 页面文案 | `src/content/copy.json` |
 | 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后 `pnpm db:seed --force`，会覆盖后台对这些记录的修改） |
-| 占位图换成真实照片 | 直接覆盖 `public/media/*.svg`，或在后台媒体库上传后替换引用 |
+| 占位图换成真实照片 | 在后台对应条目上传「封面图片」即可（见第 6.5 节）；图库在后台「现场图库」里替换 |
 | 导航结构 | `src/components/site/nav-items.ts` |
 
 ---

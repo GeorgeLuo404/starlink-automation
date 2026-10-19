@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className={`dark ${fontVariables}`} data-scroll-behavior="smooth">
-      <body className="min-h-screen bg-background text-foreground antialiased">
+      <body className="admin min-h-screen bg-background text-foreground antialiased">
         {children}
         <Toaster />
       </body>

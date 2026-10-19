@@ -5,4 +5,4 @@
  * Keep it in sync with `--ink-950` in src/app/globals.css, which is the only
  * other place a hex colour is allowed to live.
  */
-export const THEME_COLOR = "#08090b";
+export const THEME_COLOR = "#0a0a0b";

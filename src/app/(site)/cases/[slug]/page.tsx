@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { getCase, listCases } from "@/lib/data";
+import { Badge } from "@/components/ui/badge";
 import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
-import { Reveal } from "@/components/motion";
+import { Cover, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
+import { CaseCard } from "@/components/site/case-card";
+import { CtaSection } from "@/components/site/cta-section";
 import { coverSrc } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -18,11 +19,7 @@ export async function generateStaticParams() {
   return cases.map((item) => ({ slug: item.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = await getCase(slug);
   if (!item) return {};
@@ -34,11 +31,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function CaseDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function CaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = await getCase(slug);
   if (!item) notFound();
@@ -58,123 +51,99 @@ export default async function CaseDetailPage({
         eyebrow={item.industry}
         title={item.title}
         description={item.summary}
-        crumbs={[
-          { label: copy.nav.cases, href: "/cases" },
-          { label: item.title },
-        ]}
-      />
-
-      <div className="container-x py-16 md:py-24">
-        <Reveal>
-          <div className="relative aspect-21/9 overflow-hidden rounded-(--radius) border border-border">
-            <Image
-              src={coverSrc("case", item)}
-              alt={item.title}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        </Reveal>
-
-        <div className="mt-12 grid gap-14 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <RichText content={item.content} />
-
-            <div className="mt-14 border-t border-border pt-10">
-              <h2 className="text-display text-xl text-white">{copy.cases.scope}</h2>
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-                {item.scope.map((s) => (
-                  <li key={s} className="flex items-start gap-2.5 text-sm text-body">
-                    <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
-                    {s}
-                  </li>
-                ))}
-              </ul>
+        crumbs={[{ label: copy.nav.cases, href: "/cases" }, { label: item.title }]}
+      >
+        <dl className="intro mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-border pt-8 sm:grid-cols-4" style={{ animationDelay: "280ms" }}>
+          {facts.map((fact) => (
+            <div key={fact.label}>
+              <dt className="text-xs text-muted-foreground">{fact.label}</dt>
+              <dd className="mt-2 text-base">{fact.value}</dd>
             </div>
-          </div>
+          ))}
+        </dl>
+      </PageHero>
 
-          <aside className="lg:col-span-4">
-            <div className="sticky top-28 space-y-6">
-              <div className="card-industrial divide-y divide-border">
-                {facts.map((fact) => (
-                  <div key={fact.label} className="flex items-baseline justify-between gap-4 p-5">
-                    <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
-                      {fact.label}
-                    </span>
-                    <span className="text-right text-sm text-foreground">{fact.value}</span>
-                  </div>
-                ))}
-              </div>
+      <section className="theme-white section-y">
+        <div className="container-x">
+          <Cover
+            src={coverSrc("case", item)}
+            alt={item.title}
+            sizes="(max-width: 1408px) 100vw, 1408px"
+            priority
+            className="aspect-16/9 rounded-(--radius)"
+          />
 
-              {item.metrics.length > 0 ? (
-                <div className="card-industrial p-6">
-                  <h2 className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
-                    {copy.cases.results}
-                  </h2>
-                  <div className="mt-5 space-y-4">
-                    {item.metrics.map((metric) => (
-                      <div key={metric.value} className="flex items-baseline justify-between gap-4">
-                        <span className="text-sm text-muted-foreground">{metric.label}</span>
-                        <span className="text-xl font-semibold text-primary tabular-nums">{metric.value}</span>
-                      </div>
+          {item.metrics.length > 0 ? (
+            <div className="mt-16 grid gap-y-10 border-t border-border sm:grid-cols-3">
+              {item.metrics.map((metric) => (
+                <div key={metric.label} className="reveal pt-10 sm:border-l sm:border-border sm:pl-8 sm:first:border-l-0 sm:first:pl-0">
+                  <div className="text-5xl font-medium tracking-tight tabular-nums lg:text-6xl">{metric.value}</div>
+                  <p className="mt-4 text-sm text-muted-foreground">{metric.label}</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="mt-20 grid gap-16 lg:grid-cols-12">
+            <RichText content={item.content} className="lg:col-span-7" />
+
+            <aside className="space-y-10 lg:col-span-4 lg:col-start-9">
+              {item.scope.length > 0 ? (
+                <div>
+                  <h2 className="text-sm text-muted-foreground">{copy.cases.scope}</h2>
+                  <ul className="mt-4 divide-y divide-border border-y border-border">
+                    {item.scope.map((s) => (
+                      <li key={s} className="flex items-center gap-3 py-3.5 text-sm text-body">
+                        <LinkNode className="size-2" />
+                        {s}
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               ) : null}
-
               {item.tags.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
+                <ul className="flex flex-wrap gap-2">
                   {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
+                    <li key={tag}>
+                      <Badge variant="outline" size="md">
+                        {tag}
+                      </Badge>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : null}
-
-              <div className="rounded-(--radius) border border-primary/25 bg-primary/6 p-6">
-                <h2 className="text-sm font-semibold text-white">{copy.home.cta.title}</h2>
-                <Link href="/contact" className="btn btn-primary mt-5 w-full">
-                  {copy.home.cta.primary}
-                  <ArrowRight className="size-4" />
-                </Link>
-              </div>
-            </div>
-          </aside>
+              <PillLink href="/contact" size="default">
+                {copy.home.cta.primary}
+                <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+              </PillLink>
+            </aside>
+          </div>
         </div>
+      </section>
 
-        {others.length > 0 ? (
-          <div className="mt-20 border-t border-border pt-14">
-            <h2 className="text-display text-2xl text-white">{copy.cases.related}</h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
+      {others.length > 0 ? (
+        <section className="theme-light section-y">
+          <div className="container-x">
+            <SectionHead
+              eyebrow={copy.cases.title}
+              title={copy.cases.related}
+              action={
+                <PillLink href="/cases" variant="outline">
+                  {copy.common.viewAll}
+                  <ArrowRight />
+                </PillLink>
+              }
+            />
+            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {others.map((other) => (
-                <Link
-                  key={other.slug}
-                  href={`/cases/${other.slug}`}
-                  className="card-industrial corner-ticks group flex gap-4 p-5"
-                >
-                  <div className="relative size-20 shrink-0 overflow-hidden rounded-(--radius)">
-                    <Image src={coverSrc("case", other)} alt={other.title} fill sizes="80px" className="object-cover" />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="font-mono text-[0.625rem] tracking-wider text-primary">
-                      {other.industry}
-                    </span>
-                    <h3 className="mt-1.5 line-clamp-2 text-sm font-semibold text-white transition-colors group-hover:text-primary">
-                      {other.title}
-                    </h3>
-                  </div>
-                </Link>
+                <CaseCard key={other.slug} item={other} />
               ))}
             </div>
           </div>
-        ) : null}
-      </div>
+        </section>
+      ) : null}
+
+      <CtaSection />
     </>
   );
 }

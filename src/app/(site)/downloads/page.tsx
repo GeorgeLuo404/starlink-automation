@@ -1,9 +1,9 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { listDownloads } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { DownloadList } from "@/components/site/download-list";
+import { EmptyState } from "@/components/site/kit";
 import { Toaster } from "@/components/ui/sonner";
 import copy from "@/content/copy.json";
 
@@ -27,19 +27,12 @@ export default async function DownloadsPage() {
         crumbs={[{ label: copy.nav.downloads }]}
       />
 
-      <div className="container-x py-16 md:py-20">
-        {items.length === 0 ? (
-          <div className="rounded-(--radius) border border-dashed border-border py-24 text-center">
-            <p className="text-sm text-muted-foreground">{copy.downloads.emptyHint}</p>
-          </div>
-        ) : (
-          <DownloadList items={items} />
-        )}
-
-        <p className="mt-10 font-mono text-[0.6875rem] leading-relaxed tracking-wide text-faint">
-          如需特定技术文档或图纸样例，请通过联系页面告知我们，我们会按需提供。
-        </p>
-      </div>
+      <section className="theme-white section-y">
+        <div className="container-x">
+          {items.length === 0 ? <EmptyState hint={copy.downloads.emptyHint} /> : <DownloadList items={items} />}
+          <p className="mt-10 text-sm text-muted-foreground">如需特定技术文档或图纸样例，请通过联系页面告知我们，我们会按需提供。</p>
+        </div>
+      </section>
 
       <Toaster />
     </>

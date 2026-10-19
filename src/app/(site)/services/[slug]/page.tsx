@@ -1,14 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowRight, ArrowUpRight, Check, FileCheck2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { getService, listServices } from "@/lib/data";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
-import { ServiceIcon } from "@/components/site/service-icon";
-import { Reveal } from "@/components/motion";
+import { Cover, Eyebrow, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
+import { ServiceCard } from "@/components/site/service-card";
+import { CtaSection } from "@/components/site/cta-section";
 import { coverSrc } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -19,11 +20,7 @@ export async function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return {};
@@ -35,152 +32,122 @@ export async function generateMetadata({
   });
 }
 
-export default async function ServiceDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) notFound();
 
-  const others = (await listServices()).filter((item) => item.slug !== slug).slice(0, 3);
+  const all = await listServices();
+  const index = Math.max(0, all.findIndex((item) => item.slug === slug));
+  const others = all.filter((item) => item.slug !== slug).slice(0, 3);
 
   return (
     <>
       <PageHero
-        eyebrow={copy.services.eyebrow}
+        eyebrow={`${copy.services.title} · ${String(index + 1).padStart(2, "0")}`}
         title={service.title}
         description={service.summary}
-        crumbs={[
-          { label: copy.nav.services, href: "/services" },
-          { label: service.title },
-        ]}
+        crumbs={[{ label: copy.nav.services, href: "/services" }, { label: service.title }]}
+        aside={
+          <Cover
+            src={coverSrc("service", service)}
+            alt={service.title}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
+            className="rounded-(--radius) border border-border"
+          />
+        }
       >
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Link href="/contact" className="btn btn-primary">
+        <div className="intro mt-10 flex flex-wrap gap-3" style={{ animationDelay: "280ms" }}>
+          <PillLink href="/contact">
             {copy.services.detailCta}
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link href="/cases" className="btn btn-ghost">
+            <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+          </PillLink>
+          <PillLink href="/cases" variant="outline">
             {copy.nav.cases}
-          </Link>
+          </PillLink>
         </div>
       </PageHero>
 
-      <div className="container-x py-16 md:py-24">
-        <div className="grid gap-14 lg:grid-cols-12">
+      <section className="theme-white section-y">
+        <div className="container-x grid gap-16 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-border">
-              <Image
-                src={coverSrc("service", service)}
-                alt={service.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover"
-                priority
-              />
-            </div>
-
-            <div className="mt-12">
-              <div className="flex items-center gap-3">
-                <span className="h-px w-8 bg-primary" />
-                <span className="text-eyebrow text-primary">{copy.services.capabilities}</span>
-              </div>
-              <RichText content={service.content} className="mt-8" />
-            </div>
+            <Eyebrow>{copy.services.overview}</Eyebrow>
+            <RichText content={service.content} className="mt-8" />
           </div>
 
           <aside className="lg:col-span-5">
-            <div className="sticky top-28 space-y-6">
-              <div className="card-industrial p-7">
-                <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
-                    <ServiceIcon name={service.icon} className="size-5" />
-                  </span>
-                  <h2 className="text-base font-semibold text-white">{copy.services.capabilities}</h2>
-                </div>
-                <ul className="mt-6 space-y-3">
+            <div className="space-y-4 lg:sticky lg:top-28">
+              <Card className="p-7 lg:p-8">
+                <h2 className="title-3">{copy.services.capabilities}</h2>
+                <ul className="mt-6 divide-y divide-border border-t border-border">
                   {service.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2.5 text-sm text-body">
-                      <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
+                    <li key={feature} className="flex items-center gap-3 py-3.5 text-sm text-body">
+                      <LinkNode className="size-2" />
                       {feature}
                     </li>
                   ))}
                 </ul>
-              </div>
-
-              <div className="card-industrial p-7">
-                <div className="flex items-center gap-4">
-                  <span className="inline-flex size-11 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
-                    <FileCheck2 className="size-5" strokeWidth={1.5} />
-                  </span>
-                  <h2 className="text-base font-semibold text-white">{copy.services.deliverables}</h2>
-                </div>
-                <ul className="mt-6 space-y-3">
-                  {service.deliverables.map((item) => (
-                    <li key={item} className="border-l border-border pl-4 text-sm text-body">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-(--radius) border border-primary/25 bg-primary/6 p-7">
-                <h2 className="text-base font-semibold text-white">{copy.home.cta.title}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-subtle">{copy.home.cta.desc}</p>
-                <Link href="/contact" className="btn btn-primary mt-6 w-full">
-                  {copy.home.cta.primary}
-                  <ArrowRight className="size-4" />
-                </Link>
-              </div>
+              </Card>
+              {service.deliverables.length > 0 ? (
+                <Card className="p-7 lg:p-8">
+                  <h2 className="title-3">{copy.services.deliverables}</h2>
+                  <ul className="mt-6 flex flex-wrap gap-2">
+                    {service.deliverables.map((item) => (
+                      <li key={item}>
+                        <Badge variant="tag" size="lg" className="bg-background">
+                          {item}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              ) : null}
             </div>
           </aside>
         </div>
+      </section>
 
-        {service.faq.length > 0 ? (
-          <div className="mt-20 border-t border-border pt-14">
-            <h2 className="text-display text-2xl text-white">{copy.services.faqTitle}</h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {service.faq.map((entry) => (
-                <Reveal key={entry.q}>
-                  <div className="card-industrial h-full p-6">
-                    <h3 className="text-sm font-semibold text-white">{entry.q}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{entry.a}</p>
-                  </div>
-                </Reveal>
+      {service.faq.length > 0 ? (
+        <section className="theme-light section-y">
+          <div className="container-x">
+            <SectionHead eyebrow={service.title} title={copy.services.faqTitle} />
+            <div className="mt-14 grid gap-x-12 gap-y-12 md:grid-cols-2">
+              {service.faq.map((entry, i) => (
+                <div key={entry.q} className="reveal border-t border-border pt-7">
+                  <span className="text-sm text-primary-text tabular-nums">Q{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="title-3 mt-4 text-lg">{entry.q}</h3>
+                  <p className="mt-3 text-[0.9375rem] leading-7 text-muted-foreground">{entry.a}</p>
+                </div>
               ))}
             </div>
           </div>
-        ) : null}
+        </section>
+      ) : null}
 
-        {others.length > 0 ? (
-          <div className="mt-20 border-t border-border pt-14">
-            <h2 className="text-display text-2xl text-white">{copy.common.relatedTitle}</h2>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
+      {others.length > 0 ? (
+        <section className="theme-dark section-y">
+          <div className="container-x">
+            <SectionHead
+              eyebrow={copy.services.title}
+              title={copy.services.others}
+              action={
+                <PillLink href="/services" variant="outline">
+                  {copy.common.viewAll}
+                  <ArrowRight />
+                </PillLink>
+              }
+            />
+            <div className="mt-14 grid gap-4 md:grid-cols-3">
               {others.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/services/${item.slug}`}
-                  className="card-industrial corner-ticks group p-6"
-                >
-                  <span className="inline-flex size-10 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
-                    <ServiceIcon name={item.icon} className="size-4" />
-                  </span>
-                  <h3 className="mt-5 text-base font-semibold text-white transition-colors group-hover:text-primary">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-[0.8125rem] text-muted-foreground">{item.summary}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs text-primary">
-                    {copy.common.viewDetail}
-                    <ArrowUpRight className="size-3.5" />
-                  </span>
-                </Link>
+                <ServiceCard key={item.slug} service={item} index={all.indexOf(item)} />
               ))}
             </div>
           </div>
-        ) : null}
-      </div>
+        </section>
+      ) : null}
+
+      <CtaSection />
     </>
   );
 }

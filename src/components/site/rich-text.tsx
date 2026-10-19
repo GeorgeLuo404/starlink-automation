@@ -35,7 +35,7 @@ export function RichText({ content, className }: { content: string; className?: 
   const blocks = content.split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
 
   return (
-    <div className={cn("prose-industrial", className)}>
+    <div className={cn("rich-text", className)}>
       {blocks.map((block, index) => {
         const key = `block-${index}`;
 

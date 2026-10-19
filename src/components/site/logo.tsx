@@ -21,8 +21,8 @@ export function LogoMark({ className }: { className?: string }) {
       <path d="M20 20 20 9M20 20 30 26M20 20 10 26" strokeWidth="1" opacity="0.75" className="stroke-primary" />
       <defs>
         <radialGradient id="sl-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%" style={{ stopColor: "var(--brand-500)", stopOpacity: 0.45 }} />
-          <stop offset="100%" style={{ stopColor: "var(--brand-500)", stopOpacity: 0 }} />
+          <stop offset="0%" style={{ stopColor: "var(--primary)", stopOpacity: 0.45 }} />
+          <stop offset="100%" style={{ stopColor: "var(--primary)", stopOpacity: 0 }} />
         </radialGradient>
       </defs>
     </svg>
@@ -45,7 +45,7 @@ export function Logo({
       <LogoMark className={cn(dims[size], "shrink-0")} />
       {showWordmark ? (
         <span className="flex flex-col leading-none">
-          <span className={cn("font-semibold tracking-tight text-white", title[size])}>星链自动化</span>
+          <span className={cn("font-semibold tracking-tight text-foreground", title[size])}>星链自动化</span>
           <span className="mt-1 font-mono text-[0.5rem] tracking-[0.28em] text-muted-foreground uppercase">
             Starlink Automation
           </span>

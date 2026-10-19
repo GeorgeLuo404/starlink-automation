@@ -1,28 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="电气图纸规范 v2.0">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="电气图纸设计规范 v2.0 正式发布">
   <defs>
-    <pattern id="g" width="64" height="64" patternUnits="userSpaceOnUse">
-      <path d="M64 0H0V64" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-    </pattern>
-    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#000000" stop-opacity="0.82"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.7">
-      <stop offset="0%" stop-color="#22e0ff" stop-opacity="0.16"/>
-      <stop offset="100%" stop-color="#22e0ff" stop-opacity="0"/>
-    </radialGradient>
+    <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(10,10,11,0.06)" stroke-width="1"/></pattern>
+    <radialGradient id="glow" cx="0.82" cy="0.12" r="0.75"><stop offset="0" stop-color="#f24e1e" stop-opacity="0.05"/><stop offset="1" stop-color="#f24e1e" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="1600" height="1000" fill="#0a0b0e"/>
+  <rect width="1600" height="1000" fill="#f1f0ec"/>
   <rect width="1600" height="1000" fill="url(#g)"/>
   <rect width="1600" height="1000" fill="url(#glow)"/>
-  <circle cx="641.1" cy="843.4" r="177.7" fill="none" stroke="rgba(34,224,255,0.16)" stroke-width="1"/><circle cx="184.3" cy="493.0" r="255.2" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><circle cx="314.8" cy="214.5" r="137.5" fill="none" stroke="rgba(34,224,255,0.12)" stroke-width="1"/><circle cx="131.0" cy="97.1" r="101.1" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><circle cx="1497.8" cy="988.6" r="261.5" fill="none" stroke="rgba(34,224,255,0.10)" stroke-width="1"/><circle cx="386.0" cy="842.4" r="203.9" fill="none" stroke="rgba(34,224,255,0.14)" stroke-width="1"/><circle cx="1268.1" cy="907.8" r="367.6" fill="none" stroke="rgba(34,224,255,0.13)" stroke-width="1"/><circle cx="98.3" cy="156.7" r="89.6" fill="none" stroke="rgba(34,224,255,0.07)" stroke-width="1"/><circle cx="199.5" cy="586.2" r="92.0" fill="none" stroke="rgba(34,224,255,0.11)" stroke-width="1"/>
-  <rect width="1600" height="1000" fill="url(#v)"/>
-  <g stroke="#22e0ff" stroke-width="1.5" opacity="0.85">
-    <path d="M40 70V40H70"/><path d="M1530 40H1560V70"/>
-    <path d="M40 930V960H70"/><path d="M1530 960H1560V930"/>
+  <g transform="translate(357.5 165.6) scale(2.127)"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#0a0a0b" stroke-opacity="0.22" stroke-width="1"><path d="M52 14 L380 14 L380 254 L52 254 Z" vector-effect="non-scaling-stroke"/><path d="M44 22 L372 22 L372 262 L44 262 Z" vector-effect="non-scaling-stroke"/><path d="M36 30 L364 30 L364 270 L36 270 Z" vector-effect="non-scaling-stroke"/><path d="M77 30 L77 36" vector-effect="non-scaling-stroke"/><path d="M118 30 L118 36" vector-effect="non-scaling-stroke"/><path d="M159 30 L159 36" vector-effect="non-scaling-stroke"/><path d="M200 30 L200 36" vector-effect="non-scaling-stroke"/><path d="M241 30 L241 36" vector-effect="non-scaling-stroke"/><path d="M282 30 L282 36" vector-effect="non-scaling-stroke"/><path d="M323 30 L323 36" vector-effect="non-scaling-stroke"/><path d="M96 74 V112 M96 150 V188" vector-effect="non-scaling-stroke"/></g><g stroke="#0a0a0b" stroke-opacity="0.78" stroke-width="1"><path d="M44 42 L356 42 L356 262 L44 262 Z" vector-effect="non-scaling-stroke"/><path d="M76 56 L76 206" vector-effect="non-scaling-stroke"/><path d="M318 56 L318 206" vector-effect="non-scaling-stroke"/><path d="M252 214 L356 214 L356 256 L252 256 Z" vector-effect="non-scaling-stroke"/><path d="M76 74 H120 M120 66 V82 M130 66 V82 M130 74 H250" vector-effect="non-scaling-stroke"/><path d="M256 65 A10 10 0 0 0 256 83 M272 65 A10 10 0 0 1 272 83 M278 74 H318" vector-effect="non-scaling-stroke"/><path d="M250 74 H256 M272 74 H278" vector-effect="non-scaling-stroke"/><path d="M76 150 H120 M120 142 V158 M130 142 V158 M130 150 H168" vector-effect="non-scaling-stroke"/><path d="M168 142 V158 M178 142 V158 M178 150 H250" vector-effect="non-scaling-stroke"/><path d="M256 141 A10 10 0 0 0 256 159 M272 141 A10 10 0 0 1 272 159 M278 150 H318" vector-effect="non-scaling-stroke"/><path d="M250 150 H256 M272 150 H278" vector-effect="non-scaling-stroke"/><path d="M76 188 H120 M120 180 V196 M130 180 V196 M130 188 H250" vector-effect="non-scaling-stroke"/><path d="M256 179 A10 10 0 0 0 256 197 M272 179 A10 10 0 0 1 272 197 M278 188 H318" vector-effect="non-scaling-stroke"/><path d="M250 188 H256 M272 188 H278" vector-effect="non-scaling-stroke"/></g><g stroke="#f24e1e" stroke-opacity="1" stroke-width="1.4"><path d="M76 112 H120 M120 104 V120 M130 104 V120 M130 112 H250" vector-effect="non-scaling-stroke"/><path d="M256 103 A10 10 0 0 0 256 121 M272 103 A10 10 0 0 1 272 121 M278 112 H318 M250 112 H256 M272 112 H278" vector-effect="non-scaling-stroke"/></g></g><circle cx="312" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.75"/><circle cx="323" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="334" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="345" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.75"/><circle cx="356" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="367" cy="8" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="312" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="323" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="334" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.75"/><circle cx="345" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="356" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.34"/><circle cx="367" cy="19" r="1.25" fill="#f24e1e" fill-opacity="0.75"/><circle cx="76" cy="112" r="2.2" fill="#f24e1e"/><circle cx="318" cy="112" r="2.2" fill="#f24e1e"/><text x="258" y="228" font-size="7" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" fill="#66645f">STARLINK · E-01</text><text x="258" y="240" font-size="7" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" fill="#66645f">SHEET 01 / 48</text><text x="258" y="252" font-size="7" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" fill="#f24e1e">REV 2.0</text></g>
+  <g fill="none" stroke="rgba(10,10,11,0.28)" stroke-width="1">
+    <rect x="988.4" y="823.2" width="451.6" height="96.8"/>
+    <path d="M988.4 871.6H1440.0M1116.0 823.2V871.6"/>
   </g>
-  <text x="56" y="72" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="5" fill="#22e0ff">NOTE-06</text>
-  <text x="56" y="904" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="600" fill="#ffffff">电气图纸规范 v2.0</text>
-  <text x="56" y="946" font-family="-apple-system,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#8a929e">公司新闻</text>
-  <text x="1544" y="946" text-anchor="end" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" letter-spacing="4" fill="#3d4552">STARLINK AUTOMATION</text>
+  <g font-size="22.0">
+    <text x="1006.0" y="855.1" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" fill="#f24e1e">NOTE-06</text>
+    <text x="1133.6" y="855.1" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="2" fill="#66645f">STARLINK AUTOMATION</text>
+    <text x="1006.0" y="902.6" font-family="-apple-system,'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif" fill="#0a0a0b" fill-opacity="0.8">电气图纸设计规范 v2.0 正式发布</text>
+  </g>
 </svg>

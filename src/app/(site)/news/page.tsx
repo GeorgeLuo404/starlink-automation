@@ -1,12 +1,13 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { listArticleCategories, listArticles } from "@/lib/data";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PageHero } from "@/components/site/page-hero";
 import { ArticleCard } from "@/components/site/article-card";
-import { Stagger, StaggerItem } from "@/components/motion";
+import { EmptyState, FilterLink } from "@/components/site/kit";
 import { cn } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -34,115 +35,86 @@ export default async function NewsPage({
     const next = new URLSearchParams();
     const merged = { category, q: query, page: String(page), ...overrides };
     for (const [key, value] of Object.entries(merged)) {
-      if (value && value !== "1" && !(key === "page" && value === "1")) next.set(key, value);
+      if (value && !(key === "page" && value === "1")) next.set(key, value);
     }
     const qs = next.toString();
     return `/news${qs ? `?${qs}` : ""}`;
   };
 
+  const pager = (disabled: boolean) => cn("h-10 px-5", disabled && "pointer-events-none opacity-40");
+
   return (
     <>
       <PageHero
         eyebrow={copy.news.eyebrow}
-        title={copy.news.title}
+        title={copy.home.news.title}
         description={copy.news.lead}
         crumbs={[{ label: copy.nav.news }]}
       >
-        <div className="mt-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href={buildQuery({ category: undefined, page: undefined })}
-              className={cn(
-                "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-                !category
-                  ? "border-primary/40 bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground hover:text-white"
-              )}
-            >
+        <div className="intro mt-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between" style={{ animationDelay: "280ms" }}>
+          <nav className="flex flex-wrap items-center gap-2" aria-label={copy.common.category}>
+            <FilterLink href={buildQuery({ category: undefined, page: undefined })} active={!category}>
               {copy.common.all}
-            </Link>
+            </FilterLink>
             {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                href={buildQuery({ category: cat.slug, page: undefined })}
-                className={cn(
-                  "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-                  category === cat.slug
-                    ? "border-primary/40 bg-primary/10 text-primary"
-                    : "border-border text-muted-foreground hover:text-white"
-                )}
-              >
+              <FilterLink key={cat.slug} href={buildQuery({ category: cat.slug, page: undefined })} active={category === cat.slug}>
                 {cat.name}
-              </Link>
+              </FilterLink>
             ))}
-          </div>
+          </nav>
 
-          <form action="/news" className="flex w-full max-w-xs gap-2">
-            <input
+          <form action="/news" className="flex w-full max-w-sm gap-2" role="search">
+            {category ? <input type="hidden" name="category" value={category} /> : null}
+            <Input
               type="search"
               name="q"
               defaultValue={query ?? ""}
               placeholder={copy.common.searchPlaceholder}
-              className="field h-10"
+              className="h-10 rounded-full px-5"
               aria-label={copy.common.search}
             />
-            <button type="submit" className="btn btn-ghost h-10 shrink-0 px-4">
-              {copy.common.search}
-            </button>
+            <Button type="submit" variant="outline" size="icon" shape="pill" className="shrink-0" aria-label={copy.common.search}>
+              <Search />
+            </Button>
           </form>
         </div>
       </PageHero>
 
-      <div className="container-x py-16 md:py-24">
-        {items.length === 0 ? (
-          <div className="rounded-(--radius) border border-dashed border-border py-24 text-center">
-            <p className="text-sm font-medium text-foreground">{copy.common.empty}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{copy.common.emptyHint}</p>
-          </div>
-        ) : (
-          <>
-            <Stagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" gap={0.08}>
-              {items.map((article) => (
-                <StaggerItem key={article.slug} className="h-full">
-                  <ArticleCard article={article} />
-                </StaggerItem>
-              ))}
-            </Stagger>
+      <section className="theme-light section-y">
+        <div className="container-x">
+          {items.length === 0 ? (
+            <EmptyState title={copy.common.empty} hint={copy.common.emptyHint} />
+          ) : (
+            <>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {items.map((article, i) => (
+                  <ArticleCard key={article.slug} article={article} priority={i < 3} />
+                ))}
+              </div>
 
-            {totalPages > 1 ? (
-              <nav className="mt-16 flex items-center justify-between border-t border-border pt-8" aria-label="Pagination">
-                <Link
-                  href={buildQuery({ page: String(Math.max(1, page - 1)) })}
-                  aria-disabled={page <= 1}
-                  className={cn(
-                    "btn btn-ghost h-10 px-4",
-                    page <= 1 && "pointer-events-none opacity-40"
-                  )}
-                >
-                  <ChevronLeft className="size-4" />
-                  {copy.common.prev}
-                </Link>
-
-                <span className="font-mono text-xs tracking-wider text-muted-foreground">
-                  {copy.common.page} {page} / {totalPages} · {total} 条
-                </span>
-
-                <Link
-                  href={buildQuery({ page: String(Math.min(totalPages, page + 1)) })}
-                  aria-disabled={page >= totalPages}
-                  className={cn(
-                    "btn btn-ghost h-10 px-4",
-                    page >= totalPages && "pointer-events-none opacity-40"
-                  )}
-                >
-                  {copy.common.next}
-                  <ChevronRight className="size-4" />
-                </Link>
-              </nav>
-            ) : null}
-          </>
-        )}
-      </div>
+              {totalPages > 1 ? (
+                <nav className="mt-16 flex items-center justify-between border-t border-border pt-8" aria-label="Pagination">
+                  <Button asChild variant="outline" shape="pill" className={pager(page <= 1)}>
+                    <Link href={buildQuery({ page: String(Math.max(1, page - 1)) })} aria-disabled={page <= 1}>
+                      <ChevronLeft />
+                      {copy.common.prev}
+                    </Link>
+                  </Button>
+                  <span className="text-sm text-muted-foreground tabular-nums">
+                    {copy.common.page} {page} / {totalPages} 页 · 共 {total} 篇
+                  </span>
+                  <Button asChild variant="outline" shape="pill" className={pager(page >= totalPages)}>
+                    <Link href={buildQuery({ page: String(Math.min(totalPages, page + 1)) })} aria-disabled={page >= totalPages}>
+                      {copy.common.next}
+                      <ChevronRight />
+                    </Link>
+                  </Button>
+                </nav>
+              ) : null}
+            </>
+          )}
+        </div>
+      </section>
     </>
   );
 }

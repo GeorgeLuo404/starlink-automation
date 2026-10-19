@@ -29,6 +29,10 @@ ADMIN_EMAIL=admin@your-domain.com ADMIN_PASSWORD='强密码' pnpm admin:create
 
 也可以用「封面图片」旁边的**上传**按钮直接上传，效果一样。
 
+**没有照片时**：业务能力、项目案例、新闻的「封面图片」留空，或仍是初始化写入的 `/media/….svg`，
+前台显示的就是对应题材的线稿占位图，版式与真实照片完全相同。拍到现场照片后，在该条目上传封面
+替换这个地址即可，无需改代码。建议照片横向、比例约 16:10，宽度不小于 1600 像素。
+
 **限制**：单文件 200MB（`MAX_UPLOAD_MB` 可调）；支持 jpg/png/webp/gif/avif/svg、
 mp4/webm/mov、pdf/zip/docx/xlsx/pptx/csv/txt。
 

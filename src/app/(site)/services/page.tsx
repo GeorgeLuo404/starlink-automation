@@ -1,14 +1,15 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { listServices } from "@/lib/data";
+import { processSteps } from "@/content/defaults";
 import { PageHero } from "@/components/site/page-hero";
+import { Cover, LinkNode, PillLink } from "@/components/site/kit";
 import { ServiceIcon } from "@/components/site/service-icon";
-import { Reveal } from "@/components/motion";
-import { coverSrc } from "@/lib/utils";
+import { HomeProcess } from "@/components/site/home/process-stack";
+import { CtaSection } from "@/components/site/cta-section";
+import { coverSrc, cn } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
 export const revalidate = 120;
@@ -31,61 +32,65 @@ export default async function ServicesPage() {
         crumbs={[{ label: copy.nav.services }]}
       />
 
-      <div className="container-x py-16 md:py-24">
-        <div className="space-y-4">
-          {services.map((service, index) => (
-            <Reveal key={service.slug} delay={0.04}>
-              <Link
-                href={`/services/${service.slug}`}
-                className="card-industrial corner-ticks group grid gap-8 overflow-hidden p-7 lg:grid-cols-12 lg:p-9"
-              >
-                <div className="lg:col-span-5">
-                  <div className="flex items-center gap-4">
-                    <span className="inline-flex size-12 items-center justify-center rounded-(--radius) border border-border bg-card text-primary">
-                      <ServiceIcon name={service.icon} className="size-5" />
-                    </span>
-                    <span className="font-mono text-xs tracking-[0.2em] text-ghost">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <h2 className="text-display mt-6 text-2xl text-white lg:text-3xl">
-                    {service.title}
-                  </h2>
-                  <p className="mt-4 text-[0.9375rem] leading-relaxed text-muted-foreground">
-                    {service.summary}
-                  </p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                    {copy.services.detailCta}
-                    <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                </div>
-
-                <div className="lg:col-span-4">
-                  <h3 className="text-eyebrow">{copy.services.capabilities}</h3>
-                  <ul className="mt-5 space-y-2.5">
-                    {service.features.slice(0, 6).map((feature) => (
-                      <li key={feature} className="flex items-start gap-2.5 text-sm text-body">
-                        <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="relative aspect-16/10 overflow-hidden rounded-(--radius) border border-border lg:col-span-3 lg:aspect-auto lg:min-h-full">
-                  <Image
-                    src={coverSrc("service", service)}
-                    alt={service.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 25vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
+      <section className="theme-white section-y">
+        <div className="container-x divide-y divide-border">
+          {services.map((service, i) => (
+            <article key={service.slug} className="reveal grid gap-10 py-14 first:pt-0 last:pb-0 lg:grid-cols-12 lg:items-center lg:gap-16 lg:py-20">
+              <Link href={`/services/${service.slug}`} className={cn("group block lg:col-span-6", i % 2 === 1 && "lg:order-2")}>
+                <Cover
+                  src={coverSrc("service", service)}
+                  alt={service.title}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority={i === 0}
+                  className="rounded-(--radius)"
+                />
               </Link>
-            </Reveal>
+
+              <div className="lg:col-span-6">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <span className="tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="h-px w-8 bg-border" aria-hidden="true" />
+                  <ServiceIcon name={service.icon} className="size-4 text-primary-text" />
+                </div>
+                <h2 className="title-2 mt-6 text-[clamp(1.875rem,3vw,2.75rem)]">
+                  <Link href={`/services/${service.slug}`} className="transition-colors hover:text-primary-text">
+                    {service.title}
+                  </Link>
+                </h2>
+                <p className="lead mt-5 max-w-xl">{service.summary}</p>
+
+                <p className="mt-9 text-xs tracking-widest text-muted-foreground">{copy.services.capabilities}</p>
+                <ul className="mt-4 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                  {service.features.slice(0, 6).map((feature) => (
+                    <li key={feature} className="flex items-center gap-2.5 text-sm text-body">
+                      <LinkNode className="size-2" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-10 flex flex-wrap gap-3">
+                  <PillLink href={`/services/${service.slug}`} size="default">
+                    {copy.common.viewDetail}
+                    <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                  </PillLink>
+                  <PillLink href="/contact" variant="outline" size="default">
+                    {copy.services.detailCta}
+                  </PillLink>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
-      </div>
+      </section>
+
+      <HomeProcess
+        eyebrow={copy.home.process.eyebrow}
+        title={copy.home.process.title}
+        lead={copy.home.process.desc}
+        steps={processSteps}
+      />
+      <CtaSection />
     </>
   );
 }
