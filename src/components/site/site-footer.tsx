@@ -1,103 +1,79 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
-import { services } from "@/content/defaults";
 import type { SiteSettings } from "@/lib/data";
 import { Logo } from "./logo";
+import type { NavService } from "./nav-items";
 import { NewsletterForm } from "./newsletter-form";
 import copy from "@/content/copy.json";
 
-export function SiteFooter({ settings }: { settings: SiteSettings }) {
+export function SiteFooter({ settings, services }: { settings: SiteSettings; services: NavService[] }) {
   const year = new Date().getFullYear();
+  const link = "text-sm text-muted-foreground transition-colors hover:text-foreground";
 
   return (
-    <footer className="relative border-t border-border bg-surface">
-      <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
-      <div className="container-x relative py-16 md:py-20">
-        <div className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <Logo size="md" />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{copy.footer.desc}</p>
-            <div className="mt-6 space-y-2.5 text-sm">
-              <a
-                href={`tel:${settings.phone}`}
-                className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
-              >
-                <Phone className="size-3.5 text-primary" />
-                {settings.phone}
-              </a>
-              <a
-                href={`mailto:${settings.email}`}
-                className="flex items-center gap-2.5 text-body transition-colors hover:text-primary"
-              >
-                <Mail className="size-3.5 text-primary" />
-                {settings.email}
-              </a>
-              <p className="flex items-start gap-2.5 text-muted-foreground">
-                <MapPin className="mt-0.5 size-3.5 shrink-0 text-primary" />
-                {settings.address}
-              </p>
-            </div>
-          </div>
-
-          <div className="lg:col-span-2">
-            <h3 className="text-eyebrow">{copy.footer.quickLinks}</h3>
-            <ul className="mt-5 space-y-2.5 text-sm">
-              {(["services", "cases", "news", "gallery", "downloads", "about"] as const).map((key) => (
-                <li key={key}>
-                  <Link
-                    href={`/${key}`}
-                    className="text-muted-foreground transition-colors hover:text-white"
-                  >
-                    {copy.nav[key]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-3">
-            <h3 className="text-eyebrow">{copy.footer.servicesTitle}</h3>
-            <ul className="mt-5 space-y-2.5 text-sm">
-              {services.map((service) => (
-                <li key={service.slug}>
-                  <Link
-                    href={`/services/${service.slug}`}
-                    className="text-muted-foreground transition-colors hover:text-white"
-                  >
-                    {service.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-3">
-            <h3 className="text-eyebrow">{copy.footer.subscribe}</h3>
-            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{copy.footer.subscribeDesc}</p>
-            <NewsletterForm className="mt-5" />
-          </div>
+    <footer className="theme-dark border-t border-border">
+      <div className="container-x grid gap-12 py-20 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <Logo size="md" />
+          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">{copy.footer.desc}</p>
+          <h3 className="mt-10 text-sm text-foreground">{copy.footer.subscribe}</h3>
+          <p className="mt-2 max-w-sm text-xs leading-6 text-muted-foreground">{copy.footer.subscribeDesc}</p>
+          <NewsletterForm className="mt-4 max-w-sm" />
         </div>
 
-        <div className="hairline my-10" />
+        <div className="lg:col-span-2 lg:col-start-6">
+          <h3 className="text-sm text-foreground">{copy.footer.quickLinks}</h3>
+          <ul className="mt-5 space-y-3">
+            {(["services", "cases", "news", "gallery", "downloads", "about", "contact"] as const).map((key) => (
+              <li key={key}>
+                <Link href={`/${key}`} className={link}>
+                  {copy.nav[key]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <div className="flex flex-col gap-4 text-xs text-faint md:flex-row md:items-center md:justify-between">
+        <div className="lg:col-span-2">
+          <h3 className="text-sm text-foreground">{copy.footer.servicesTitle}</h3>
+          <ul className="mt-5 space-y-3">
+            {services.map((s) => (
+              <li key={s.slug}>
+                <Link href={`/services/${s.slug}`} className={link}>
+                  {s.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="lg:col-span-3">
+          <h3 className="text-sm text-foreground">{copy.footer.contactTitle}</h3>
+          <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
+            <li>
+              <a href={`tel:${settings.phone}`} className={link}>
+                {settings.phone}
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${settings.email}`} className={link}>
+                {settings.email}
+              </a>
+            </li>
+            <li className="leading-7">{settings.address}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-border">
+        <div className="container-x flex flex-col gap-3 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {copy.meta.siteName}. {copy.footer.rights}.
+            © {year} {copy.meta.siteName} · {copy.footer.rights}
           </p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <a
-              href="https://beian.miit.gov.cn"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="transition-colors hover:text-muted-foreground"
-            >
+            <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer noopener" className="transition-colors hover:text-foreground">
               {settings.icp ?? copy.footer.icp}
             </a>
-            <span className="hidden md:inline">|</span>
             <span>{copy.footer.police}</span>
-            <Link href="/contact" className="transition-colors hover:text-muted-foreground">
-              {copy.nav.contact}
-            </Link>
           </div>
         </div>
       </div>

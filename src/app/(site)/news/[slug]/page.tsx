@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft, Clock, Eye } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Eye } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { getArticle, listArticles } from "@/lib/data";
+import { Badge } from "@/components/ui/badge";
 import { ViewCounter } from "@/components/site/view-counter";
 import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { ArticleCard } from "@/components/site/article-card";
+import { Cover, PillLink, SectionHead } from "@/components/site/kit";
 import { coverSrc, formatDate } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -19,11 +19,7 @@ export async function generateStaticParams() {
   return items.map((item) => ({ slug: item.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) return {};
@@ -37,11 +33,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) notFound();
@@ -54,13 +46,11 @@ export default async function ArticlePage({
       <PageHero
         eyebrow={article.category}
         title={article.title}
-        crumbs={[
-          { label: copy.nav.news, href: "/news" },
-          { label: article.title },
-        ]}
+        size="md"
+        crumbs={[{ label: copy.nav.news, href: "/news" }, { label: article.title }]}
       >
-        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[0.6875rem] tracking-wider text-faint">
-          <span>{formatDate(article.publishedAt)}</span>
+        <div className="intro mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground" style={{ animationDelay: "200ms" }}>
+          <span className="tabular-nums">{formatDate(article.publishedAt)}</span>
           <span className="flex items-center gap-1.5">
             <Clock className="size-3.5" />
             {article.readMinutes} {copy.news.minRead}
@@ -68,7 +58,7 @@ export default async function ArticlePage({
           {typeof article.views === "number" && article.views > 0 ? (
             <span className="flex items-center gap-1.5">
               <Eye className="size-3.5" />
-              {article.views}
+              {article.views} {copy.common.views}
             </span>
           ) : null}
         </div>
@@ -76,57 +66,60 @@ export default async function ArticlePage({
 
       <ViewCounter slug={slug} />
 
-      <article className="container-x py-16 md:py-20">
-        <div className="mx-auto max-w-3xl">
-          <div className="relative aspect-video overflow-hidden rounded-(--radius) border border-border">
-            <Image
+      <article className="theme-white section-y">
+        <div className="container-x">
+          <div className="mx-auto max-w-3xl">
+            <Cover
               src={coverSrc("article", article)}
               alt={article.title}
-              fill
               sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
               priority
+              className="aspect-16/9 rounded-(--radius)"
             />
+
+            {article.excerpt ? <p className="title-3 mt-14 text-xl leading-relaxed text-body">{article.excerpt}</p> : null}
+            <RichText content={article.content} className="mt-10" />
+
+            {article.tags.length > 0 ? (
+              <div className="mt-14 flex flex-wrap items-center gap-2 border-t border-border pt-8">
+                <span className="mr-2 text-xs text-muted-foreground">{copy.common.tags}</span>
+                {article.tags.map((tag) => (
+                  <Badge key={tag} variant="outline" size="md">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+
+            <PillLink href="/news" variant="outline" size="default" className="mt-10">
+              <ArrowLeft className="transition-transform group-hover:-translate-x-0.5" />
+              {copy.common.backToList}
+            </PillLink>
           </div>
-
-          <RichText content={article.content} className="mt-12" />
-
-          {article.tags.length > 0 ? (
-            <div className="mt-12 flex flex-wrap items-center gap-2 border-t border-border pt-8">
-              <span className="font-mono text-[0.625rem] tracking-[0.14em] text-faint uppercase">
-                {copy.common.tags}
-              </span>
-              {article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-border px-3 py-1 font-mono text-[0.625rem] text-muted-foreground"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          ) : null}
-
-          <Link
-            href="/news"
-            className="btn btn-ghost mt-10 inline-flex h-10 px-4"
-          >
-            <ArrowLeft className="size-4" />
-            {copy.common.backToList}
-          </Link>
         </div>
+      </article>
 
-        {others.length > 0 ? (
-          <div className="mt-20 border-t border-border pt-14">
-            <h2 className="text-display text-2xl text-white">{copy.common.relatedTitle}</h2>
-            <div className="mt-8 grid gap-6 md:grid-cols-3">
+      {others.length > 0 ? (
+        <section className="theme-light section-y">
+          <div className="container-x">
+            <SectionHead
+              eyebrow={copy.news.title}
+              title={copy.common.relatedTitle}
+              action={
+                <PillLink href="/news" variant="outline">
+                  {copy.common.viewAll}
+                  <ArrowRight />
+                </PillLink>
+              }
+            />
+            <div className="mt-14 grid gap-4 md:grid-cols-3">
               {others.map((item) => (
                 <ArticleCard key={item.slug} article={item} />
               ))}
             </div>
           </div>
-        ) : null}
-      </article>
+        </section>
+      ) : null}
     </>
   );
 }

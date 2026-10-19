@@ -1,3 +1,5 @@
+import type { ServiceContent } from "@/content/defaults";
+
 export type NavItem = {
   key: "home" | "services" | "cases" | "news" | "gallery" | "downloads" | "about" | "contact";
   href: string;
@@ -13,3 +15,6 @@ export const navItems: NavItem[] = [
   { key: "downloads", href: "/downloads" },
   { key: "about", href: "/about" },
 ];
+
+/** What the header dropdown and footer need of each service (kept small: it is sent to the client). */
+export type NavService = Pick<ServiceContent, "slug" | "title" | "summary" | "coverUrl">;

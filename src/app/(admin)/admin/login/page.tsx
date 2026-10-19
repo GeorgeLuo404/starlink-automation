@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
         sit on top of the form and swallow every click. `aria-hidden` does not
         affect hit-testing.
       */}
-      <div className="grid-blueprint pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+      <div className="grid-lines grid-lines-lg pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <div
         className="pointer-events-none absolute -top-40 left-1/2 h-80 w-xl -translate-x-1/2 rounded-full bg-primary/8 blur-[110px]"
         aria-hidden="true"

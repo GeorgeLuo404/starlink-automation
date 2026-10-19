@@ -1,11 +1,9 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 import { listGallery } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { GalleryGrid } from "@/components/site/gallery-grid";
-import { cn } from "@/lib/utils";
+import { EmptyState, FilterLink } from "@/components/site/kit";
 import copy from "@/content/copy.json";
 
 export const revalidate = 120;
@@ -16,11 +14,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/gallery",
 });
 
-export default async function GalleryPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ album?: string }>;
-}) {
+export default async function GalleryPage({ searchParams }: { searchParams: Promise<{ album?: string }> }) {
   const { album } = await searchParams;
 
   const all = await listGallery();
@@ -31,48 +25,27 @@ export default async function GalleryPage({
     <>
       <PageHero
         eyebrow={copy.gallery.eyebrow}
-        title={copy.gallery.title}
+        title={copy.home.gallery.title}
         description={copy.gallery.lead}
         crumbs={[{ label: copy.nav.gallery }]}
       >
-        <div className="mt-10 flex flex-wrap items-center gap-2">
-          <Link
-            href="/gallery"
-            className={cn(
-              "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-              !album
-                ? "border-primary/40 bg-primary/10 text-primary"
-                : "border-border text-muted-foreground hover:text-white"
-            )}
-          >
+        <nav className="intro mt-10 flex flex-wrap items-center gap-2" aria-label={copy.gallery.albums} style={{ animationDelay: "280ms" }}>
+          <FilterLink href="/gallery" active={!album}>
             {copy.gallery.albums}
-          </Link>
+          </FilterLink>
           {albums.map((name) => (
-            <Link
-              key={name}
-              href={`/gallery?album=${encodeURIComponent(name)}`}
-              className={cn(
-                "rounded-full border px-3.5 py-1.5 text-xs transition-colors",
-                album === name
-                  ? "border-primary/40 bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground hover:text-white"
-              )}
-            >
+            <FilterLink key={name} href={`/gallery?album=${encodeURIComponent(name)}`} active={album === name}>
               {name}
-            </Link>
+            </FilterLink>
           ))}
-        </div>
+        </nav>
       </PageHero>
 
-      <div className="container-x py-16 md:py-20">
-        {items.length === 0 ? (
-          <div className="rounded-(--radius) border border-dashed border-border py-24 text-center">
-            <p className="text-sm text-muted-foreground">{copy.common.emptyHint}</p>
-          </div>
-        ) : (
-          <GalleryGrid items={items} />
-        )}
-      </div>
+      <section className="theme-dark section-y pt-4 md:pt-6">
+        <div className="container-x">
+          {items.length === 0 ? <EmptyState hint={copy.common.emptyHint} /> : <GalleryGrid items={items} />}
+        </div>
+      </section>
     </>
   );
 }

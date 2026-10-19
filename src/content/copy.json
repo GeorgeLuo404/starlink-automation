@@ -183,8 +183,10 @@
     "lead": "核心业务覆盖从电气设计到整线联调的完整交付链路。",
     "detailCta": "咨询此项服务",
     "capabilities": "服务内容",
+    "overview": "服务说明",
     "deliverables": "交付物",
-    "faqTitle": "常见问题"
+    "faqTitle": "常见问题",
+    "others": "其他业务能力"
   },
   "cases": {
     "title": "项目案例",

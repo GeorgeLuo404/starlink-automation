@@ -2,8 +2,9 @@
 @import "tw-animate-css";
 
 /* ==========================================================================
-   深圳市星链自动化有限公司 — Industrial Design System
-   Graphite base · electric cyan signal · hairline grids · technical mono
+   深圳市星链自动化有限公司 — Design System
+   Ink black and paper white sections · one vermilion accent · hairline
+   line-art · large, quiet type
    ========================================================================== */
 
 /* ==========================================================================
@@ -11,34 +12,37 @@
    --------------------------------------------------------------------------
    整个项目中十六进制颜色只允许出现在这里。
    The ONLY place in this project where a hex colour may appear.
+   (scripts/generate-placeholders.ts reads these values for the SVG covers.)
    ========================================================================== */
 
 :root {
-  /* 石墨底色 / Graphite surfaces */
-  --ink-950: #08090b; /* 页面底色 */
-  --ink-900: #0a0b0e; /* 交替区块底色 */
-  --ink-850: #0d0f13; /* 卡片 / 面板 / 表单控件 */
-  --ink-800: #12151a; /* 弱化面 */
-  --ink-750: #14171d; /* 抬升面 */
-  --ink-700: #171a21; /* 次级面 */
-  --ink-650: #1b1f27; /* 描边 / 轨道 */
-  --ink-600: #1f242e; /* 次级面 hover */
-  --ink-500: #2a303b; /* 提亮节点 */
-  --ink-400: #3d4552; /* 水印 / 序号 */
+  /* 墨黑 / Ink — black sections */
+  --ink-950: #0a0a0b; /* 页面底色 / page black */
+  --ink-900: #111113; /* 黑底上的卡片 / cards on black */
+  --ink-800: #19191c; /* 抬升面 / raised on black */
+  --ink-700: #27272b; /* 黑底描边 / hairlines on black */
+  --ink-600: #333338; /* 悬停描边 / hover hairlines */
+  --ink-500: #45454b; /* 提亮描边 / lifted hairlines */
+  --ink-400: #5c5c63; /* 水印 / watermarks */
 
-  /* 文字 / Text */
-  --paper-100: #e8ebf0;
-  --paper-200: #d7dee9;
-  --paper-300: #c3c9d4;
-  --paper-400: #a7aeb9;
-  --paper-500: #8a929e;
-  --paper-600: #5c6472;
+  /* 石灰 / Stone — secondary text */
+  --stone-200: #d4d1ca; /* 黑底正文 / body copy on black */
+  --stone-300: #b9b6af;
+  --stone-400: #9a9893; /* 黑底次要文字 / muted on black */
+  --stone-500: #7f7d78; /* 弱化文字 / faint */
+  --stone-600: #66645f; /* 白底次要文字 / muted on paper */
+  --stone-700: #45443f; /* 白底正文 / body copy on paper */
 
-  /* 品牌主色 / Brand */
-  --brand-200: #cfefff;
-  --brand-300: #9ff0ff;
-  --brand-500: #22e0ff;
-  --brand-950: #04141a;
+  /* 纸白 / Paper — light sections */
+  --paper-50: #f7f6f3; /* 黑底文字 / text on black */
+  --paper-100: #f1f0ec; /* 浅色区块 / light sections */
+  --paper-200: #e7e5df;
+  --paper-300: #d8d5cd; /* 白底描边 / hairlines on paper */
+  --paper-400: #c4c0b6; /* 白底提亮描边 / lifted hairlines on paper */
+
+  /* 朱砂橙 / Vermilion — the one accent, chosen 2026-10-19 */
+  --orange-500: #f24e1e;
+  --orange-600: #bf401b; /* 白底上的橙色文字（≥ 4.5:1）/ orange text on paper */
 
   /* 状态色 / Status */
   --green-500: #35d07f;
@@ -50,8 +54,8 @@
 
   --white: #ffffff;
   --black: #000000;
-  --scrollbar-thumb: #232833;
-  --scrollbar-thumb-hover: #313846;
+  --scrollbar-thumb: #2a2a2e;
+  --scrollbar-thumb-hover: #3a3a3f;
 }
 
 /* ==========================================================================
@@ -59,36 +63,38 @@
    --------------------------------------------------------------------------
    组件只允许使用这一层。换配色只需改上面的色板，无需触碰任何组件。
    Components may only reference THIS layer — restyle the palette above and the
-   entire site follows.
+   entire site follows. :root is the black theme; see 2.1 for section themes.
    ========================================================================== */
 
 :root {
   --background: var(--ink-950);
-  --foreground: var(--paper-100);
+  --foreground: var(--paper-50);
 
   --surface: var(--ink-900);
-  --card: var(--ink-850);
-  --card-foreground: var(--paper-100);
-  --elevated: var(--ink-750);
-  --raised: var(--ink-650);
+  --card: var(--ink-900);
+  --card-foreground: var(--paper-50);
+  --elevated: var(--ink-800);
+  --raised: var(--ink-800);
 
-  --popover: var(--ink-850);
-  --popover-foreground: var(--paper-100);
+  --popover: var(--ink-900);
+  --popover-foreground: var(--paper-50);
 
-  --primary: var(--brand-500);
-  --primary-foreground: var(--brand-950);
-  --secondary: var(--ink-700);
-  --secondary-foreground: var(--paper-100);
-  --secondary-hover: var(--ink-600);
+  --primary: var(--orange-500);
+  --primary-foreground: var(--ink-950);
+  /** The accent used as text: deepened on light sections for contrast. */
+  --primary-text: var(--orange-500);
+  --secondary: var(--ink-800);
+  --secondary-foreground: var(--paper-50);
+  --secondary-hover: var(--ink-700);
   --muted: var(--ink-800);
-  --muted-foreground: var(--paper-500);
+  --muted-foreground: var(--stone-400);
   --accent: var(--ink-800);
-  --accent-foreground: var(--paper-100);
+  --accent-foreground: var(--paper-50);
   --lifted: var(--ink-500);
 
-  --border: var(--ink-650);
-  --input: var(--ink-650);
-  --ring: var(--brand-500);
+  --border: var(--ink-700);
+  --input: var(--ink-700);
+  --ring: var(--orange-500);
 
   --destructive: var(--red-500);
   --destructive-foreground: var(--white);
@@ -98,19 +104,21 @@
   --signal: var(--amber-500);
   --signal-foreground: var(--amber-950);
 
-  --body: var(--paper-300);
-  --subtle: var(--paper-400);
-  --faint: var(--paper-600);
+  --body: var(--stone-200);
+  --subtle: var(--stone-300);
+  --faint: var(--stone-500);
   --ghost: var(--ink-400);
 
-  --radius: 0.375rem;
+  --radius: 1rem;
 }
 
 /* ==========================================================================
    3 · 暴露给 Tailwind / Exposed to Tailwind
    --------------------------------------------------------------------------
-   theme 块的 inline 关键字让 bg-primary 直接编译为 var(--primary)。
-   The "inline" keyword makes bg-primary compile straight to var(--primary).
+   theme 块的 inline 关键字让 bg-primary 直接编译为 var(--primary)，所以
+   区块主题（2.1）重新声明角色后，所有工具类会跟着变。
+   The "inline" keyword makes bg-primary compile straight to var(--primary), so
+   utilities follow whichever section theme (2.1) they sit in.
    ========================================================================== */
 
 @theme inline {
@@ -125,6 +133,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-text: var(--primary-text);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-hover: var(--secondary-hover);
@@ -150,19 +159,16 @@
 }
 
 @theme {
-  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  /* Noto Sans SC is self-hosted (@fontsource, unicode-range slices) so CJK
+     headings render the same on Aliyun as anywhere — no Google Fonts. */
+  --font-sans: var(--font-inter), "Inter", "Noto Sans SC Variable", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --animate-marquee: marquee 45s linear infinite;
-  --animate-marquee-reverse: marquee-reverse 45s linear infinite;
-  --animate-spin-slow: spin 28s linear infinite;
-  --animate-spin-slower: spin 60s linear infinite;
-  --animate-float: float 7s ease-in-out infinite;
   --animate-pulse-ring: pulse-ring 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  --animate-blink: blink 1.6s steps(2, start) infinite;
-  --animate-shimmer: shimmer 2.4s linear infinite;
 }
+
 @layer base {
   * {
     border-color: var(--border);
@@ -175,25 +181,26 @@
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
   ::selection {
-    background: color-mix(in oklab, var(--brand-500) 30%, transparent);
-    color: var(--white);
+    background: color-mix(in oklab, var(--primary) 30%, transparent);
+    color: var(--foreground);
   }
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--surface);
+    background: var(--ink-950);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
     border-radius: 999px;
-    border: 2px solid var(--surface);
+    border: 2px solid var(--ink-950);
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover);
@@ -214,46 +221,93 @@
       transition-duration: 0.001ms !important;
     }
   }
+
+  /* ------------------------------------------------------------------------
+     2.1 · 区块主题 / Section themes
+     ------------------------------------------------------------------------
+     A page alternates black and paper sections. Each class re-maps the roles,
+     so every utility (bg-card, text-muted-foreground, border-border …) and
+     every ui/ component follows the section it sits in. In the base layer, so
+     a utility on the same element (bg-transparent …) still wins.
+     ------------------------------------------------------------------------ */
+  .theme-dark {
+    --background: var(--ink-950);
+    --foreground: var(--paper-50);
+    --surface: var(--ink-900);
+    --card: var(--ink-900);
+    --card-foreground: var(--paper-50);
+    --elevated: var(--ink-800);
+    --raised: var(--ink-800);
+    --popover: var(--ink-900);
+    --popover-foreground: var(--paper-50);
+    --primary-text: var(--orange-500);
+    --secondary: var(--ink-800);
+    --secondary-foreground: var(--paper-50);
+    --secondary-hover: var(--ink-700);
+    --muted: var(--ink-800);
+    --muted-foreground: var(--stone-400);
+    --accent: var(--ink-800);
+    --accent-foreground: var(--paper-50);
+    --lifted: var(--ink-500);
+    --border: var(--ink-700);
+    --input: var(--ink-700);
+    --body: var(--stone-200);
+    --subtle: var(--stone-300);
+    --faint: var(--stone-500);
+    --ghost: var(--ink-400);
+    color-scheme: dark;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  .theme-light,
+  .theme-white {
+    --background: var(--paper-100);
+    --foreground: var(--ink-950);
+    --surface: var(--paper-200);
+    --card: var(--white);
+    --card-foreground: var(--ink-950);
+    --elevated: var(--paper-200);
+    --raised: var(--paper-200);
+    --popover: var(--white);
+    --popover-foreground: var(--ink-950);
+    --primary-text: var(--orange-600);
+    --secondary: var(--paper-200);
+    --secondary-foreground: var(--ink-950);
+    --secondary-hover: var(--paper-300);
+    --muted: var(--paper-200);
+    --muted-foreground: var(--stone-600);
+    --accent: var(--paper-200);
+    --accent-foreground: var(--ink-950);
+    --lifted: var(--paper-400);
+    --border: var(--paper-300);
+    --input: var(--paper-300);
+    --body: var(--stone-700);
+    --subtle: var(--stone-600);
+    --faint: var(--stone-500);
+    --ghost: var(--paper-400);
+    color-scheme: light;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+  .theme-white {
+    --background: var(--white);
+    --card: var(--paper-100);
+  }
+
+  /* The admin keeps the palette but a tighter radius for dense tables and forms. */
+  .admin {
+    --radius: 0.5rem;
+  }
 }
 
 @keyframes marquee {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
 }
-@keyframes marquee-reverse {
-  from { transform: translate3d(-50%, 0, 0); }
-  to { transform: translate3d(0, 0, 0); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
-}
 @keyframes pulse-ring {
   0% { transform: scale(0.85); opacity: 0.7; }
   80%, 100% { transform: scale(1.6); opacity: 0; }
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.15; }
-}
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-@keyframes orbit-cw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes orbit-ccw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-@keyframes dash-flow {
-  to { stroke-dashoffset: -120; }
-}
-@keyframes pulse-node {
-  0%, 100% { opacity: 0.35; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
 }
 
 @layer components {
@@ -272,294 +326,275 @@
   }
 
   .section-y {
-    padding-block: 5.5rem;
-  }
-  @media (min-width: 768px) {
-    .section-y { padding-block: 7.5rem; }
-  }
-  @media (min-width: 1280px) {
-    .section-y { padding-block: 9rem; }
+    padding-block: clamp(5.5rem, 10vw, 9.5rem);
   }
 
   /* --------------------------- typography ----------------------------- */
-  .text-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    line-height: 1;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
+  /* Medium weight, big sizes, no letter-spacing tricks — CJK needs air.
+     In the components layer, so a text-* utility can still resize one. */
+  .display {
+    font-weight: 500;
+    font-size: clamp(2.75rem, 6vw, 5.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.012em;
   }
-  .text-display {
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 0.94;
+  .title-1 {
+    font-weight: 500;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.012em;
     text-wrap: balance;
   }
-  .hairline {
-    height: 1px;
-    background-image: linear-gradient(
-      to right,
-      transparent,
-      var(--border) 12%,
-      var(--border) 88%,
-      transparent
-    );
+  .title-2 {
+    font-weight: 500;
+    font-size: clamp(2.125rem, 4.2vw, 4rem);
+    line-height: 1.14;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .title-3 {
+    font-weight: 500;
+    font-size: 1.375rem;
+    line-height: 1.35;
+  }
+  .lead {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: var(--muted-foreground);
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    color: var(--muted-foreground);
   }
 
   /* ---------------------------- decoration ---------------------------- */
-  .grid-blueprint {
+  /* Faint drawing-board grid, in the text colour of the section. */
+  .grid-lines {
     background-image:
-      linear-gradient(to right, color-mix(in oklab, var(--white) 3.5%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, var(--white) 3.5%, transparent) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-  .grid-blueprint-fine {
-    background-image:
-      linear-gradient(to right, color-mix(in oklab, var(--white) 2.8%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, var(--white) 2.8%, transparent) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
     background-size: 24px 24px;
   }
-  .noise-overlay::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  .grid-lines-sm {
+    background-size: 16px 16px;
+  }
+  .grid-lines-lg {
+    background-size: 64px 64px;
   }
   .mask-fade-x {
     /* `black` here is a mask alpha value, not a brand colour */
     -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
     mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   }
-  .text-gradient-brand {
-    background: linear-gradient(100deg, var(--white) 0%, var(--brand-200) 45%, var(--primary) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .glow-brand {
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--brand-500) 35%, transparent), 0 0 40px -12px color-mix(in oklab, var(--brand-500) 55%, transparent);
-  }
-
-  /* ------------------------------ buttons ----------------------------- */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: var(--radius);
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1;
-    padding: 0.875rem 1.5rem;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn:disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-  .btn-primary {
-    background: var(--primary);
-    color: var(--primary-foreground);
-    font-weight: 600;
-  }
-  .btn-primary:hover {
-    background: var(--white);
-  }
-  .btn-ghost {
-    border: 1px solid var(--border);
-    color: var(--foreground);
-    background: transparent;
-  }
-  .btn-ghost:hover {
-    border-color: color-mix(in oklab, var(--brand-500) 60%, transparent);
-    background: color-mix(in oklab, var(--brand-500) 8%, transparent);
-  }
-
-  /* ------------------------------- cards ------------------------------ */
-  .card-industrial {
-    position: relative;
-    border: 1px solid var(--border);
-    background: linear-gradient(180deg, color-mix(in oklab, var(--white) 2.2%, transparent), transparent 60%), var(--card);
-    transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .card-industrial:hover {
-    border-color: color-mix(in oklab, var(--brand-500) 45%, transparent);
-  }
-
-  .corner-ticks::before,
-  .corner-ticks::after {
-    content: "";
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-color: color-mix(in oklab, var(--brand-500) 70%, transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .corner-ticks::before {
-    top: -1px;
-    left: -1px;
-    border-top: 1px solid;
-    border-left: 1px solid;
-  }
-  .corner-ticks::after {
-    bottom: -1px;
-    right: -1px;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-  }
-  .corner-ticks:hover::before,
-  .corner-ticks:hover::after,
-  .corner-ticks[data-active="true"]::before,
-  .corner-ticks[data-active="true"]::after {
-    opacity: 1;
-  }
-
-  /* ------------------------------- forms ------------------------------ */
-  .field {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.7rem 0.9rem;
-    font-size: 0.875rem;
-    color: var(--foreground);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-  .field::placeholder {
-    color: var(--faint);
-  }
-  .field:focus {
-    outline: none;
-    border-color: color-mix(in oklab, var(--brand-500) 65%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand-500) 14%, transparent);
-  }
-  .field-label {
-    display: block;
-    font-size: 0.6875rem;
-    font-family: var(--font-mono);
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
-    margin-bottom: 0.5rem;
-  }
-
-  /* --------------------------- orbit diagram -------------------------- */
-  .orbit-cw { animation: orbit-cw 72s linear infinite; }
-  .orbit-ccw { animation: orbit-ccw 72s linear infinite; }
-  .orbit-cw-fast { animation: orbit-cw 34s linear infinite; }
-  .orbit-ccw-fast { animation: orbit-ccw 34s linear infinite; }
-  .dash-flow {
-    stroke-dasharray: 4 8;
-    animation: dash-flow 4s linear infinite;
-  }
-  .pulse-node { animation: pulse-node 3s ease-in-out infinite; }
-
-  /* ---------------------------- scroll rail --------------------------- */
-  .rail {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    overscroll-behavior-x: contain;
-  }
-  .rail::-webkit-scrollbar {
-    display: none;
-  }
-  .rail > * {
-    scroll-snap-align: start;
-    flex: 0 0 auto;
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent);
+    mask-image: linear-gradient(to bottom, black 30%, transparent);
   }
 
   /* ------------------------ article prose (CMS) ----------------------- */
-  .prose-industrial {
+  /* Uses roles only, so it reads well on black and on paper sections. */
+  .rich-text {
     color: var(--body);
     font-size: 1.0625rem;
-    line-height: 1.85;
+    line-height: 1.9;
   }
-  .prose-industrial > * + * { margin-top: 1.35em; }
-  .prose-industrial h2 {
-    color: var(--white);
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    margin-top: 2.4em;
-    padding-left: 0.75rem;
-    border-left: 3px solid var(--primary);
+  .rich-text > * + * { margin-top: 1.35em; }
+  .rich-text h2 {
+    color: var(--foreground);
+    font-size: 1.625rem;
+    font-weight: 500;
+    line-height: 1.35;
+    margin-top: 2.2em;
   }
-  .prose-industrial h3 {
-    color: var(--white);
-    font-size: 1.175rem;
-    font-weight: 600;
-    margin-top: 2em;
+  .rich-text h3 {
+    color: var(--foreground);
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-top: 1.9em;
   }
-  .prose-industrial a {
-    color: var(--primary);
+  .rich-text a {
+    color: var(--primary-text);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .prose-industrial strong { color: var(--white); font-weight: 600; }
-  .prose-industrial ul,
-  .prose-industrial ol { padding-left: 1.4em; }
-  .prose-industrial ul { list-style: none; }
-  .prose-industrial ul > li { position: relative; }
-  .prose-industrial ul > li::before {
+  .rich-text strong { color: var(--foreground); font-weight: 600; }
+  .rich-text ul,
+  .rich-text ol { padding-left: 1.4em; }
+  .rich-text ul { list-style: none; }
+  .rich-text ul > li { position: relative; }
+  .rich-text ul > li::before {
     content: "";
     position: absolute;
-    left: -1.1em;
-    top: 0.72em;
+    left: -1.2em;
+    top: 0.78em;
     width: 6px;
-    height: 1px;
+    height: 6px;
+    border-radius: 999px;
     background: var(--primary);
   }
-  .prose-industrial ol { list-style: decimal; }
-  .prose-industrial li + li { margin-top: 0.5em; }
-  .prose-industrial blockquote {
+  .rich-text ol { list-style: decimal; }
+  .rich-text ol > li::marker { color: var(--primary-text); }
+  .rich-text li + li { margin-top: 0.5em; }
+  .rich-text blockquote {
     border-left: 2px solid var(--primary);
     padding: 0.35em 0 0.35em 1.25em;
     color: var(--foreground);
   }
-  .prose-industrial img {
-    border-radius: var(--radius);
+  .rich-text img {
+    border-radius: calc(var(--radius) - 0.25rem);
     border: 1px solid var(--border);
   }
-  .prose-industrial code {
+  .rich-text code {
     font-family: var(--font-mono);
     font-size: 0.875em;
-    background: var(--elevated);
+    background: var(--muted);
     border: 1px solid var(--border);
     padding: 0.15em 0.4em;
-    border-radius: 4px;
-    color: var(--brand-300);
+    border-radius: 6px;
+    color: var(--foreground);
   }
-  .prose-industrial pre {
-    background: var(--surface);
+  .rich-text pre {
+    background: var(--muted);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: calc(var(--radius) - 0.25rem);
     padding: 1.15rem 1.25rem;
     overflow-x: auto;
   }
-  .prose-industrial pre code {
+  .rich-text pre code {
     background: none;
     border: none;
     padding: 0;
-    color: var(--paper-200);
   }
-  .prose-industrial table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
-  .prose-industrial th,
-  .prose-industrial td {
-    border: 1px solid var(--border);
-    padding: 0.6rem 0.85rem;
+  .rich-text table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+  .rich-text th,
+  .rich-text td {
+    border-bottom: 1px solid var(--border);
+    padding: 0.7rem 0.85rem;
     text-align: left;
   }
-  .prose-industrial th { background: var(--muted); color: var(--white); font-weight: 600; }
-  .prose-industrial hr { border: none; height: 1px; background: var(--border); }
+  .rich-text th { color: var(--foreground); font-weight: 500; }
+  .rich-text hr { border: none; height: 1px; background: var(--border); }
+}
+
+/* ------------------------------- motion -------------------------------- */
+/* Entrance and scroll reveal are pure CSS, so content is never left
+   invisible waiting for JavaScript. The reveal only runs where scroll-driven
+   animations are supported; elsewhere content is simply visible. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.intro {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+
+/* --------------------------- line-art motion ---------------------------- */
+/* Looping SVG drawings (the process steps). Each one's 100% keyframe is the
+   finished drawing, so the global reduced-motion rule leaves it fully drawn. */
+@keyframes art-draw {
+  0% { stroke-dashoffset: 1; }
+  45%, 100% { stroke-dashoffset: 0; }
+}
+@keyframes art-flow {
+  to { stroke-dashoffset: -1; }
+}
+@keyframes art-scan {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--scan-to, 0)); }
+}
+@keyframes art-ping {
+  0%, 100% { opacity: 0; }
+  5% { opacity: 1; }
+  30% { opacity: 0; }
+}
+@keyframes art-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes art-pop {
+  0%, 35% { opacity: 0; transform: scale(0.6); }
+  45%, 100% { opacity: 1; transform: none; }
+}
+.art-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: art-draw var(--d, 5s) cubic-bezier(0.65, 0, 0.35, 1) var(--delay, 0s) infinite both;
+}
+.art-flow {
+  stroke-dasharray: 0.12 0.88;
+  animation: art-flow var(--d, 3s) linear var(--delay, 0s) infinite both;
+}
+.art-scan {
+  animation: art-scan var(--d, 4s) linear infinite;
+}
+.art-ping {
+  opacity: 0;
+  animation: art-ping var(--d, 4s) linear var(--delay, 0s) infinite both;
+}
+.art-spin {
+  transform-box: view-box;
+  transform-origin: var(--origin, center);
+  animation: art-spin var(--d, 6s) linear infinite;
+}
+.art-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: art-pop var(--d, 6s) ease-out var(--delay, 0s) infinite both;
+}
+
+/* ------------------------- folding process stack ------------------------ */
+/* Six equal cards (--band). Each sticks one strip lower than the last, so the
+   next slides over it and only its title strip stays visible.
+
+   Releasing them together: a sticky box is held inside its containing block,
+   and a plain list would push the last card (lowest bottom edge) first, sliding
+   it up over the strips. So each card sits in its own wrapper (.process-slot)
+   whose spacer reaches (steps − 1 − i) × (band − strip) further down, cancelled
+   by an equal negative margin so the layout is unchanged. Every wrapper then
+   runs out at the same scroll position — the moment the last card settles — and
+   the folded stack scrolls away as one block, followed by the next section.
+
+   Off on phones and on windows too short to hold the folded stack. */
+.process-stack {
+  --strip: 52px;
+  --header: 72px;
+  --band: 380px;
+}
+@media (min-width: 1024px) and (min-height: 720px) {
+  .process-step {
+    position: sticky;
+    top: calc(var(--header) + var(--i) * var(--strip));
+    height: var(--band);
+  }
+  .process-step-body {
+    height: calc(var(--band) - var(--strip));
+  }
+  .process-step-spacer {
+    --reach: calc((var(--steps) - 1 - var(--i)) * (var(--band) - var(--strip)));
+    height: var(--reach);
+    margin-bottom: calc(var(--reach) * -1);
+  }
+  .process-step-art {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+  }
 }

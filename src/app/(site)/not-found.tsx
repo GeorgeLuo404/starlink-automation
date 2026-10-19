@@ -1,20 +1,22 @@
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { Eyebrow, PillLink } from "@/components/site/kit";
+import copy from "@/content/copy.json";
 
 export default function SiteNotFound() {
   return (
-    <section className="relative flex min-h-[70svh] items-center justify-center overflow-hidden pt-32 pb-24">
-      <div className="grid-blueprint absolute inset-0 opacity-40" aria-hidden="true" />
-      <div className="container-x relative text-center">
-        <p className="font-mono text-[0.6875rem] tracking-[0.3em] text-primary uppercase">Error 404</p>
-        <h1 className="text-display mt-6 text-[5rem] leading-none text-white sm:text-[8rem]">404</h1>
-        <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-muted-foreground">
-          您访问的页面可能已被移动或删除。
-        </p>
-        <Link href="/" className="btn btn-primary mt-10 inline-flex">
-          <ArrowLeft className="size-4" />
-          返回首页
-        </Link>
+    <section className="theme-dark relative isolate flex min-h-[80svh] items-center overflow-hidden pt-32 pb-24">
+      <div className="grid-lines grid-lines-lg mask-fade-b absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
+      <div className="container-x">
+        <Eyebrow>Error 404</Eyebrow>
+        <h1 className="display mt-8">
+          404<span className="text-primary">.</span>
+        </h1>
+        <p className="title-3 mt-6">{copy.common.notFoundTitle}</p>
+        <p className="lead mt-3 max-w-md">{copy.common.notFoundDesc}</p>
+        <PillLink href="/" className="mt-10">
+          <ArrowLeft className="transition-transform group-hover:-translate-x-0.5" />
+          {copy.common.backHome}
+        </PillLink>
       </div>
     </section>
   );

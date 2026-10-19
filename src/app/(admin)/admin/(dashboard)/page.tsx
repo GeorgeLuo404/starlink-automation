@@ -74,7 +74,7 @@ export default async function AdminDashboardPage() {
           const Icon = stat.icon;
           return (
             <Link key={stat.label} href={stat.href} className="group">
-              <Card className="corner-ticks h-full p-5 transition-colors group-hover:border-primary/40">
+              <Card className="h-full p-5 transition-colors group-hover:border-primary/40">
                 <div className="flex items-start justify-between">
                   <span className="inline-flex size-9 items-center justify-center rounded-(--radius) border border-border bg-surface text-primary">
                     <Icon className="size-4" strokeWidth={1.6} />

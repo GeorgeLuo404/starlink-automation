@@ -73,6 +73,8 @@ export type ProcessStep = {
   no: string;
   title: string;
   desc: string;
+  /** 输出物 — what the client receives at the end of the step. */
+  outputs: string[];
 };
 
 export type WhyItem = {
@@ -252,31 +254,37 @@ export const processSteps: ProcessStep[] = [
     no: "01",
     title: "需求评估",
     desc: "现场勘察与工艺拆解，输出可行性评估、节拍测算与风险清单。",
+    outputs: ["可行性评估报告", "节拍测算", "风险清单"],
   },
   {
     no: "02",
     title: "方案设计",
     desc: "确定控制架构、设备选型与接口定义，明确验收标准。",
+    outputs: ["控制架构图", "设备选型清单", "接口定义", "验收标准"],
   },
   {
     no: "03",
     title: "电气设计",
     desc: "输出电气原理图、柜体布局、端子表与电缆清册全套文件。",
+    outputs: ["电气原理图", "柜体布局", "端子表", "电缆清册"],
   },
   {
     no: "04",
     title: "程序开发",
     desc: "PLC、HMI 与机器人程序编写，离线仿真验证后进入现场。",
+    outputs: ["PLC / HMI 程序", "机器人程序", "离线仿真记录"],
   },
   {
     no: "05",
     title: "现场调试",
     desc: "就位接线、单机调试到整线联调，陪产爬坡直至达到节拍。",
+    outputs: ["单机调试记录", "联调报告", "节拍验证"],
   },
   {
     no: "06",
     title: "交付培训",
     desc: "操作与维护培训、备件清单交付与长期技术支持。",
+    outputs: ["操作与维护手册", "培训记录", "备件清单"],
   },
 ];
 

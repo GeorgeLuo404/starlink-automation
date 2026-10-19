@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -37,23 +39,18 @@ export function NewsletterForm({ className }: { className?: string }) {
 
   return (
     <form onSubmit={submit} className={cn("flex gap-2", className)}>
-      <input
+      <Input
         type="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder={copy.footer.subscribePlaceholder}
-        className="field h-10 flex-1"
+        className="rounded-full px-5"
         aria-label={copy.footer.subscribePlaceholder}
       />
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        className="inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius) bg-primary text-primary-foreground transition-colors hover:bg-white disabled:opacity-50"
-        aria-label={copy.footer.subscribeButton}
-      >
-        <ArrowRight className="size-4" />
-      </button>
+      <Button type="submit" size="icon" shape="pill" disabled={status === "loading"} className="size-11" aria-label={copy.footer.subscribeButton}>
+        <ArrowRight />
+      </Button>
     </form>
   );
 }

@@ -8,13 +8,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground font-semibold hover:bg-white",
-        brand: "bg-primary text-primary-foreground font-semibold hover:bg-white",
+        // Hover states use the theme roles (not literal white), so every variant
+        // works on both dark and light sections.
+        default: "bg-primary text-primary-foreground hover:bg-foreground hover:text-background",
+        brand: "bg-primary text-primary-foreground hover:bg-foreground hover:text-background",
+        /** High-contrast solid in the text colour — e.g. a white pill on a black header. */
+        inverse: "bg-foreground text-background hover:bg-primary hover:text-primary-foreground",
         outline:
-          "border border-border bg-transparent text-foreground hover:border-primary/60 hover:bg-primary/8",
+          "border border-border bg-transparent text-foreground hover:border-foreground/40 hover:bg-foreground/5",
         secondary: "bg-secondary text-foreground hover:bg-secondary-hover",
-        ghost: "text-foreground hover:bg-white/5",
-        destructive: "bg-destructive text-white hover:bg-destructive-hover",
+        ghost: "text-foreground hover:bg-foreground/5",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive-hover",
         link: "text-primary underline-offset-4 hover:underline p-0 h-auto",
       },
       size: {
@@ -24,8 +28,12 @@ const buttonVariants = cva(
         icon: "size-10 p-0",
         "icon-sm": "size-8 p-0",
       },
+      shape: {
+        default: "",
+        pill: "rounded-full",
+      },
     },
-    defaultVariants: { variant: "default", size: "default" },
+    defaultVariants: { variant: "default", size: "default", shape: "default" },
   }
 );
 
@@ -33,6 +41,7 @@ function Button({
   className,
   variant,
   size,
+  shape,
   asChild = false,
   ...props
 }: React.ComponentProps<"button"> &
@@ -42,7 +51,7 @@ function Button({
     <Comp
       data-slot="button"
       data-variant={variant}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, shape, className }))}
       {...props}
     />
   );
