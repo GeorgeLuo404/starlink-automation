@@ -5,7 +5,8 @@
  *
  * 业务能力、项目案例、新闻与图库在后台上传真实照片之前，显示这里生成的 SVG：
  *   public/media/service-<slug>.svg · case-<slug>.svg · article-<slug>.svg
- *   public/media/gallery-01…09.svg · factory.svg · og.svg · src/app/icon.svg
+ *   public/media/gallery-01…09.svg · factory.svg · og.svg
+ *   src/app/icon.svg · src/app/favicon.ico（品牌标识，见 scripts/brand-mark.ts）
  * 文件名与 coverSrc()（src/lib/utils.ts）和数据库种子一致；上传封面后自动被替换。
  *
  * Until a real photo is uploaded in the admin, every cover falls back to these
@@ -21,6 +22,8 @@ import { articles, cases, galleryItems, services } from "../src/content/defaults
 import { drawings, serviceDrawing, type DrawingName } from "../src/lib/line-art/drawings";
 import { FONT_MONO, FONT_SANS, drawingBounds, drawingMarkup, textWidth } from "../src/lib/line-art/svg";
 import type { Drawing } from "../src/lib/line-art/geometry";
+import { markShapes, polyPath } from "../src/lib/brand-mark";
+import { markIco, markSvg } from "./brand-mark";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public", "media");
@@ -116,7 +119,7 @@ function cover({
 `;
 }
 
-/** Social share image: the mark, the line and the robot. 1200 × 630. */
+/** Social share image: the brand mark, the line and the robot. 1200 × 630. */
 function ogImage() {
   const W = 1200;
   const H = 630;
@@ -132,9 +135,12 @@ function ogImage() {
   <rect width="${W}" height="${H}" fill="url(#g)"/>
   <rect width="${W}" height="${H}" fill="url(#glow)"/>
   <g transform="translate(560 70) scale(${k})">${drawingMarkup(drawings.ctaRobot(), { ink, accent, label: token("stone-400") })}</g>
+  <g transform="translate(74 86) scale(1.3)">
+    <path d="${polyPath(markShapes.upper)}" fill="${accent}"/>
+    <path d="${polyPath(markShapes.lower)}" fill="${ink}"/>
+    <path d="${polyPath(markShapes.star)}" fill="${accent}"/>
+  </g>
   <g transform="translate(80 92)">
-    <path d="M20 2.5 34.5 11v18L20 37.5 5.5 29V11L20 2.5Z" fill="none" stroke="${accent}" stroke-width="1.6"/>
-    <circle cx="20" cy="20" r="2.8" fill="${accent}"/>
     <text x="52" y="27" font-family="${FONT_SANS}" font-size="22" font-weight="600" fill="${ink}">星链自动化</text>
   </g>
   <text x="80" y="330" font-family="${FONT_SANS}" font-size="64" font-weight="500" fill="${ink}">以自动化，</text>
@@ -145,21 +151,12 @@ function ogImage() {
 `;
 }
 
-/** Favicon (src/app/icon.svg): the hexagon node on ink. */
-function favicon() {
-  const accent = token("orange-500");
-  const paper = token("paper-50");
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
-  <rect width="40" height="40" rx="9" fill="${token("ink-950")}"/>
-  <path d="M20 6 32.5 13.2v14.4L20 34 7.5 27.6V13.2L20 6Z" fill="none" stroke="${accent}" stroke-width="1.8"/>
-  <circle cx="20" cy="20" r="2.8" fill="${accent}"/>
-  <circle cx="20" cy="12" r="1.8" fill="${paper}"/>
-  <circle cx="27.5" cy="24.5" r="1.8" fill="${paper}"/>
-  <circle cx="12.5" cy="24.5" r="1.8" fill="${paper}"/>
-  <path d="M20 20V12M20 20l7.5 4.5M20 20l-7.5 4.5" stroke="${accent}" stroke-width="1.1" opacity="0.8"/>
-</svg>
-`;
-}
+/** Favicon colours: the brand mark (scripts/brand-mark.ts) on an ink tile. */
+const rgb = (name: string): [number, number, number] => {
+  const n = parseInt(token(name).slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+const MARK = { tile: rgb("ink-950"), upper: rgb("orange-500"), lower: rgb("paper-50"), star: rgb("orange-500") };
 
 /* ------------------------------ 题材对照 ---------------------------------- */
 
@@ -218,10 +215,12 @@ async function main() {
   files.push(["og.svg", ogImage()]);
 
   for (const [name, svg] of files) await writeFile(path.join(OUT, name), svg);
-  // Next.js serves src/app/icon.svg as the favicon for every route (site and admin).
-  await writeFile(path.join(ROOT, "src", "app", "icon.svg"), favicon());
+  // Next.js serves both for every route (site and admin): icon.svg for current
+  // browsers, favicon.ico for older ones and for crawlers such as Baidu.
+  await writeFile(path.join(ROOT, "src", "app", "icon.svg"), markSvg(MARK));
+  await writeFile(path.join(ROOT, "src", "app", "favicon.ico"), markIco(MARK));
 
-  console.log(`Generated ${files.length} placeholders in public/media and src/app/icon.svg`);
+  console.log(`Generated ${files.length} placeholders in public/media, plus src/app/icon.svg and favicon.ico`);
 }
 
 main().catch((error) => {

@@ -307,7 +307,8 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 - 页面里内联绘制（`components/site/line-art.tsx`），颜色跟随区块主题；
 - `pnpm media:placeholders` 把同一批线稿写成 `public/media` 下的 SVG 占位图：
   `service-<slug>.svg`、`case-<slug>.svg`、`article-<slug>.svg`、`gallery-01…09.svg`、`factory.svg`、`og.svg`，
-  以及 `src/app/icon.svg`。颜色读自 `globals.css` 色板，结果是确定的（重复运行文件不变）。
+  以及站点图标 `src/app/icon.svg` 与 `src/app/favicon.ico`（16/32/48 像素，图形定义在 `scripts/brand-mark.ts`）。
+  颜色读自 `globals.css` 色板，结果是确定的（重复运行文件不变）。
 
 业务能力、项目案例、新闻的封面都经过 `coverSrc()`（`src/lib/utils.ts`）：**后台上传了封面就用照片，
 没有就用对应的线稿占位图**，同一个图框，换图不会改变版式。新增一条业务 / 案例 / 文章时，

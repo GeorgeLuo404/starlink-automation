@@ -1,30 +1,21 @@
+import { MARK_VIEWBOX, markShapes, polyPath } from "@/lib/brand-mark";
 import { cn } from "@/lib/utils";
 
+const UPPER = polyPath(markShapes.upper);
+const LOWER = polyPath(markShapes.lower);
+const STAR = polyPath(markShapes.star);
+
 /**
- * 星链自动化品牌标识 / Starlink Automation brand mark
- * A hexagonal "constellation" node — industrial, technical, and scalable.
+ * 星链自动化品牌标识 / Starlink Automation brand mark — the isometric S
+ * (src/lib/brand-mark.ts): upper half in the accent, lower half in the text
+ * colour of the section, the star between them. Same shapes as the favicon.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 40 40" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M20 2.5 34.5 11v18L20 37.5 5.5 29V11L20 2.5Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        className="text-primary"
-      />
-      <path d="M20 2.5 34.5 11v18L20 37.5 5.5 29V11L20 2.5Z" fill="url(#sl-glow)" opacity="0.5" />
-      <circle cx="20" cy="20" r="2.6" className="fill-primary" />
-      <circle cx="20" cy="9" r="1.9" className="fill-foreground" />
-      <circle cx="30" cy="26" r="1.9" className="fill-foreground" />
-      <circle cx="10" cy="26" r="1.9" className="fill-foreground" />
-      <path d="M20 20 20 9M20 20 30 26M20 20 10 26" strokeWidth="1" opacity="0.75" className="stroke-primary" />
-      <defs>
-        <radialGradient id="sl-glow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%" style={{ stopColor: "var(--primary)", stopOpacity: 0.45 }} />
-          <stop offset="100%" style={{ stopColor: "var(--primary)", stopOpacity: 0 }} />
-        </radialGradient>
-      </defs>
+    <svg viewBox={MARK_VIEWBOX} className={className} aria-hidden="true">
+      <path d={UPPER} className="fill-primary" />
+      <path d={LOWER} className="fill-foreground" />
+      <path d={STAR} className="fill-primary" />
     </svg>
   );
 }
