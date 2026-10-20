@@ -32,7 +32,7 @@ export function PageHero({
   return (
     <section className={cn("theme-dark relative isolate overflow-hidden", className)}>
       <div className="grid-lines grid-lines-lg mask-fade-b absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
-      <div className="absolute top-0 right-[6%] -z-10 size-[40rem] -translate-y-1/2 rounded-full bg-primary/8 blur-[140px]" aria-hidden="true" />
+      <div className="absolute top-0 right-[6%] -z-10 size-160 -translate-y-1/2 rounded-full bg-primary/8 blur-[140px]" aria-hidden="true" />
 
       <div className="container-x pt-32 pb-16 md:pt-40 md:pb-20">
         <nav aria-label="Breadcrumb" className="intro flex flex-wrap items-center gap-2 text-xs text-muted-foreground">

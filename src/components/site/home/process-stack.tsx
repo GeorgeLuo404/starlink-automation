@@ -77,7 +77,7 @@ export function HomeProcess({
                       </div>
                     </div>
                     <div className="flex lg:col-span-5 lg:justify-end">
-                      <div className="process-step-art grid-lines grid-lines-sm aspect-[3/2] w-full max-w-sm rounded-xl border border-border p-3 text-foreground">
+                      <div className="process-step-art grid-lines grid-lines-sm aspect-3/2 w-full max-w-sm rounded-xl border border-border p-3 text-foreground">
                         {Art ? <Art /> : null}
                       </div>
                     </div>

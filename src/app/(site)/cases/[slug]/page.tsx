@@ -70,7 +70,7 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
             alt={item.title}
             sizes="(max-width: 1408px) 100vw, 1408px"
             priority
-            className="aspect-16/9 rounded-(--radius)"
+            className="aspect-video rounded-(--radius)"
           />
 
           {item.metrics.length > 0 ? (

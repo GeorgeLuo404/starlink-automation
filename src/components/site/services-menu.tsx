@@ -87,7 +87,7 @@ export function ServicesMenu({ services, active }: { services: NavService[]; act
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             // pt bridges the gap to the link, so the pointer can travel into the panel.
-            className="absolute top-full left-1/2 w-[44rem] -translate-x-1/2 pt-7"
+            className="absolute top-full left-1/2 w-176 -translate-x-1/2 pt-7"
           >
             <div className="theme-dark rounded-[1.25rem] border border-border bg-background/95 p-2 shadow-2xl shadow-black/50 backdrop-blur-xl">
               <ul className="grid grid-cols-2 gap-1">
@@ -118,7 +118,7 @@ export function ServicesMenu({ services, active }: { services: NavService[]; act
                   <Link
                     href="/services"
                     onClick={() => setOpen(false)}
-                    className="group flex h-full min-h-[4.25rem] items-center justify-between gap-4 rounded-xl border border-dashed border-border px-5 transition-colors hover:border-primary/50 hover:bg-primary/5"
+                    className="group flex h-full min-h-17 items-center justify-between gap-4 rounded-xl border border-dashed border-border px-5 transition-colors hover:border-primary/50 hover:bg-primary/5"
                   >
                     <span className="flex items-center gap-3 text-sm">
                       <LinkNode />

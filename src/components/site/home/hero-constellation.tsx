@@ -925,7 +925,7 @@ export function HeroConstellation() {
   return (
     <div className="relative size-full overflow-hidden bg-background">
       <div
-        className="absolute top-1/2 right-[10%] size-[44rem] -translate-y-1/2 rounded-full bg-primary/6 blur-[140px]"
+        className="absolute top-1/2 right-[10%] size-176 -translate-y-1/2 rounded-full bg-primary/6 blur-[140px]"
         aria-hidden="true"
       />
       <canvas ref={canvasRef} className="absolute inset-0 size-full font-mono" />
