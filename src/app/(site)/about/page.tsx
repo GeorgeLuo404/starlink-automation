@@ -98,7 +98,7 @@ export default async function AboutPage() {
           <ol className="mt-16 grid gap-x-8 gap-y-12 border-t border-border sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             {milestones.map((m) => (
               <li key={m.title} className="reveal relative pt-8">
-                <span className="absolute -top-[5px] left-0 size-2.5 rounded-full border border-primary bg-background" aria-hidden="true" />
+                <span className="absolute -top-1.25 left-0 size-2.5 rounded-full border border-primary bg-background" aria-hidden="true" />
                 <div className="text-sm text-primary-text tabular-nums">{m.year}</div>
                 <h3 className="mt-3 text-base">{m.title}</h3>
                 <p className="mt-2 text-sm leading-7 text-muted-foreground">{m.desc}</p>

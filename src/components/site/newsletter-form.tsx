@@ -41,6 +41,8 @@ export function NewsletterForm({ className }: { className?: string }) {
     <form onSubmit={submit} className={cn("flex gap-2", className)}>
       <Input
         type="email"
+        name="email"
+        autoComplete="email"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}

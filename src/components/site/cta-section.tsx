@@ -11,7 +11,7 @@ export function CtaSection() {
   return (
     <section className="theme-dark py-20 lg:py-28">
       <div className="container-x">
-        <Card className="theme-white reveal grid items-center gap-10 overflow-hidden rounded-[2rem] border-0 bg-background p-8 md:p-14 lg:grid-cols-2 lg:p-20">
+        <Card className="theme-white reveal grid items-center gap-10 overflow-hidden rounded-4xl border-0 bg-background p-8 md:p-14 lg:grid-cols-2 lg:p-20">
           <div>
             <Eyebrow>{t.eyebrow}</Eyebrow>
             <h2 className="title-2 mt-6">{t.title}</h2>

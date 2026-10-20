@@ -14,8 +14,7 @@ import { navItems, type NavService } from "./nav-items";
 import { ServicesMenu } from "./services-menu";
 import copy from "@/content/copy.json";
 
-const links = navItems.slice(1);
-const menuLinks = [{ key: "home" as const, href: "/" }, ...links, { key: "contact" as const, href: "/contact" }];
+const menuLinks = [...navItems, { key: "contact" as const, href: "/contact" }];
 const ease = [0.22, 1, 0.36, 1] as const;
 const fade = {
   initial: { opacity: 0 },
@@ -56,7 +55,7 @@ export function SiteHeader({ services }: { services: NavService[] }) {
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label={copy.nav.menu}>
-          {links.map((item) =>
+          {navItems.map((item) =>
             item.hasMenu ? (
               <ServicesMenu key={item.key} services={services} active={isActive(item.href)} />
             ) : (

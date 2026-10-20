@@ -74,7 +74,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               alt={article.title}
               sizes="(max-width: 768px) 100vw, 768px"
               priority
-              className="aspect-16/9 rounded-(--radius)"
+              className="aspect-video rounded-(--radius)"
             />
 
             {article.excerpt ? <p className="title-3 mt-14 text-xl leading-relaxed text-body">{article.excerpt}</p> : null}
