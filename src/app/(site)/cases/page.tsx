@@ -3,6 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 import { listCases } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { CaseCard } from "@/components/site/case-card";
+import { TileRows } from "@/components/site/media-tile";
 import { EmptyState } from "@/components/site/kit";
 import { CtaSection } from "@/components/site/cta-section";
 import copy from "@/content/copy.json";
@@ -32,12 +33,12 @@ export default async function CasesPage() {
           {cases.length === 0 ? (
             <EmptyState title={copy.common.empty} hint={copy.common.emptyHint} />
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
-              {cases.map((item, i) => (
-                // The first row sits above the fold and holds the page's LCP image.
-                <CaseCard key={item.slug} item={item} lead={i === 0} priority={i < 3} />
-              ))}
-            </div>
+            <TileRows
+              items={cases}
+              pattern={[1, 2]}
+              // The first rows sit above the fold and hold the page's LCP image.
+              render={(item, i) => <CaseCard item={item} lead={i === 0} priority={i < 3} />}
+            />
           )}
         </div>
       </section>

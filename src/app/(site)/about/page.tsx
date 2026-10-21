@@ -8,6 +8,7 @@ import { Counter } from "@/components/motion";
 import { PageHero } from "@/components/site/page-hero";
 import { Cover, Eyebrow, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
 import { CtaSection } from "@/components/site/cta-section";
+import { StatGrid } from "@/components/site/stat-grid";
 import copy from "@/content/copy.json";
 
 export const revalidate = 300;
@@ -61,17 +62,7 @@ export default async function AboutPage() {
             </div>
           </div>
 
-          <div className="mt-20 grid gap-y-12 border-t border-border sm:grid-cols-2 lg:grid-cols-4">
-            {t.stats.map((item) => (
-              <div key={item.label} className="reveal border-border pt-10 sm:pr-8 lg:border-l lg:pl-8 lg:first:border-l-0 lg:first:pl-0">
-                <div className="text-6xl font-medium tracking-tight tabular-nums lg:text-7xl">
-                  <Counter value={item.value} />
-                  <span className="text-primary-text">{item.suffix}</span>
-                </div>
-                <p className="mt-5 text-base">{item.label}</p>
-              </div>
-            ))}
-          </div>
+          <StatGrid items={t.stats} className="mt-14 sm:mt-20" />
         </div>
       </section>
 

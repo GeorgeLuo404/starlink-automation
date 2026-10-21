@@ -54,9 +54,12 @@ const THEMES = {
 const esc = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /**
- * One cover: drawing centred on a faint grid, with a small CAD-style title
- * block. 16:10, with enough margin that 16:9, 4:3 and square crops
- * (object-cover) all keep the whole drawing.
+ * One cover: drawing centred on a faint grid. 16:10, with enough margin that
+ * 16:9, 4:3 and square crops (object-cover) all keep the whole drawing.
+ *   titled  — a small CAD-style title block, bottom right
+ *   tile    — no title block, the drawing a little smaller and higher: cards
+ *             lay their own title over the lower part (services, cases, news)
+ *   gallery — no title block, the drawing large: the gallery shows a caption
  */
 function cover({
   drawing,
@@ -65,7 +68,7 @@ function cover({
   title,
   W = 1600,
   H = 1000,
-  titleBlock = true,
+  layout = "titled",
 }: {
   drawing: Drawing;
   theme: Theme;
@@ -73,9 +76,11 @@ function cover({
   title: string;
   W?: number;
   H?: number;
-  /** Off for gallery tiles, which carry their own caption. */
-  titleBlock?: boolean;
+  layout?: "titled" | "tile" | "gallery";
 }) {
+  const titleBlock = layout === "titled";
+  // Share of the height the drawing may fill, and where its centre sits.
+  const [fit, cy] = ({ titled: [0.56, 0.46], tile: [0.54, 0.44], gallery: [0.64, 0.42] } as const)[layout];
   const t = THEMES[theme];
   const ink = token(t.ink);
   const accent = token("orange-500");
@@ -84,9 +89,9 @@ function cover({
   // Fit the drawing's real bounds into the middle band of the frame — inside
   // what a 16:9, 4:3 or square crop (object-cover) still shows.
   const b = drawingBounds(drawing, LABELS);
-  const k = Math.min((W * 0.62) / b.w, (H * (titleBlock ? 0.56 : 0.64)) / b.h);
+  const k = Math.min((W * 0.62) / b.w, (H * fit) / b.h);
   const dx = W / 2 - (b.x + b.w / 2) * k;
-  const dy = H * (titleBlock ? 0.46 : 0.42) - (b.y + b.h / 2) * k;
+  const dy = H * cy - (b.y + b.h / 2) * k;
 
   // Title block, sized to its text, kept clear of the crop edges.
   const fs = 1000 * 0.022;
@@ -196,19 +201,19 @@ async function main() {
   const files: [string, string][] = [];
 
   services.forEach((s, i) =>
-    files.push([`service-${s.slug}.svg`, cover({ drawing: pick(serviceDrawing[s.slug], "plcRack"), theme: "dark", code: `SVC-${n2(i)}`, title: s.title })])
+    files.push([`service-${s.slug}.svg`, cover({ drawing: pick(serviceDrawing[s.slug], "plcRack"), theme: "dark", code: `SVC-${n2(i)}`, title: s.title, layout: "tile" })])
   );
   cases.forEach((c, i) =>
-    files.push([`case-${c.slug}.svg`, cover({ drawing: pick(caseDrawing[c.slug], "assemblyLine"), theme: "light", code: `CASE-${n2(i)}`, title: c.title })])
+    files.push([`case-${c.slug}.svg`, cover({ drawing: pick(caseDrawing[c.slug], "assemblyLine"), theme: "dark", code: `CASE-${n2(i)}`, title: c.title, layout: "tile" })])
   );
   articles.forEach((a, i) =>
-    files.push([`article-${a.slug}.svg`, cover({ drawing: pick(articleDrawing[a.slug], "schematic"), theme: "light", code: `NOTE-${n2(i)}`, title: a.title })])
+    files.push([`article-${a.slug}.svg`, cover({ drawing: pick(articleDrawing[a.slug], "schematic"), theme: "light", code: `NOTE-${n2(i)}`, title: a.title, layout: "tile" })])
   );
   galleryItems.forEach((g, i) =>
     files.push([
       `gallery-${n2(i)}.svg`,
-      // 4:3 like the gallery tiles, and no title block: the tile shows the caption.
-      cover({ drawing: pick(galleryDrawing[i], "assemblyLine"), theme: "dark", code: `IMG-${n2(i)}`, title: g.title, H: 1200, titleBlock: false }),
+      // 4:3 like the gallery tiles.
+      cover({ drawing: pick(galleryDrawing[i], "assemblyLine"), theme: "dark", code: `IMG-${n2(i)}`, title: g.title, H: 1200, layout: "gallery" }),
     ])
   );
   files.push(["factory.svg", cover({ drawing: drawings.workshop(), theme: "light", code: "SITE", title: "作业现场" })]);

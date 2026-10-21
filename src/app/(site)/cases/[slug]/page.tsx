@@ -8,9 +8,10 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { Cover, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
 import { CaseCard } from "@/components/site/case-card";
+import { TileRows } from "@/components/site/media-tile";
 import { MediaCarousel } from "@/components/site/media-carousel";
 import { CtaSection } from "@/components/site/cta-section";
-import { coverSrc } from "@/lib/utils";
+import { coverSrc, cn } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
 export const revalidate = 120;
@@ -67,7 +68,7 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
       <section className="theme-white section-y">
         <div className="container-x">
           {item.media?.length ? (
-            <MediaCarousel items={item.media} title={item.title} sizes="(max-width: 1408px) 100vw, 1408px" />
+            <MediaCarousel items={item.media} title={item.title} sizes="(max-width: 1024px) 100vw, (max-width: 1408px) 75vw, 1000px" />
           ) : (
             <Cover
               src={coverSrc("case", item)}
@@ -79,11 +80,17 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
           )}
 
           {item.metrics.length > 0 ? (
-            <div className="mt-16 grid gap-y-10 border-t border-border sm:grid-cols-3">
-              {item.metrics.map((metric) => (
-                <div key={metric.label} className="reveal pt-10 sm:border-l sm:border-border sm:pl-8 sm:first:border-l-0 sm:first:pl-0">
-                  <div className="text-5xl font-medium tracking-tight tabular-nums lg:text-6xl">{metric.value}</div>
-                  <p className="mt-4 text-sm text-muted-foreground">{metric.label}</p>
+            // Three across on every screen: on phones the type shrinks instead of stacking.
+            <div className="mt-10 grid grid-cols-3 gap-y-6 border-t border-border sm:mt-16 sm:gap-y-10">
+              {item.metrics.map((metric, i) => (
+                <div
+                  key={metric.label}
+                  className={cn("reveal pt-6 pr-3 sm:pt-10 sm:pr-6", i % 3 !== 0 && "border-l border-border pl-4 sm:pl-8")}
+                >
+                  <div className="text-[1.625rem] leading-tight font-medium tracking-tight tabular-nums sm:text-5xl lg:text-6xl">
+                    {metric.value}
+                  </div>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground sm:mt-4 sm:text-sm">{metric.label}</p>
                 </div>
               ))}
             </div>
@@ -139,11 +146,12 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
                 </PillLink>
               }
             />
-            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {others.map((other) => (
-                <CaseCard key={other.slug} item={other} />
-              ))}
-            </div>
+            <TileRows
+              items={others}
+              pattern={[3]}
+              className="mt-14"
+              render={(other) => <CaseCard item={other} size="md" sizes="(max-width: 768px) 100vw, 45vw" />}
+            />
           </div>
         </section>
       ) : null}

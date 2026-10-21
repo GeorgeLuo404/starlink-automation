@@ -85,7 +85,7 @@
     },
     "statement": {
       "eyebrow": "我们的方法",
-      "text": "我们把复杂的产线逻辑拆解成可验证的模块，让每一台设备在节拍内稳定运行，让每一次交付都能被测量。"
+      "text": "把复杂产线拆成可验证的模块，每一次交付都可测量。"
     },
     "stats": {
       "eyebrow": "交付数据",
@@ -203,7 +203,8 @@
     "scope": "服务范围",
     "results": "项目成果",
     "gallery": "现场影像",
-    "related": "相关案例"
+    "related": "相关案例",
+    "view": "查看案例"
   },
   "news": {
     "title": "新闻动态",
@@ -231,7 +232,10 @@
     "playVideo": "播放视频",
     "zoom": "查看大图",
     "thumbnails": "选择要查看的图片或视频",
-    "bilibili": "B站"
+    "bilibili": "B站",
+    "photo": "照片",
+    "video": "视频",
+    "bilibiliVideo": "B站视频"
   },
   "downloads": {
     "title": "资料下载",

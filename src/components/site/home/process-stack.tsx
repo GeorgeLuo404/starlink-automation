@@ -28,7 +28,7 @@ export function HomeProcess({
 
   return (
     <section className="theme-dark border-t border-border">
-      <div className="container-x pt-[clamp(5.5rem,10vw,9.5rem)] pb-16">
+      <div className="container-x section-y pb-12 sm:pb-16">
         <SectionHead eyebrow={eyebrow} title={title} lead={lead} />
       </div>
 
@@ -60,12 +60,14 @@ export function HomeProcess({
                     </span>
                   </div>
 
-                  <div className="process-step-body grid gap-8 py-8 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-7">
-                    <div className="flex flex-col justify-between gap-8 lg:col-span-7">
-                      <p className="max-w-xl text-xl leading-[1.55] font-medium lg:text-[1.625rem]">{step.desc}</p>
+                  <div className="process-step-body grid grid-cols-1 gap-5 py-5 sm:gap-8 sm:py-8 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-7">
+                    <div className="flex flex-col justify-between gap-5 sm:gap-8 lg:col-span-7">
+                      <p className="max-w-xl text-lg leading-[1.55] font-medium sm:text-xl lg:text-[1.625rem]">
+                        {step.desc}
+                      </p>
                       <div>
                         <p className="text-xs tracking-widest text-muted-foreground">输出物</p>
-                        <ul className="mt-3 flex flex-wrap gap-2">
+                        <ul className="mt-2.5 flex flex-wrap gap-2 sm:mt-3">
                           {step.outputs.map((o) => (
                             <li key={o}>
                               <Badge variant="tag" size="lg">
@@ -76,7 +78,7 @@ export function HomeProcess({
                         </ul>
                       </div>
                     </div>
-                    <div className="flex lg:col-span-5 lg:justify-end">
+                    <div className="flex min-h-0 lg:col-span-5 lg:justify-end">
                       <div className="process-step-art grid-lines grid-lines-sm aspect-3/2 w-full max-w-sm rounded-xl border border-border p-3 text-foreground">
                         {Art ? <Art /> : null}
                       </div>

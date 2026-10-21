@@ -117,7 +117,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 </PillLink>
               }
             />
-            <div className="mt-14 grid gap-4 md:grid-cols-3">
+            <div className="mt-14 grid gap-x-6 gap-y-12 md:grid-cols-3">
               {others.map((item) => (
                 <ArticleCard key={item.slug} article={item} />
               ))}

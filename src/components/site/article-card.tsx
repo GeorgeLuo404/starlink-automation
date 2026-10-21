@@ -1,37 +1,37 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import type { ArticleView } from "@/lib/data";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { coverSrc, cn, formatDate } from "@/lib/utils";
 import { Cover } from "./kit";
-import copy from "@/content/copy.json";
 
+/**
+ * A news item: cover, category and date, title. The excerpt waits on the
+ * cover and shows over it on hover, so the list reads as headlines.
+ */
 export function ArticleCard({ article, priority, className }: { article: ArticleView; priority?: boolean; className?: string }) {
   return (
     <Link href={`/news/${article.slug}`} className={cn("reveal group block", className)}>
-      <Card className="h-full p-2 transition-colors group-hover:border-lifted">
+      <div className="relative">
         <Cover
           src={coverSrc("article", article)}
           alt={article.title}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
+          className="rounded-(--radius) border border-border"
         />
-        <div className="flex flex-1 flex-col px-4 pt-5 pb-5 lg:px-5 lg:pb-6">
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <Badge variant="tag" size="md">
-              {article.category}
-            </Badge>
-            <span className="tabular-nums">{formatDate(article.publishedAt)}</span>
+        {article.excerpt ? (
+          <div
+            aria-hidden="true"
+            className="theme-dark absolute inset-0 flex items-end rounded-(--radius) bg-background/75 p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          >
+            <p className="line-clamp-3 text-sm leading-6 text-body">{article.excerpt}</p>
           </div>
-          <h3 className="title-3 mt-5 line-clamp-2 text-xl">{article.title}</h3>
-          <p className="mt-3 line-clamp-2 text-sm leading-7 text-muted-foreground">{article.excerpt}</p>
-          <span className="mt-auto inline-flex items-center gap-1.5 pt-7 text-sm">
-            {copy.common.readMore}
-            <ArrowUpRight className="size-4 text-primary-text transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </span>
-        </div>
-      </Card>
+        ) : null}
+      </div>
+      <div className="mt-5 flex items-center gap-3 text-xs">
+        <span className="text-primary-text">{article.category}</span>
+        <span className="text-muted-foreground tabular-nums">{formatDate(article.publishedAt)}</span>
+      </div>
+      <h3 className="title-3 mt-2.5 line-clamp-2 text-xl transition-colors group-hover:text-primary-text">{article.title}</h3>
     </Link>
   );
 }
