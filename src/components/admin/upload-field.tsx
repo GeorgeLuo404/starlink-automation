@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Check, Copy, FileText, Loader2, Maximize2, Play, Upload, X } from "lucide-react";
 import { uploadFile, type UploadedFile } from "@/lib/upload-client";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { FieldError, useFieldError } from "@/components/admin/action-form";
 import { Dropzone } from "@/components/admin/dropzone";
@@ -35,6 +36,7 @@ export function UploadField({
   showPreview = true,
   onUploaded,
   description,
+  logo = false,
 }: {
   name: string;
   label: string;
@@ -46,6 +48,8 @@ export function UploadField({
   showPreview?: boolean;
   onUploaded?: (result: UploadResult) => void;
   description?: string;
+  /** Preview uncropped on a light backdrop (brand logos) instead of cropped to fill. */
+  logo?: boolean;
 }) {
   const [ownUrl, setOwnUrl] = useState(defaultValue);
   const url = value ?? ownUrl;
@@ -161,12 +165,21 @@ export function UploadField({
               <button
                 type="button"
                 onClick={() => setPreviewing(true)}
-                className="group relative aspect-video w-full shrink-0 overflow-hidden rounded-[calc(var(--radius)-0.25rem)] bg-muted sm:w-72"
+                className={cn(
+                  "group relative aspect-video w-full shrink-0 overflow-hidden rounded-[calc(var(--radius)-0.25rem)] bg-muted sm:w-72",
+                  logo && "theme-white"
+                )}
                 aria-label={`预览${label}`}
               >
                 {isImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img ref={readImage} src={url} alt="" className="size-full object-cover" onLoad={(e) => readImage(e.currentTarget)} />
+                  <img
+                    ref={readImage}
+                    src={url}
+                    alt=""
+                    className={cn("size-full", logo ? "object-contain p-6" : "object-cover")}
+                    onLoad={(e) => readImage(e.currentTarget)}
+                  />
                 ) : (
                   <video
                     ref={readVideo}
@@ -226,9 +239,15 @@ export function UploadField({
   );
 }
 
+const IMAGE_NAMES: Record<string, string> = { "image/svg+xml": "SVG", "image/webp": "WebP" };
+
 /** What the empty drop area says it accepts, from the <input accept> string. */
 function hintFor(accept: string) {
   if (accept === "image/*") return "JPG / PNG / WebP / GIF / SVG · 单个文件不超过 200MB";
+  const types = accept.split(",").map((t) => t.trim());
+  if (types.every((t) => t.startsWith("image/"))) {
+    return `${types.map((t) => IMAGE_NAMES[t] ?? t.slice(6).toUpperCase()).join(" / ")} · 单个文件不超过 200MB`;
+  }
   if (accept === "video/*") return "MP4 / WebM / MOV · 建议 1080p、50MB 以内";
   if (!accept.includes("image") && !accept.includes("video")) return "PDF / ZIP / Office 文档 · 单个文件不超过 200MB";
   return "图片 / 视频 / 文档 · 单个文件不超过 200MB";

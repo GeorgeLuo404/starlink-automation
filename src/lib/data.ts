@@ -13,6 +13,7 @@ import {
   type DownloadContent,
   type GalleryContent,
   type MediaContent,
+  type PartnerContent,
   type ServiceContent,
 } from "@/content/defaults";
 
@@ -376,13 +377,13 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   }, defaultSettings);
 });
 
-/* --------------------------------- 合作伙伴 -------------------------------- */
+/* ------------------------------- 支持的品牌与平台 ------------------------------ */
 
-export async function listPartners(): Promise<{ name: string; nameZh: string }[]> {
+export async function listPartners(): Promise<PartnerContent[]> {
   return fromDb(async (db) => {
     const rows = await db.partner.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
     if (!rows.length) return defaultPartners;
-    return rows.map((r) => ({ name: r.name, nameZh: r.nameZh ?? "" }));
+    return rows.map((r) => ({ name: r.name, nameZh: r.nameZh ?? "", logoUrl: r.logoUrl ?? undefined }));
   }, defaultPartners);
 }
 

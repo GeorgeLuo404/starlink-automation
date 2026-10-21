@@ -343,22 +343,25 @@ export const whyItems: WhyItem[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* 合作伙伴 / Partners                                                 */
+/* 支持的品牌与平台 / Supported brands (the Partner table)            */
 /* ------------------------------------------------------------------ */
 
-export const partners: { name: string; nameZh: string }[] = [
-  { name: "SIEMENS", nameZh: "西门子" },
-  { name: "MITSUBISHI", nameZh: "三菱电机" },
-  { name: "OMRON", nameZh: "欧姆龙" },
-  { name: "INOVANCE", nameZh: "汇川技术" },
-  { name: "DELTA", nameZh: "台达电子" },
-  { name: "BECKHOFF", nameZh: "倍福自动化" },
-  { name: "FANUC", nameZh: "发那科" },
-  { name: "ABB", nameZh: "ABB 机器人" },
-  { name: "KUKA", nameZh: "库卡" },
-  { name: "YASKAWA", nameZh: "安川电机" },
-  { name: "EPSON", nameZh: "爱普生" },
-  { name: "UNIVERSAL ROBOTS", nameZh: "优傲机器人" },
+export type PartnerContent = { name: string; nameZh: string; logoUrl?: string };
+
+/** Logos live in public/brands; where each came from is in docs/BRAND-LOGOS.md. */
+export const partners: PartnerContent[] = [
+  { name: "SIEMENS", nameZh: "西门子", logoUrl: "/brands/siemens.svg" },
+  { name: "MITSUBISHI", nameZh: "三菱电机", logoUrl: "/brands/mitsubishi-electric.svg" },
+  { name: "OMRON", nameZh: "欧姆龙", logoUrl: "/brands/omron.svg" },
+  { name: "INOVANCE", nameZh: "汇川技术", logoUrl: "/brands/inovance.svg" },
+  { name: "DELTA", nameZh: "台达电子", logoUrl: "/brands/delta.svg" },
+  { name: "BECKHOFF", nameZh: "倍福自动化", logoUrl: "/brands/beckhoff.svg" },
+  { name: "FANUC", nameZh: "发那科", logoUrl: "/brands/fanuc.svg" },
+  { name: "ABB", nameZh: "ABB 机器人", logoUrl: "/brands/abb.svg" },
+  { name: "KUKA", nameZh: "库卡", logoUrl: "/brands/kuka.svg" },
+  { name: "YASKAWA", nameZh: "安川电机", logoUrl: "/brands/yaskawa.svg" },
+  { name: "EPSON", nameZh: "爱普生", logoUrl: "/brands/epson.svg" },
+  { name: "UNIVERSAL ROBOTS", nameZh: "优傲机器人", logoUrl: "/brands/universal-robots.svg" },
 ];
 
 /* ------------------------------------------------------------------ */

@@ -264,14 +264,18 @@ export const gallerySchema = z.object({
   sortOrder: int("排序", -9999, 9999, 0),
 });
 
+/** A supported brand (Partner table). Order and visibility have their own actions. */
 export const partnerSchema = z.object({
   id: recordId,
   name: required("名称", 80),
   nameZh: optional("品牌中文名", 80),
-  logoUrl: link("Logo 地址"),
-  active: checkbox,
-  sortOrder: int("排序", -9999, 9999, 0),
+  logoUrl: link("Logo"),
 });
+
+/** Every brand id, top to bottom, after a drag in the admin list. */
+export const partnerOrderSchema = z.array(requiredId).min(1).max(500);
+
+export const partnerActiveSchema = z.object({ id: requiredId, active: z.boolean() });
 
 export const settingsSchema = z.object({
   contactPhone: optional("业务电话", 32).refine(
