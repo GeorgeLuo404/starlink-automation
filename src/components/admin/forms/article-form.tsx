@@ -1,7 +1,7 @@
 import { saveArticle } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
-import { UploadField } from "@/components/admin/upload-field";
+import { MediaFields, type MediaRecord } from "@/components/admin/media-fields";
 
 type ArticleRecord = {
   id: string;
@@ -10,6 +10,7 @@ type ArticleRecord = {
   excerpt: string | null;
   content: string;
   coverUrl: string | null;
+  media: MediaRecord[];
   tags: string[];
   status: string;
   featured: boolean;
@@ -44,8 +45,8 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
         <FormTextarea label="摘要" name="excerpt" rows={3} defaultValue={article?.excerpt} placeholder="列表页与分享卡片上显示的简介" />
       </FormSection>
 
-      <FormSection title="封面" description="建议尺寸 1600×1000，支持上传到媒体库或直接填写 CDN 地址。">
-        <UploadField name="coverUrl" label="封面图片" folder="articles" defaultValue={article?.coverUrl ?? ""} accept="image/*" />
+      <FormSection title="封面与影像" description="封面建议 1600×1000。添加图片或视频后，文章详情页顶部会显示轮播，取代封面图。">
+        <MediaFields folder="articles" cover={article?.coverUrl} media={article?.media} />
       </FormSection>
 
       <FormSection

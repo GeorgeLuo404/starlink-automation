@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { Edit3, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
-import { deleteCase } from "@/lib/admin-actions";
-import { ConfirmAction } from "@/components/admin/confirm-action";
+import { COVER_MEDIA, coverOf } from "@/lib/data";
+import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
+import { CasesTable, type CaseRow } from "@/components/admin/tables/cases-table";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AdminPageHeader, EmptyState, SetupNotice, StatusPill, iconAction, iconDanger } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +21,24 @@ export default async function AdminCasesPage() {
     );
   }
 
-  let rows: Awaited<ReturnType<typeof db.project.findMany>> = [];
+  let rows: CaseRow[] = [];
   try {
-    rows = await db.project.findMany({ orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }] });
+    const records = await db.project.findMany({
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      include: { media: COVER_MEDIA, _count: { select: { media: true } } },
+    });
+    rows = records.map((row) => ({
+      id: row.id,
+      title: row.title,
+      slug: row.slug,
+      industry: row.industry ?? "",
+      year: row.year ?? 0,
+      status: row.status,
+      featured: row.featured,
+      sortOrder: row.sortOrder,
+      cover: coverOf(row),
+      mediaCount: row._count.media,
+    }));
   } catch {
     rows = [];
   }
@@ -48,49 +61,7 @@ export default async function AdminCasesPage() {
       {rows.length === 0 ? (
         <EmptyState title="还没有案例" description="创建第一个项目案例，或运行 pnpm db:seed 导入内置示例。" />
       ) : (
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {["项目", "行业", "年份", "状态", "操作"].map((head) => (
-                  <TableHead key={head}>
-                    {head}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>
-                    <span className="line-clamp-1 font-medium text-foreground">{row.title}</span>
-                    <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{row.slug}</span>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{row.industry ?? "—"}</TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{row.year ?? "—"}</TableCell>
-                  <TableCell><StatusPill status={row.status} /></TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1.5">
-                      <Link href={`/admin/cases/${row.id}`} className={iconAction} aria-label="编辑">
-                        <Edit3 className="size-3.5" />
-                      </Link>
-                      <ConfirmAction
-                        action={deleteCase}
-                        id={row.id}
-                        title="删除案例"
-                        description={`确定删除案例「${row.title}」吗？此操作不可撤销。`}
-                        triggerLabel="删除"
-                        triggerClassName={iconDanger}
-                      >
-                        <Trash2 className="size-3.5" />
-                      </ConfirmAction>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+        <CasesTable rows={rows} />
       )}
     </>
   );

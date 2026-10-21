@@ -9,6 +9,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { Cover, Eyebrow, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
 import { ServiceCard } from "@/components/site/service-card";
+import { MediaCarousel } from "@/components/site/media-carousel";
 import { CtaSection } from "@/components/site/cta-section";
 import { coverSrc } from "@/lib/utils";
 import copy from "@/content/copy.json";
@@ -107,6 +108,17 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </aside>
         </div>
       </section>
+
+      {service.media?.length ? (
+        <section className="theme-dark section-y">
+          <div className="container-x">
+            <SectionHead eyebrow={service.title} title={copy.services.media} lead={copy.services.mediaLead} />
+            <div className="mt-14">
+              <MediaCarousel items={service.media} title={service.title} sizes="(max-width: 1408px) 100vw, 1408px" />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {service.faq.length > 0 ? (
         <section className="theme-light section-y">

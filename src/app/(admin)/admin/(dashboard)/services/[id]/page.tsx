@@ -26,7 +26,7 @@ export default async function AdminServiceEditorPage({ params }: { params: Promi
   let record = null;
   if (!isNew) {
     try {
-      record = await db.service.findUnique({ where: { id } });
+      record = await db.service.findUnique({ where: { id }, include: { media: { orderBy: { sortOrder: "asc" } } } });
     } catch {
       record = null;
     }

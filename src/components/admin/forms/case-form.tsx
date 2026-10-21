@@ -1,7 +1,7 @@
 import { saveCase } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
-import { UploadField } from "@/components/admin/upload-field";
+import { MediaFields, type MediaRecord } from "@/components/admin/media-fields";
 
 type CaseRecord = {
   id: string;
@@ -12,12 +12,11 @@ type CaseRecord = {
   summary: string | null;
   content: string | null;
   coverUrl: string | null;
-  videoUrl: string | null;
+  media: MediaRecord[];
   tags: string[];
   metrics: unknown;
   year: number | null;
   location: string | null;
-  gallery: string[];
   scope: string[];
   status: string;
   featured: boolean;
@@ -51,10 +50,8 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
         <FormTextarea label="项目简介" name="summary" rows={3} defaultValue={record?.summary} />
       </FormSection>
 
-      <FormSection title="封面与影像">
-        <UploadField name="coverUrl" label="封面图片" folder="cases" defaultValue={record?.coverUrl ?? ""} accept="image/*" />
-        <UploadField name="videoUrl" label="项目视频" folder="cases" defaultValue={record?.videoUrl ?? ""} accept="video/*" />
-        <FormField label="图库链接" name="gallery" defaultValue={record?.gallery?.join(", ")} placeholder="用逗号分隔多个图片地址" description="可选，用于项目详情页的现场影像区" />
+      <FormSection title="封面与影像" description="现场照片与视频会在详情页顶部轮播，可混合图片、上传的视频和 B站 视频。">
+        <MediaFields folder="cases" cover={record?.coverUrl} media={record?.media} />
       </FormSection>
 
       <FormSection title="项目详情" description="支持 ## 标题、- 列表、**加粗** 等轻量标记。">

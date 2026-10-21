@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { Edit3, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
-import { deleteService } from "@/lib/admin-actions";
-import { ConfirmAction } from "@/components/admin/confirm-action";
+import { COVER_MEDIA, coverOf } from "@/lib/data";
+import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
+import { ServicesTable, type ServiceRow } from "@/components/admin/tables/services-table";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AdminPageHeader, EmptyState, SetupNotice, StatusPill, iconAction, iconDanger } from "@/components/admin/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +21,22 @@ export default async function AdminServicesPage() {
     );
   }
 
-  let rows: Awaited<ReturnType<typeof db.service.findMany>> = [];
+  let rows: ServiceRow[] = [];
   try {
-    rows = await db.service.findMany({ orderBy: { sortOrder: "asc" } });
+    const records = await db.service.findMany({
+      orderBy: { sortOrder: "asc" },
+      include: { media: COVER_MEDIA, _count: { select: { media: true } } },
+    });
+    rows = records.map((row) => ({
+      id: row.id,
+      title: row.title,
+      slug: row.slug,
+      icon: row.icon ?? "",
+      sortOrder: row.sortOrder,
+      status: row.published ? "PUBLISHED" : "DRAFT",
+      cover: coverOf(row),
+      mediaCount: row._count.media,
+    }));
   } catch {
     rows = [];
   }
@@ -48,51 +59,7 @@ export default async function AdminServicesPage() {
       {rows.length === 0 ? (
         <EmptyState title="还没有业务项" description="创建第一项业务能力，或运行 pnpm db:seed 导入内置示例。" />
       ) : (
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {["名称", "图标", "排序", "状态", "操作"].map((head) => (
-                  <TableHead key={head}>
-                    {head}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>
-                    <span className="font-medium text-foreground">{row.title}</span>
-                    <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{row.slug}</span>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{row.icon ?? "—"}</TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{row.sortOrder}</TableCell>
-                  <TableCell>
-                    <StatusPill status={row.published ? "PUBLISHED" : "DRAFT"} />
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1.5">
-                      <Link href={`/admin/services/${row.id}`} className={iconAction} aria-label="编辑">
-                        <Edit3 className="size-3.5" />
-                      </Link>
-                      <ConfirmAction
-                        action={deleteService}
-                        id={row.id}
-                        title="删除业务"
-                        description={`确定删除业务「${row.title}」吗？此操作不可撤销。`}
-                        triggerLabel="删除"
-                        triggerClassName={iconDanger}
-                      >
-                        <Trash2 className="size-3.5" />
-                      </ConfirmAction>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+        <ServicesTable rows={rows} />
       )}
     </>
   );

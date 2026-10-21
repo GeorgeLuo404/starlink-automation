@@ -26,7 +26,7 @@ export default async function AdminCaseEditorPage({ params }: { params: Promise<
   let record = null;
   if (!isNew) {
     try {
-      record = await db.project.findUnique({ where: { id } });
+      record = await db.project.findUnique({ where: { id }, include: { media: { orderBy: { sortOrder: "asc" } } } });
     } catch {
       record = null;
     }

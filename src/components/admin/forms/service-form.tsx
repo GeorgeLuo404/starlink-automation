@@ -1,7 +1,7 @@
 import { saveService } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
 import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
-import { UploadField } from "@/components/admin/upload-field";
+import { MediaFields, type MediaRecord } from "@/components/admin/media-fields";
 
 type ServiceRecord = {
   id: string;
@@ -11,7 +11,7 @@ type ServiceRecord = {
   content: string | null;
   icon: string | null;
   coverUrl: string | null;
-  videoUrl: string | null;
+  media: MediaRecord[];
   features: string[];
   deliverables: string[];
   faq: unknown;
@@ -55,9 +55,14 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
         <FormTextarea label="简介" name="summary" rows={2} defaultValue={record?.summary} />
       </FormSection>
 
-      <FormSection title="配图">
-        <UploadField name="coverUrl" label="封面图片" folder="services" defaultValue={record?.coverUrl ?? ""} accept="image/*" />
-        <UploadField name="videoUrl" label="介绍视频" folder="services" defaultValue={record?.videoUrl ?? ""} accept="video/*" />
+      <FormSection title="封面与影像" description="封面显示在详情页顶部与业务卡片上；图片与视频显示在详情页的「现场影像」区。">
+        <MediaFields
+          folder="services"
+          cover={record?.coverUrl}
+          media={record?.media}
+          shownIn="详情页「现场影像」区"
+          whenEmpty="没有图片与视频时不显示该区域。"
+        />
       </FormSection>
 
       <FormSection title="详情" description="支持 ## 标题、- 列表等轻量标记。">

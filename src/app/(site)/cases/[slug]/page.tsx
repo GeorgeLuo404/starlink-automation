@@ -8,6 +8,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { Cover, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
 import { CaseCard } from "@/components/site/case-card";
+import { MediaCarousel } from "@/components/site/media-carousel";
 import { CtaSection } from "@/components/site/cta-section";
 import { coverSrc } from "@/lib/utils";
 import copy from "@/content/copy.json";
@@ -65,13 +66,17 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
 
       <section className="theme-white section-y">
         <div className="container-x">
-          <Cover
-            src={coverSrc("case", item)}
-            alt={item.title}
-            sizes="(max-width: 1408px) 100vw, 1408px"
-            priority
-            className="aspect-video rounded-(--radius)"
-          />
+          {item.media?.length ? (
+            <MediaCarousel items={item.media} title={item.title} sizes="(max-width: 1408px) 100vw, 1408px" />
+          ) : (
+            <Cover
+              src={coverSrc("case", item)}
+              alt={item.title}
+              sizes="(max-width: 1408px) 100vw, 1408px"
+              priority
+              className="aspect-video rounded-(--radius)"
+            />
+          )}
 
           {item.metrics.length > 0 ? (
             <div className="mt-16 grid gap-y-10 border-t border-border sm:grid-cols-3">

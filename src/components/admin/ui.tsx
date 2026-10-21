@@ -53,6 +53,9 @@ const STATUS: Record<string, { label: string; variant: BadgeVariant }> = {
   SPAM: { label: "垃圾信息", variant: "destructive" },
 };
 
+/** Options for a status filter in an admin <DataTable>. */
+export const publishStatusOptions = ["PUBLISHED", "DRAFT", "ARCHIVED"].map((value) => ({ value, label: STATUS[value].label }));
+
 export function StatusPill({ status }: { status: string }) {
   const entry = STATUS[status];
   return <Badge variant={entry?.variant ?? "outline"}>{entry?.label ?? status}</Badge>;

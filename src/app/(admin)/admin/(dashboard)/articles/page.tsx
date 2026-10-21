@@ -1,14 +1,10 @@
 import Link from "next/link";
-import { Edit3, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
-import { deleteArticle, setArticleStatus } from "@/lib/admin-actions";
-import { ActionForm, SubmitButton } from "@/components/admin/action-form";
-import { ConfirmAction } from "@/components/admin/confirm-action";
+import { COVER_MEDIA, coverOf } from "@/lib/data";
+import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
+import { ArticlesTable, type ArticleRow } from "@/components/admin/tables/articles-table";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AdminPageHeader, EmptyState, SetupNotice, StatusPill, iconAction, iconDanger } from "@/components/admin/ui";
-import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -26,9 +22,24 @@ export default async function AdminArticlesPage() {
     );
   }
 
-  let articles: Awaited<ReturnType<typeof db.article.findMany>> = [];
+  let articles: ArticleRow[] = [];
   try {
-    articles = await db.article.findMany({ orderBy: [{ createdAt: "desc" }] });
+    const records = await db.article.findMany({
+      orderBy: [{ createdAt: "desc" }],
+      include: { media: COVER_MEDIA, _count: { select: { media: true } } },
+    });
+    articles = records.map((row) => ({
+      id: row.id,
+      title: row.title,
+      slug: row.slug,
+      status: row.status,
+      featured: row.featured,
+      pinned: row.pinned,
+      publishedAt: row.publishedAt,
+      viewCount: row.viewCount,
+      cover: coverOf(row),
+      mediaCount: row._count.media,
+    }));
   } catch {
     articles = [];
   }
@@ -62,77 +73,7 @@ export default async function AdminArticlesPage() {
           }
         />
       ) : (
-        <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {["标题", "状态", "发布日期", "阅读", "操作"].map((head) => (
-                  <TableHead key={head}>
-                    {head}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {articles.map((article) => (
-                <TableRow key={article.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span className="line-clamp-1 font-medium text-foreground">{article.title}</span>
-                      {article.featured ? (
-                        <span className="rounded-full border border-primary/30 px-2 py-0.5 font-mono text-[0.5625rem] text-primary">
-                          精选
-                        </span>
-                      ) : null}
-                    </div>
-                    <span className="mt-1 block font-mono text-[0.625rem] text-faint">/{article.slug}</span>
-                  </TableCell>
-                  <TableCell>
-                    <StatusPill status={article.status} />
-                  </TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">
-                    {article.publishedAt ? formatDate(article.publishedAt) : "—"}
-                  </TableCell>
-                  <TableCell className="font-mono text-xs text-muted-foreground">{article.viewCount}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1.5">
-                      <Link
-                        href={`/admin/articles/${article.id}`}
-                        className={iconAction}
-                        aria-label="编辑"
-                      >
-                        <Edit3 className="size-3.5" />
-                      </Link>
-
-                      <ActionForm action={setArticleStatus} showSummary={false}>
-                        <input type="hidden" name="id" value={article.id} />
-                        <input
-                          type="hidden"
-                          name="status"
-                          value={article.status === "PUBLISHED" ? "DRAFT" : "PUBLISHED"}
-                        />
-                        <SubmitButton variant="outline" size="sm" className="h-8 px-2.5 font-mono text-[0.625rem]">
-                          {article.status === "PUBLISHED" ? "下架" : "发布"}
-                        </SubmitButton>
-                      </ActionForm>
-
-                      <ConfirmAction
-                        action={deleteArticle}
-                        id={article.id}
-                        title="删除文章"
-                        description={`确定删除文章「${article.title}」吗？此操作不可撤销。`}
-                        triggerLabel="删除"
-                        triggerClassName={iconDanger}
-                      >
-                        <Trash2 className="size-3.5" />
-                      </ConfirmAction>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+        <ArticlesTable rows={articles} />
       )}
     </>
   );
