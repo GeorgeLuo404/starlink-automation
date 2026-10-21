@@ -30,7 +30,7 @@ export default async function AdminArticleEditorPage({
   let article = null;
   if (!isNew) {
     try {
-      article = await db.article.findUnique({ where: { id } });
+      article = await db.article.findUnique({ where: { id }, include: { media: { orderBy: { sortOrder: "asc" } } } });
     } catch {
       article = null;
     }

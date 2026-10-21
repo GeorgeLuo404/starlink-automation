@@ -1,32 +1,17 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { Dialog } from "radix-ui";
-import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { Play } from "lucide-react";
 import type { GalleryView } from "@/lib/data";
-import { Button } from "@/components/ui/button";
+import { Lightbox } from "@/components/site/lightbox";
 import { cn } from "@/lib/utils";
-import copy from "@/content/copy.json";
 
 const fallback = (i: number) => `/media/gallery-${String((i % 9) + 1).padStart(2, "0")}.svg`;
-const fade = { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 0.2 } };
 
-/**
- * Photo grid with a lightbox. The lightbox is a Radix Dialog (Escape, focus
- * trap, scroll lock) animated with motion, like the mobile menu; arrow keys
- * step through the photos.
- */
+/** Photo grid; clicking a tile opens it in the full-screen <Lightbox>. */
 export function GalleryGrid({ items }: { items: GalleryView[] }) {
   const [index, setIndex] = useState<number | null>(null);
-  const open = index !== null;
-  const current = index !== null ? items[index] : null;
-
-  const step = useCallback(
-    (by: number) => setIndex((i) => (i === null ? i : (i + by + items.length) % items.length)),
-    [items.length]
-  );
 
   return (
     <>
@@ -64,60 +49,11 @@ export function GalleryGrid({ items }: { items: GalleryView[] }) {
         ))}
       </div>
 
-      <Dialog.Root open={open} onOpenChange={(next) => !next && setIndex(null)}>
-        <AnimatePresence>
-          {open && current ? (
-            <Dialog.Portal forceMount>
-              <Dialog.Overlay forceMount asChild>
-                <motion.div {...fade} className="theme-dark fixed inset-0 z-100 bg-background/94 backdrop-blur-md" />
-              </Dialog.Overlay>
-              <Dialog.Content
-                forceMount
-                asChild
-                aria-describedby={undefined}
-                onKeyDown={(e) => {
-                  if (e.key === "ArrowRight") step(1);
-                  if (e.key === "ArrowLeft") step(-1);
-                }}
-              >
-                <motion.div {...fade} className="theme-dark fixed inset-0 z-100 flex items-center justify-center bg-transparent p-4 md:p-10">
-                  <Dialog.Close asChild>
-                    <Button variant="outline" size="icon" shape="pill" className="absolute top-5 right-5" aria-label={copy.gallery.close}>
-                      <X />
-                    </Button>
-                  </Dialog.Close>
-                  <Button variant="outline" size="icon" shape="pill" className="absolute left-4 z-10 size-11" onClick={() => step(-1)} aria-label={copy.gallery.prev}>
-                    <ChevronLeft />
-                  </Button>
-
-                  <motion.figure
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="w-full max-w-5xl"
-                  >
-                    <div className="relative aspect-16/10 w-full overflow-hidden rounded-(--radius) border border-border">
-                      <Image src={current.url ?? fallback(index ?? 0)} alt={current.title} fill sizes="90vw" className="object-contain" />
-                    </div>
-                    <figcaption className="mt-5 text-center">
-                      <Dialog.Title className="text-base">{current.title}</Dialog.Title>
-                      {current.caption ? <p className="mt-1 text-sm text-muted-foreground">{current.caption}</p> : null}
-                      <p className="mt-3 text-xs text-muted-foreground tabular-nums">
-                        {(index ?? 0) + 1} / {items.length}
-                      </p>
-                    </figcaption>
-                  </motion.figure>
-
-                  <Button variant="outline" size="icon" shape="pill" className="absolute right-4 z-10 size-11" onClick={() => step(1)} aria-label={copy.gallery.next}>
-                    <ChevronRight />
-                  </Button>
-                </motion.div>
-              </Dialog.Content>
-            </Dialog.Portal>
-          ) : null}
-        </AnimatePresence>
-      </Dialog.Root>
+      <Lightbox
+        items={items.map((item, i) => ({ src: item.url ?? fallback(i), title: item.title, caption: item.caption }))}
+        index={index}
+        onIndexChange={setIndex}
+      />
     </>
   );
 }

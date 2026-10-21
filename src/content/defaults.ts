@@ -19,6 +19,19 @@ export type ServiceContent = {
   features: string[];
   deliverables: string[];
   faq: { q: string; a: string }[];
+  /** 详情页「现场影像」轮播；为空时不显示该区域。 */
+  media?: MediaContent[];
+};
+
+/** 详情页轮播里的一项：图片、上传的视频或 B站 视频。 */
+export type MediaContent = {
+  kind: "IMAGE" | "VIDEO";
+  /** 图片地址、视频文件地址或 B站 视频链接 */
+  url: string;
+  /** 视频封面 */
+  posterUrl?: string | null;
+  alt?: string | null;
+  caption?: string | null;
 };
 
 export type CaseContent = {
@@ -36,6 +49,8 @@ export type CaseContent = {
   metrics: { value: string; label: string }[];
   tags: string[];
   featured: boolean;
+  /** 详情页轮播；为空时详情页显示封面图。 */
+  media?: MediaContent[];
 };
 
 export type ArticleContent = {
@@ -50,6 +65,8 @@ export type ArticleContent = {
   publishedAt: string;
   readMinutes: number;
   featured: boolean;
+  /** 详情页轮播；为空时详情页显示封面图。 */
+  media?: MediaContent[];
 };
 
 export type DownloadContent = {

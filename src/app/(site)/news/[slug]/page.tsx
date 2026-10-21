@@ -9,6 +9,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { ArticleCard } from "@/components/site/article-card";
 import { Cover, PillLink, SectionHead } from "@/components/site/kit";
+import { MediaCarousel } from "@/components/site/media-carousel";
 import { coverSrc, formatDate } from "@/lib/utils";
 import copy from "@/content/copy.json";
 
@@ -69,13 +70,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <article className="theme-white section-y">
         <div className="container-x">
           <div className="mx-auto max-w-3xl">
-            <Cover
-              src={coverSrc("article", article)}
-              alt={article.title}
-              sizes="(max-width: 768px) 100vw, 768px"
-              priority
-              className="aspect-video rounded-(--radius)"
-            />
+            {article.media?.length ? (
+              <MediaCarousel items={article.media} title={article.title} sizes="(max-width: 768px) 100vw, 768px" />
+            ) : (
+              <Cover
+                src={coverSrc("article", article)}
+                alt={article.title}
+                sizes="(max-width: 768px) 100vw, 768px"
+                priority
+                className="aspect-video rounded-(--radius)"
+              />
+            )}
 
             {article.excerpt ? <p className="title-3 mt-14 text-xl leading-relaxed text-body">{article.excerpt}</p> : null}
             <RichText content={article.content} className="mt-10" />

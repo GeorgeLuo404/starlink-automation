@@ -12,7 +12,15 @@ import { PrismaPg } from "@prisma/adapter-pg";
  * public site to bundled content instead of crashing every request.
  */
 
-const globalForPrisma = globalThis as unknown as { __starlinkPrisma?: PrismaClient };
+/**
+ * Dev keeps one client on globalThis so hot reloads don't open new pools. It
+ * remembers which generated PrismaClient class made it: after `prisma
+ * generate` the module (and class) is new, and a client built from the old
+ * one would not know the new schema — so it is replaced instead of reused.
+ */
+const globalForPrisma = globalThis as unknown as {
+  __starlinkPrisma?: { client: PrismaClient; generated: typeof PrismaClient } | PrismaClient;
+};
 
 let cached: PrismaClient | null = null;
 
@@ -20,16 +28,22 @@ export function getPrisma(): PrismaClient | null {
   if (!process.env.DATABASE_URL) return null;
   if (cached) return cached;
 
-  if (process.env.NODE_ENV !== "production" && globalForPrisma.__starlinkPrisma) {
-    cached = globalForPrisma.__starlinkPrisma;
-    return cached;
+  const stored = globalForPrisma.__starlinkPrisma;
+  if (process.env.NODE_ENV !== "production" && stored) {
+    if ("generated" in stored && stored.generated === PrismaClient) {
+      cached = stored.client;
+      return cached;
+    }
+    // Built from an older `prisma generate`: release its connections and start over.
+    const stale = "generated" in stored ? stored.client : stored;
+    void stale.$disconnect().catch(() => {});
   }
 
   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
   cached = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.__starlinkPrisma = cached;
+    globalForPrisma.__starlinkPrisma = { client: cached, generated: PrismaClient };
   }
   return cached;
 }

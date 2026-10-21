@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { canonicalBilibiliUrl, isBilibiliShortLink, isBilibiliUrl, parseBilibili } from "@/lib/bilibili";
 
 /**
  * Validation for every admin form.
@@ -120,6 +121,59 @@ const pipeLines = (label: string, max = 10000) =>
       : []
   );
 
+export const MEDIA_LIMIT = 30;
+
+const mediaItem = z.object({
+  kind: z.enum(["IMAGE", "VIDEO"]),
+  url: z.string().trim().max(2000),
+  posterUrl: z.string().trim().max(2000).nullish(),
+  alt: z.string().trim().max(300, "替代文本不能超过 300 个字符").nullish(),
+  caption: z.string().trim().max(300, "说明不能超过 300 个字符").nullish(),
+});
+
+/**
+ * 详情页轮播 — the <MediaFields> list, sent as JSON in one hidden field.
+ * B站 watch links are normalised (tracking parameters dropped); b23.tv short
+ * links pass through and are resolved by the save action.
+ */
+const mediaList = z
+  .preprocess(
+    (value) => {
+      if (typeof value !== "string" || value.trim() === "") return [];
+      try {
+        return JSON.parse(value);
+      } catch {
+        return value;
+      }
+    },
+    z.array(mediaItem, { error: "图片与视频数据无效，请刷新页面后重试" }).max(MEDIA_LIMIT, `图片与视频最多 ${MEDIA_LIMIT} 项`)
+  )
+  .superRefine((items, ctx) => {
+    items.forEach((item, i) => {
+      const fail = (message: string) => ctx.addIssue({ code: "custom", message: `第 ${i + 1} 项：${message}`, path: [i] });
+      if (!URL_OR_PATH_RE.test(item.url)) return fail("地址必须是 http(s):// 开头的网址或以 / 开头的站内路径");
+      if (item.posterUrl && !URL_OR_PATH_RE.test(item.posterUrl)) return fail("视频封面地址无效");
+      if (item.kind === "VIDEO" && isBilibiliUrl(item.url)) {
+        if (!isBilibiliShortLink(item.url) && !parseBilibili(item.url)) return fail("不是有效的 B站 视频链接");
+        if (!item.posterUrl) return fail("B站 视频需要上传封面");
+      }
+    });
+  })
+  .transform((items) =>
+    items.map((item) => {
+      const bilibili = item.kind === "VIDEO" ? parseBilibili(item.url) : null;
+      return {
+        kind: item.kind,
+        url: bilibili ? canonicalBilibiliUrl(bilibili) : item.url,
+        posterUrl: item.posterUrl || null,
+        alt: item.alt || null,
+        caption: item.caption || null,
+      };
+    })
+  );
+
+export type MediaInput = z.infer<typeof mediaList>[number];
+
 /* --------------------------------- schemas --------------------------------- */
 
 export const articleSchema = z.object({
@@ -129,6 +183,7 @@ export const articleSchema = z.object({
   excerpt: optional("摘要", 500),
   content: required("正文", 100_000),
   coverUrl: link("封面图片"),
+  media: mediaList,
   tags: list("标签", 500),
   status: publishStatus,
   publishedAt: date("发布日期"),
@@ -150,11 +205,7 @@ export const caseSchema = z.object({
   summary: optional("项目简介", 2000),
   content: optional("详情", 100_000),
   coverUrl: link("封面图片"),
-  videoUrl: link("项目视频"),
-  gallery: list("图库链接").refine(
-    (urls) => urls.every((url) => URL_OR_PATH_RE.test(url)),
-    "图库链接中有无效地址：每项都必须是 http(s):// 网址或以 / 开头的路径"
-  ),
+  media: mediaList,
   scope: lines("服务范围", 5000),
   metrics: pipeLines("关键指标", 5000).refine(
     (rows) => rows.every((row) => row[0] && row[1]),
@@ -175,7 +226,7 @@ export const serviceSchema = z.object({
   summary: optional("简介", 2000),
   content: optional("详情", 100_000),
   coverUrl: link("封面图片"),
-  videoUrl: link("介绍视频"),
+  media: mediaList,
   features: lines("服务内容"),
   deliverables: lines("交付物"),
   faq: pipeLines("FAQ").refine(

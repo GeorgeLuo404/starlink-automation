@@ -94,8 +94,9 @@ model Article {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
-  author   User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  author   User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  media    ContentMedia[]
 
   @@index([status, publishedAt])
   @@index([categoryId])
@@ -110,8 +111,6 @@ model Project {
   summary    String?       @db.Text
   content    String?       @db.Text
   coverUrl   String?
-  gallery    String[]      @default([])
-  videoUrl   String?
   tags       String[]      @default([])
   scope      String[]      @default([])
   metrics    Json?
@@ -123,7 +122,35 @@ model Project {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
+  media ContentMedia[]
+
   @@index([status, sortOrder])
+}
+
+/// 案例 / 新闻 / 业务能力详情页的图片与视频，按 sortOrder 排成轮播。
+/// 每行只属于一个案例、一篇文章或一项业务（迁移里有 CHECK 约束）。
+model ContentMedia {
+  id        String    @id @default(cuid())
+  kind      MediaKind
+  /// 图片地址、上传的视频地址，或 B站 视频链接
+  url       String
+  /// 视频封面
+  posterUrl String?
+  alt       String?
+  caption   String?
+  sortOrder Int       @default(0)
+  projectId String?
+  articleId String?
+  serviceId String?
+  createdAt DateTime  @default(now())
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  article Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  service Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sortOrder])
+  @@index([articleId, sortOrder])
+  @@index([serviceId, sortOrder])
 }
 
 model Service {
@@ -134,7 +161,6 @@ model Service {
   content   String?  @db.Text
   icon         String?
   coverUrl     String?
-  videoUrl     String?
   features     String[] @default([])
   deliverables String[] @default([])
   faq          Json?
@@ -142,6 +168,8 @@ model Service {
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  media ContentMedia[]
 }
 
 model MediaAsset {

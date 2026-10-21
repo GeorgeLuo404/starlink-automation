@@ -6,6 +6,7 @@ import { z } from "zod";
 import { clearSessionCookie, getSession, setSessionCookie, verifyPassword } from "@/lib/auth";
 import { getPrisma, requireDb } from "@/lib/prisma";
 import { deleteObject } from "@/lib/storage";
+import { isBilibiliShortLink, resolveBilibiliShortLink } from "@/lib/bilibili";
 import { slugify } from "@/lib/utils";
 import {
   articleSchema,
@@ -16,6 +17,7 @@ import {
   gallerySchema,
   idSchema,
   inquiryUpdateSchema,
+  type MediaInput,
   partnerSchema,
   serviceSchema,
   settingsSchema,
@@ -70,6 +72,27 @@ async function persist(work: () => Promise<unknown>): Promise<ActionState | null
     console.error("[admin] database write failed:", error);
     return { ok: false, message: "保存失败：数据库暂时不可用，请稍后重试" };
   }
+}
+
+/**
+ * Turn the validated media list into rows for the nested write, in display
+ * order. b23.tv short links are followed here — the browser cannot.
+ */
+async function mediaRows(media: MediaInput[]): Promise<{ rows: (MediaInput & { sortOrder: number })[] } | { failure: ActionState }> {
+  const rows = [];
+  for (const [index, item] of media.entries()) {
+    let url = item.url;
+    if (item.kind === "VIDEO" && isBilibiliShortLink(url)) {
+      const resolved = await resolveBilibiliShortLink(url);
+      if (!resolved) {
+        const message = `第 ${index + 1} 项：无法打开这个 B站 短链接，请粘贴视频页的完整链接`;
+        return { failure: { ok: false, message, fieldErrors: { media: [message] } } };
+      }
+      url = resolved;
+    }
+    rows.push({ ...item, url, sortOrder: index });
+  }
+  return { rows };
 }
 
 /** Zod parse + DB availability check shared by every form action. */
@@ -137,7 +160,9 @@ export async function saveArticle(_prev: ActionState, form: FormData): Promise<A
   const ready = await prepare(articleSchema, form);
   if (!ready.ok) return ready.failure;
   const { db, data: input } = ready;
-  const { id, ...fields } = input;
+  const { id, media, ...fields } = input;
+  const prepared = await mediaRows(media);
+  if ("failure" in prepared) return prepared.failure;
 
   const data = {
     ...fields,
@@ -145,8 +170,11 @@ export async function saveArticle(_prev: ActionState, form: FormData): Promise<A
     publishedAt: input.publishedAt ?? (input.status === "PUBLISHED" ? new Date() : null),
   };
 
+  // Nested writes run in one transaction: the old list is replaced as a whole.
   const failure = await persist(() =>
-    id ? db.article.update({ where: { id }, data }) : db.article.create({ data })
+    id
+      ? db.article.update({ where: { id }, data: { ...data, media: { deleteMany: {}, create: prepared.rows } } })
+      : db.article.create({ data: { ...data, media: { create: prepared.rows } } })
   );
   if (failure) return failure;
 
@@ -193,7 +221,9 @@ export async function saveCase(_prev: ActionState, form: FormData): Promise<Acti
   const ready = await prepare(caseSchema, form);
   if (!ready.ok) return ready.failure;
   const { db, data: input } = ready;
-  const { id, ...fields } = input;
+  const { id, media, ...fields } = input;
+  const prepared = await mediaRows(media);
+  if ("failure" in prepared) return prepared.failure;
 
   const data = {
     ...fields,
@@ -201,8 +231,11 @@ export async function saveCase(_prev: ActionState, form: FormData): Promise<Acti
     metrics: input.metrics.map(([value, label]) => ({ value, label })),
   };
 
+  // Nested writes run in one transaction: the old list is replaced as a whole.
   const failure = await persist(() =>
-    id ? db.project.update({ where: { id }, data }) : db.project.create({ data })
+    id
+      ? db.project.update({ where: { id }, data: { ...data, media: { deleteMany: {}, create: prepared.rows } } })
+      : db.project.create({ data: { ...data, media: { create: prepared.rows } } })
   );
   if (failure) return failure;
 
@@ -227,7 +260,9 @@ export async function saveService(_prev: ActionState, form: FormData): Promise<A
   const ready = await prepare(serviceSchema, form);
   if (!ready.ok) return ready.failure;
   const { db, data: input } = ready;
-  const { id, ...fields } = input;
+  const { id, media, ...fields } = input;
+  const prepared = await mediaRows(media);
+  if ("failure" in prepared) return prepared.failure;
 
   const data = {
     ...fields,
@@ -235,8 +270,11 @@ export async function saveService(_prev: ActionState, form: FormData): Promise<A
     faq: input.faq.map(([q, a]) => ({ q, a })),
   };
 
+  // Nested writes run in one transaction: the old list is replaced as a whole.
   const failure = await persist(() =>
-    id ? db.service.update({ where: { id }, data }) : db.service.create({ data })
+    id
+      ? db.service.update({ where: { id }, data: { ...data, media: { deleteMany: {}, create: prepared.rows } } })
+      : db.service.create({ data: { ...data, media: { create: prepared.rows } } })
   );
   if (failure) return failure;
 

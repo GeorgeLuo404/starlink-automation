@@ -1,63 +1,34 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, UploadCloud } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { uploadFile } from "@/lib/upload-client";
+import { Dropzone } from "@/components/admin/dropzone";
 
 type QueueItem = { name: string; progress: number; status: "uploading" | "done" | "error" };
 
 export function MediaUploader({ folder = "general" }: { folder?: string }) {
   const [queue, setQueue] = useState<QueueItem[]>([]);
-  const [dragging, setDragging] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   function patch(name: string, update: Partial<QueueItem>) {
     setQueue((prev) => prev.map((item) => (item.name === name ? { ...item, ...update } : item)));
   }
 
-  function uploadOne(file: File) {
-    return new Promise<void>((resolve) => {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("folder", folder);
-
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "/api/upload");
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          patch(file.name, { progress: Math.round((event.loaded / event.total) * 100) });
-        }
-      };
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          patch(file.name, { status: "done", progress: 100 });
-        } else {
-          let message = String(xhr.status);
-          try {
-            message = JSON.parse(xhr.responseText).error ?? message;
-          } catch {
-            /* keep the status code */
-          }
-          patch(file.name, { status: "error" });
-          toast.error(`${file.name}: ${message}`);
-        }
-        resolve();
-      };
-      xhr.onerror = () => {
-        patch(file.name, { status: "error" });
-        toast.error(`${file.name}: 网络错误`);
-        resolve();
-      };
-      xhr.send(body);
-    });
+  async function uploadOne(file: File) {
+    try {
+      await uploadFile(file, folder, (progress) => patch(file.name, { progress }));
+      patch(file.name, { status: "done", progress: 100 });
+    } catch (error) {
+      patch(file.name, { status: "error" });
+      toast.error(`${file.name}: ${error instanceof Error ? error.message : "upload_failed"}`);
+    }
   }
 
-  async function handleFiles(files: FileList | null) {
-    if (!files || files.length === 0) return;
-    const list = Array.from(files);
+  async function handleFiles(list: File[]) {
+    if (list.length === 0) return;
     setQueue((prev) => [
       ...prev,
       ...list.map((file) => ({ name: file.name, progress: 0, status: "uploading" as const })),
@@ -74,40 +45,13 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
 
   return (
     <div>
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setDragging(false);
-          void handleFiles(e.dataTransfer.files);
-        }}
-        onClick={() => inputRef.current?.click()}
-        className={cn(
-          "flex cursor-pointer flex-col items-center justify-center rounded-(--radius) border border-dashed px-6 py-12 text-center transition-colors",
-          dragging ? "border-primary/60 bg-primary/6" : "border-border hover:border-primary/40"
-        )}
-      >
-        <UploadCloud className={cn("size-7", dragging ? "text-primary" : "text-faint")} strokeWidth={1.4} />
-        <p className="mt-4 text-sm font-medium text-foreground">拖拽文件到此处，或点击选择</p>
-        <p className="mt-1.5 font-mono text-[0.6875rem] text-faint">
-          图片 / 视频 / PDF / Office · 单文件不超过 200MB
-        </p>
-      </div>
-
-      <input
-        ref={inputRef}
-        type="file"
+      <Dropzone
         multiple
-        className="hidden"
         accept="image/*,video/*,.pdf,.zip,.docx,.xlsx,.pptx,.csv,.txt"
-        onChange={(e) => {
-          void handleFiles(e.target.files);
-          e.target.value = "";
-        }}
+        onFiles={(files) => void handleFiles(files)}
+        title="拖拽文件到此处，或点击选择"
+        hint="图片 / 视频 / PDF / Office · 单文件不超过 200MB"
+        className="py-12"
       />
 
       {queue.length > 0 ? (

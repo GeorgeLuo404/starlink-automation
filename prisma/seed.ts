@@ -107,7 +107,6 @@ async function main() {
         summary: item.summary,
         content: item.content,
         coverUrl: `/media/case-${item.slug}.svg`,
-        gallery: [] as string[],
         tags: item.tags,
         scope: item.scope,
         metrics: item.metrics,

@@ -1,27 +1,35 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Check, Copy, Loader2, Upload, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Check, Copy, FileText, Loader2, Maximize2, Play, Upload, X } from "lucide-react";
+import { uploadFile, type UploadedFile } from "@/lib/upload-client";
 import { toast } from "sonner";
 import { FieldError, useFieldError } from "@/components/admin/action-form";
+import { Dropzone } from "@/components/admin/dropzone";
+import { fileName, MediaPreview } from "@/components/admin/media-preview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export type UploadResult = { url: string; key: string; size: number; kind: string; name: string };
+export type UploadResult = UploadedFile;
 
 /**
  * Upload-or-paste field used by every admin form.
  *
- * Drop a file to upload it to the configured storage driver; the returned URL
- * is written into a normal text input so it can also be pasted or edited by
- * hand (e.g. pointing at an existing CDN asset).
+ * Drop, paste or pick a file to upload it to the configured storage driver;
+ * the returned URL is written into a normal text input so it can also be
+ * pasted or edited by hand (e.g. pointing at an existing CDN asset). Once set,
+ * the file shows as a card — click the thumbnail to preview it full size,
+ * drop another file on it to replace it. Pass `value` and
+ * `onValueChange` to control it from a parent (the cover field in
+ * <MediaFields> does, for 设为封面).
  */
 export function UploadField({
   name,
   label,
   defaultValue = "",
+  value,
+  onValueChange,
   folder = "general",
   accept = "image/*,video/*,.pdf,.zip,.docx,.xlsx,.pptx",
   showPreview = true,
@@ -31,48 +39,34 @@ export function UploadField({
   name: string;
   label: string;
   defaultValue?: string;
+  value?: string;
+  onValueChange?: (url: string) => void;
   folder?: string;
   accept?: string;
   showPreview?: boolean;
   onUploaded?: (result: UploadResult) => void;
   description?: string;
 }) {
-  const [url, setUrl] = useState(defaultValue);
+  const [ownUrl, setOwnUrl] = useState(defaultValue);
+  const url = value ?? ownUrl;
+  const setUrl = (next: string) => {
+    if (value === undefined) setOwnUrl(next);
+    onValueChange?.(next);
+  };
   const [busy, setBusy] = useState(false);
-  const [dragging, setDragging] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+  /** Pixel size / duration of the current file, read when its preview loads. */
+  const [meta, setMeta] = useState<{ url: string; text: string } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const error = useFieldError(name);
 
   async function upload(file: File) {
     setBusy(true);
     try {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("folder", folder);
-
-      const response = await fetch("/api/upload", { method: "POST", body });
-      const data = (await response.json()) as {
-        ok: boolean;
-        url?: string;
-        key?: string;
-        size?: number;
-        kind?: string;
-        error?: string;
-      };
-
-      if (!response.ok || !data.ok || !data.url) {
-        throw new Error(data.error ?? "upload_failed");
-      }
-
-      setUrl(data.url);
-      onUploaded?.({
-        url: data.url,
-        key: data.key ?? "",
-        size: data.size ?? file.size,
-        kind: data.kind ?? "IMAGE",
-        name: file.name,
-      });
+      const result = await uploadFile(file, folder);
+      setUrl(result.url);
+      onUploaded?.(result);
       toast.success(`上传成功 / Uploaded: ${file.name}`);
     } catch (error) {
       toast.error(`上传失败 / Upload failed: ${error instanceof Error ? error.message : "unknown"}`);
@@ -83,6 +77,21 @@ export function UploadField({
 
   const isImage = /\.(png|jpe?g|webp|gif|avif|svg)(\?|$)/i.test(url);
   const isVideo = /\.(mp4|webm|mov)(\?|$)/i.test(url);
+  const previewable = showPreview && (isImage || isVideo);
+  const details = meta?.url === url ? meta.text : null;
+
+  // Read size/duration from the preview element. Also checked on mount: a cached
+  // file can finish loading before React attaches onLoad.
+  const readImage = (img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth && meta?.url !== url) {
+      setMeta({ url, text: `${img.naturalWidth} × ${img.naturalHeight}` });
+    }
+  };
+  const readVideo = (video: HTMLVideoElement | null) => {
+    if (video && video.readyState >= 1 && meta?.url !== url) {
+      setMeta({ url, text: `${video.videoWidth} × ${video.videoHeight} · ${duration(video.duration)}` });
+    }
+  };
 
   return (
     <div>
@@ -143,38 +152,90 @@ export function UploadField({
         }}
       />
 
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={(e) => {
-          e.preventDefault();
-          setDragging(false);
-          const file = e.dataTransfer.files?.[0];
-          if (file) void upload(file);
-        }}
-        className={cn(
-          "mt-2 rounded-(--radius) border border-dashed px-4 py-3 text-center text-xs transition-colors",
-          dragging ? "border-primary/60 bg-primary/6 text-primary" : "border-border text-faint"
-        )}
-      >
-        {busy ? "上传中…" : "或将文件拖到此处上传"}
-      </div>
+      {!url ? (
+        <Dropzone onFiles={([file]) => upload(file)} accept={accept} busy={busy} hint={hintFor(accept)} className="mt-3" />
+      ) : (
+        <Dropzone onFiles={([file]) => upload(file)} accept={accept} busy={busy} overlay="松开以替换文件" className="mt-3">
+          <div className="flex flex-col gap-4 rounded-(--radius) border border-border bg-raised/40 p-3 sm:flex-row sm:items-center">
+            {previewable ? (
+              <button
+                type="button"
+                onClick={() => setPreviewing(true)}
+                className="group relative aspect-video w-full shrink-0 overflow-hidden rounded-[calc(var(--radius)-0.25rem)] bg-muted sm:w-72"
+                aria-label={`预览${label}`}
+              >
+                {isImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img ref={readImage} src={url} alt="" className="size-full object-cover" onLoad={(e) => readImage(e.currentTarget)} />
+                ) : (
+                  <video
+                    ref={readVideo}
+                    src={`${url}#t=0.1`}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="size-full object-cover"
+                    onLoadedMetadata={(e) => readVideo(e.currentTarget)}
+                  />
+                )}
+                {isVideo ? (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="inline-flex size-10 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm">
+                      <Play className="ml-0.5 size-4 fill-current" />
+                    </span>
+                  </span>
+                ) : null}
+                <span className="absolute inset-0 flex items-end justify-end p-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 text-[0.6875rem] text-foreground backdrop-blur-sm">
+                    <Maximize2 className="size-3" />
+                    预览
+                  </span>
+                </span>
+              </button>
+            ) : (
+              <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-(--radius) border border-border bg-raised text-muted-foreground">
+                <FileText className="size-5" strokeWidth={1.6} />
+              </span>
+            )}
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <p className="truncate font-mono text-xs text-foreground">{fileName(url)}</p>
+              {details ? <p className="font-mono text-[0.6875rem] text-muted-foreground tabular-nums">{details}</p> : null}
+              <p className="text-xs text-faint">
+                {previewable ? "点击缩略图可放大预览；" : null}拖入新文件即可替换。
+                {!previewable ? (
+                  <a href={url} target="_blank" rel="noreferrer" className="ml-1 text-muted-foreground underline-offset-4 hover:text-primary hover:underline">
+                    打开文件
+                  </a>
+                ) : null}
+              </p>
+            </div>
+          </div>
+        </Dropzone>
+      )}
 
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
 
-      {showPreview && url && isImage ? (
-        <div className="mt-3 overflow-hidden rounded-(--radius) border border-border">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={url} alt="" className="max-h-44 w-full object-cover" />
-        </div>
-      ) : null}
-
-      {showPreview && url && isVideo ? (
-        <video src={url} controls className="mt-3 max-h-44 w-full rounded-(--radius) border border-border" />
+      {previewable ? (
+        <MediaPreview
+          items={[{ kind: isImage ? "IMAGE" : "VIDEO", url }]}
+          index={previewing ? 0 : null}
+          onIndexChange={(index) => setPreviewing(index !== null)}
+        />
       ) : null}
     </div>
   );
+}
+
+/** What the empty drop area says it accepts, from the <input accept> string. */
+function hintFor(accept: string) {
+  if (accept === "image/*") return "JPG / PNG / WebP / GIF / SVG · 单个文件不超过 200MB";
+  if (accept === "video/*") return "MP4 / WebM / MOV · 建议 1080p、50MB 以内";
+  if (!accept.includes("image") && !accept.includes("video")) return "PDF / ZIP / Office 文档 · 单个文件不超过 200MB";
+  return "图片 / 视频 / 文档 · 单个文件不超过 200MB";
+}
+
+function duration(seconds: number) {
+  if (!Number.isFinite(seconds)) return "--:--";
+  const s = Math.round(seconds);
+  return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 }

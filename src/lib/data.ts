@@ -12,6 +12,7 @@ import {
   type CaseContent,
   type DownloadContent,
   type GalleryContent,
+  type MediaContent,
   type ServiceContent,
 } from "@/content/defaults";
 
@@ -38,6 +39,37 @@ async function fromDb<T>(query: (db: NonNullable<ReturnType<typeof getPrisma>>) 
   }
 }
 
+/* ---------------------------------- 媒体 ---------------------------------- */
+
+/** The whole carousel, for a detail page. */
+const ALL_MEDIA = { orderBy: { sortOrder: "asc" as const } };
+
+/** Only the first item that can stand in for a missing cover — enough for a card. */
+export const COVER_MEDIA = {
+  where: { OR: [{ kind: "IMAGE" as const }, { posterUrl: { not: null } }] },
+  orderBy: { sortOrder: "asc" as const },
+  take: 1,
+};
+
+function toMedia(rows: unknown): MediaContent[] {
+  if (!Array.isArray(rows)) return [];
+  return rows.map((row: Record<string, unknown>) => ({
+    kind: row.kind === "VIDEO" ? "VIDEO" : "IMAGE",
+    url: String(row.url),
+    posterUrl: (row.posterUrl as string | null) ?? null,
+    alt: (row.alt as string | null) ?? null,
+    caption: (row.caption as string | null) ?? null,
+  }));
+}
+
+/** The uploaded cover, else the first image (or video poster) of the carousel. */
+export function coverOf(row: Record<string, unknown>) {
+  if (row.coverUrl) return row.coverUrl as string;
+  const first = toMedia(row.media).find((item) => item.kind === "IMAGE" || item.posterUrl);
+  if (!first) return null;
+  return first.kind === "IMAGE" ? first.url : (first.posterUrl ?? null);
+}
+
 /* --------------------------------- 业务能力 -------------------------------- */
 
 function toService(row: Record<string, unknown>): ServiceContent {
@@ -47,7 +79,7 @@ function toService(row: Record<string, unknown>): ServiceContent {
     summary: String(row.summary ?? ""),
     content: String(row.content ?? ""),
     icon: String(row.icon ?? "Cpu"),
-    coverUrl: (row.coverUrl as string | null) ?? null,
+    coverUrl: coverOf(row),
     features: Array.isArray(row.features) ? (row.features as string[]) : [],
     deliverables: Array.isArray(row.deliverables) ? (row.deliverables as string[]) : [],
     faq: Array.isArray(row.faq) ? (row.faq as ServiceContent["faq"]) : [],
@@ -56,7 +88,11 @@ function toService(row: Record<string, unknown>): ServiceContent {
 
 export async function listServices(): Promise<ServiceContent[]> {
   return fromDb(async (db) => {
-    const rows = await db.service.findMany({ where: { published: true }, orderBy: { sortOrder: "asc" } });
+    const rows = await db.service.findMany({
+      where: { published: true },
+      include: { media: COVER_MEDIA },
+      orderBy: { sortOrder: "asc" },
+    });
     if (!rows.length) return defaultServices;
     return rows.map((row) => toService(row as unknown as Record<string, unknown>));
   }, defaultServices);
@@ -64,9 +100,9 @@ export async function listServices(): Promise<ServiceContent[]> {
 
 export async function getService(slug: string): Promise<ServiceContent | null> {
   return fromDb(async (db) => {
-    const row = await db.service.findUnique({ where: { slug } });
+    const row = await db.service.findUnique({ where: { slug }, include: { media: ALL_MEDIA } });
     if (!row) return defaultServices.find((s) => s.slug === slug) ?? null;
-    return toService(row as unknown as Record<string, unknown>);
+    return { ...toService(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultServices.find((s) => s.slug === slug) ?? null);
 }
 
@@ -86,7 +122,7 @@ function toCase(row: Record<string, unknown>): CaseContent {
     metrics: Array.isArray(row.metrics) ? (row.metrics as CaseContent["metrics"]) : [],
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     featured: Boolean(row.featured),
-    coverUrl: (row.coverUrl as string | null) ?? null,
+    coverUrl: coverOf(row),
   };
 }
 
@@ -101,6 +137,7 @@ export async function listCases(options?: { featuredOnly?: boolean; limit?: numb
   return fromDb(async (db) => {
     const rows = await db.project.findMany({
       where: { status: "PUBLISHED", ...(options?.featuredOnly ? { featured: true } : {}) },
+      include: { media: COVER_MEDIA },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       take: options?.limit,
     });
@@ -111,9 +148,9 @@ export async function listCases(options?: { featuredOnly?: boolean; limit?: numb
 
 export async function getCase(slug: string): Promise<CaseContent | null> {
   return fromDb(async (db) => {
-    const row = await db.project.findUnique({ where: { slug } });
+    const row = await db.project.findUnique({ where: { slug }, include: { media: ALL_MEDIA } });
     if (!row) return defaultCases.find((c) => c.slug === slug) ?? null;
-    return toCase(row as unknown as Record<string, unknown>);
+    return { ...toCase(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultCases.find((c) => c.slug === slug) ?? null);
 }
 
@@ -135,7 +172,7 @@ function toArticle(row: Record<string, unknown>): ArticleView {
     readMinutes: Number(row.readMinutes ?? 3),
     featured: Boolean(row.featured),
     views: Number(row.viewCount ?? 0),
-    coverUrl: (row.coverUrl as string) ?? null,
+    coverUrl: coverOf(row),
   };
 }
 
@@ -187,7 +224,7 @@ export async function listArticles(options?: {
     const [rows, total] = await Promise.all([
       db.article.findMany({
         where,
-        include: { category: true },
+        include: { category: true, media: COVER_MEDIA },
         orderBy: [{ pinned: "desc" }, { publishedAt: "desc" }],
         skip: (page - 1) * pageSize,
         take: pageSize,
@@ -208,9 +245,9 @@ export async function listArticles(options?: {
 
 export async function getArticle(slug: string): Promise<ArticleView | null> {
   return fromDb(async (db) => {
-    const row = await db.article.findUnique({ where: { slug }, include: { category: true } });
+    const row = await db.article.findUnique({ where: { slug }, include: { category: true, media: ALL_MEDIA } });
     if (!row) return defaultArticles.find((a) => a.slug === slug) ?? null;
-    return toArticle(row as unknown as Record<string, unknown>);
+    return { ...toArticle(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultArticles.find((a) => a.slug === slug) ?? null);
 }
 
