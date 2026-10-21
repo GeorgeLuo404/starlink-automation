@@ -9,6 +9,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { RichText } from "@/components/site/rich-text";
 import { Cover, Eyebrow, LinkNode, PillLink, SectionHead } from "@/components/site/kit";
 import { ServiceCard } from "@/components/site/service-card";
+import { TileRows } from "@/components/site/media-tile";
 import { MediaCarousel } from "@/components/site/media-carousel";
 import { CtaSection } from "@/components/site/cta-section";
 import { coverSrc } from "@/lib/utils";
@@ -114,7 +115,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className="container-x">
             <SectionHead eyebrow={service.title} title={copy.services.media} lead={copy.services.mediaLead} />
             <div className="mt-14">
-              <MediaCarousel items={service.media} title={service.title} sizes="(max-width: 1408px) 100vw, 1408px" />
+              <MediaCarousel items={service.media} title={service.title} sizes="(max-width: 1024px) 100vw, (max-width: 1408px) 75vw, 1000px" />
             </div>
           </div>
         </section>
@@ -150,11 +151,14 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 </PillLink>
               }
             />
-            <div className="mt-14 grid gap-4 md:grid-cols-3">
-              {others.map((item) => (
-                <ServiceCard key={item.slug} service={item} index={all.indexOf(item)} />
-              ))}
-            </div>
+            <TileRows
+              items={others}
+              pattern={[3]}
+              className="mt-14"
+              render={(item) => (
+                <ServiceCard service={item} index={all.indexOf(item)} size="md" sizes="(max-width: 768px) 100vw, 45vw" />
+              )}
+            />
           </div>
         </section>
       ) : null}

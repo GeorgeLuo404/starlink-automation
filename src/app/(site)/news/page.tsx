@@ -86,7 +86,7 @@ export default async function NewsPage({
             <EmptyState title={copy.common.empty} hint={copy.common.emptyHint} />
           ) : (
             <>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-x-6 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
                 {items.map((article, i) => (
                   <ArticleCard key={article.slug} article={article} priority={i < 3} />
                 ))}

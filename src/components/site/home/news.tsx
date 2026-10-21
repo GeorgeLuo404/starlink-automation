@@ -20,7 +20,7 @@ export function HomeNews({ articles }: { articles: ArticleView[] }) {
             </PillLink>
           }
         />
-        <div className="mt-16 grid gap-4 md:grid-cols-3">
+        <div className="mt-16 grid gap-x-6 gap-y-12 md:grid-cols-3">
           {articles.map((a) => (
             <ArticleCard key={a.slug} article={a} />
           ))}

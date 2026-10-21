@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -101,22 +100,6 @@ export function FilterLink({ href, active, children }: { href: string; active: b
         {children}
       </Link>
     </Button>
-  );
-}
-
-/** Round arrow in a card's corner; reacts to hovering the whole card (.group). */
-export function CornerArrow({ className }: { className?: string }) {
-  return (
-    <span
-      className={cn(
-        buttonVariants({ variant: "outline", size: "icon-sm", shape: "pill" }),
-        "pointer-events-none bg-background/80 backdrop-blur-sm group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground",
-        className
-      )}
-      aria-hidden="true"
-    >
-      <ArrowUpRight />
-    </span>
   );
 }
 

@@ -2,9 +2,10 @@ import { ArrowRight } from "lucide-react";
 import type { ServiceContent } from "@/content/defaults";
 import { PillLink, SectionHead, highlight } from "../kit";
 import { ServiceCard } from "../service-card";
+import { TileRows } from "../media-tile";
 import copy from "@/content/copy.json";
 
-/** 业务能力 — two wide cards, then three. */
+/** 业务能力 — two wide tiles, then rows of three. */
 export function HomeServices({ services }: { services: ServiceContent[] }) {
   const t = copy.home.services;
   return (
@@ -28,17 +29,19 @@ export function HomeServices({ services }: { services: ServiceContent[] }) {
           }
         />
 
-        <div className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-          {services.map((service, i) => (
+        <TileRows
+          items={services}
+          pattern={[2, 3]}
+          className="mt-16"
+          render={(service, i, row) => (
             <ServiceCard
-              key={service.slug}
               service={service}
               index={i}
-              large={i < 2}
-              className={i < 2 ? "lg:col-span-3" : "lg:col-span-2"}
+              size={row === 0 ? "lg" : "md"}
+              sizes={row === 0 ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 45vw"}
             />
-          ))}
-        </div>
+          )}
+        />
       </div>
     </section>
   );

@@ -2,12 +2,12 @@ import { ArrowRight } from "lucide-react";
 import type { CaseContent } from "@/content/defaults";
 import { PillLink, SectionHead } from "../kit";
 import { CaseCard } from "../case-card";
+import { TileRows } from "../media-tile";
 import copy from "@/content/copy.json";
 
 /** 项目案例 — the lead project wide, the rest two by two. */
 export function HomeCases({ cases }: { cases: CaseContent[] }) {
-  const [lead, ...rest] = cases;
-  if (!lead) return null;
+  if (!cases.length) return null;
   const t = copy.home.cases;
   return (
     <section className="theme-light section-y">
@@ -23,12 +23,7 @@ export function HomeCases({ cases }: { cases: CaseContent[] }) {
             </PillLink>
           }
         />
-        <div className="mt-16 grid gap-4 lg:grid-cols-2">
-          <CaseCard item={lead} lead />
-          {rest.map((item) => (
-            <CaseCard key={item.slug} item={item} />
-          ))}
-        </div>
+        <TileRows items={cases} pattern={[1, 2]} className="mt-16" render={(item, i) => <CaseCard item={item} lead={i === 0} />} />
       </div>
     </section>
   );

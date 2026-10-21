@@ -209,6 +209,11 @@
     outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
+  /* Tailwind 4 gives buttons the default arrow; anything clickable shows the hand. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -310,6 +315,14 @@
   80%, 100% { transform: scale(1.6); opacity: 0; }
 }
 
+/* Scrolls by touch, trackpad or code, without a visible bar (thumbnail strips). */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer components {
   /* ------------------------------ layout ------------------------------ */
   .container-x {
@@ -326,7 +339,7 @@
   }
 
   .section-y {
-    padding-block: clamp(5.5rem, 10vw, 9.5rem);
+    padding-block: clamp(4rem, 7vw, 6.5rem);
   }
 
   /* --------------------------- typography ----------------------------- */
@@ -572,13 +585,27 @@
    runs out at the same scroll position — the moment the last card settles — and
    the folded stack scrolls away as one block, followed by the next section.
 
-   Off on phones and on windows too short to hold the folded stack. */
+   Below lg the strips are thinner and the band is whatever the screen has left
+   under the folded strips (svh: measured with the browser bars showing, so it
+   never changes mid-scroll). The text then sits over the art, and the art
+   takes the height that remains. Off on screens too short to hold the stack. */
 .process-stack {
-  --strip: 52px;
   --header: 72px;
-  --band: 380px;
+  --strip: 44px;
+  --band: clamp(21rem, 100svh - var(--header) - (var(--steps) - 1) * var(--strip) - 1.25rem, 32rem);
 }
-@media (min-width: 1024px) and (min-height: 720px) {
+@media (min-width: 1024px) {
+  .process-stack {
+    --strip: 52px;
+    --band: 380px;
+  }
+}
+@media (max-width: 1023.98px) and (min-height: 640px) {
+  .process-step-body {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+}
+@media (max-width: 1023.98px) and (min-height: 640px), (min-width: 1024px) and (min-height: 720px) {
   .process-step {
     position: sticky;
     top: calc(var(--header) + var(--i) * var(--strip));
