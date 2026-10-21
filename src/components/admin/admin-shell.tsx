@@ -4,12 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Blocks,
   Briefcase,
   Download,
   ExternalLink,
   FileText,
   Gauge,
-  Handshake,
   Images,
   Image as ImageIcon,
   Inbox,
@@ -49,6 +49,7 @@ export function AdminShell({
         { href: "/admin/cases", label: "项目案例", icon: Briefcase },
         { href: "/admin/services", label: "业务能力", icon: Wrench },
         { href: "/admin/gallery", label: "图库", icon: Images },
+        { href: "/admin/partners", label: "品牌平台", icon: Blocks },
       ],
     },
     {
@@ -62,7 +63,6 @@ export function AdminShell({
       title: "客户与系统",
       items: [
         { href: "/admin/inquiries", label: "客户询盘", icon: Inbox, badge: counts.inquiries },
-        { href: "/admin/partners", label: "合作伙伴", icon: Handshake },
         { href: "/admin/settings", label: "站点设置", icon: Settings },
       ],
     },

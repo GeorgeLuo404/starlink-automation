@@ -18,6 +18,8 @@ import {
   idSchema,
   inquiryUpdateSchema,
   type MediaInput,
+  partnerActiveSchema,
+  partnerOrderSchema,
   partnerSchema,
   serviceSchema,
   settingsSchema,
@@ -28,8 +30,10 @@ import {
 /* ====================================================================== */
 
 /**
- * Result of a form action. Success always ends in a redirect, so the state a
- * form actually sees is either the initial `{ ok: true }` or a failure.
+ * Result of a form action. Success usually ends in a redirect, so the state a
+ * form sees is the initial `{ ok: true }` or a failure; actions behind a
+ * dialog (savePartner) return `{ ok: true }` instead, and <ActionForm
+ * onSuccess> closes the dialog.
  */
 export type ActionState = { ok: boolean; message?: string; fieldErrors?: Record<string, string[]> };
 
@@ -399,22 +403,59 @@ export async function deleteInquiry(_prev: ActionState, form: FormData): Promise
 }
 
 /* ====================================================================== */
-/* Partners / 合作伙伴                                                    */
+/* Supported brands / 品牌平台 (Partner table)                            */
 /* ====================================================================== */
 
+/**
+ * Add or edit a brand from the admin dialog. Returns instead of redirecting,
+ * so the dialog can close itself; the list refreshes through revalidation.
+ * New brands go to the end of the list.
+ */
 export async function savePartner(_prev: ActionState, form: FormData): Promise<ActionState> {
   const ready = await prepare(partnerSchema, form);
   if (!ready.ok) return ready.failure;
   const { db, data: input } = ready;
   const { id, ...data } = input;
 
-  const failure = await persist(() =>
-    id ? db.partner.update({ where: { id }, data }) : db.partner.create({ data })
-  );
+  const failure = await persist(async () => {
+    if (id) return db.partner.update({ where: { id }, data });
+    const last = await db.partner.aggregate({ _max: { sortOrder: true } });
+    return db.partner.create({ data: { ...data, sortOrder: (last._max.sortOrder ?? -1) + 1 } });
+  });
   if (failure) return failure;
 
   bust();
-  redirect("/admin/partners");
+  return { ok: true, message: id ? "已保存" : "已添加" };
+}
+
+/** Persist the order after a drag: `ids` is the whole list, top to bottom. */
+export async function reorderPartners(ids: string[]): Promise<ActionState> {
+  await guard();
+  const parsed = partnerOrderSchema.safeParse(ids);
+  if (!parsed.success) return invalid(parsed.error);
+  const db = getPrisma();
+  if (!db) return NO_DATABASE;
+
+  const failure = await persist(() =>
+    db.$transaction(parsed.data.map((id, sortOrder) => db.partner.update({ where: { id }, data: { sortOrder } })))
+  );
+  if (failure) return failure;
+  bust();
+  return { ok: true };
+}
+
+/** Show or hide a brand on the homepage without deleting it. */
+export async function setPartnerActive(id: string, active: boolean): Promise<ActionState> {
+  await guard();
+  const parsed = partnerActiveSchema.safeParse({ id, active });
+  if (!parsed.success) return invalid(parsed.error);
+  const db = getPrisma();
+  if (!db) return NO_DATABASE;
+
+  const failure = await persist(() => db.partner.update({ where: { id }, data: { active: parsed.data.active } }));
+  if (failure) return failure;
+  bust();
+  return { ok: true };
 }
 
 export async function deletePartner(_prev: ActionState, form: FormData): Promise<ActionState> {
