@@ -1,7 +1,7 @@
 # 后台使用说明
 
 后台地址：`<网站地址>/admin`
-（当前线上：<https://starlink-automation.vercel.app/admin>；本地开发：<http://localhost:3000/admin>）
+（当前线上：<https://starlinkautomation.space/admin>；本地开发：<http://localhost:3000/admin>）
 
 ---
 

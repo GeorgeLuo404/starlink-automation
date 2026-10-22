@@ -4,7 +4,7 @@
 
 | 环境 | 地址 | 组成 |
 | --- | --- | --- |
-| MVP（当前） | <https://starlink-automation.vercel.app> | Vercel + Supabase，供客户预览，已禁止搜索引擎收录 |
+| MVP（当前） | <https://starlinkautomation.space> | Vercel + Supabase，供客户预览，已禁止搜索引擎收录 |
 | 正式环境（ICP 备案后） | 待定 | 阿里云 ECS + RDS PostgreSQL + OSS |
 
 部署细节见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。
