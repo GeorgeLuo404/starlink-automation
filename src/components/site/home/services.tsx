@@ -1,25 +1,19 @@
 import { ArrowRight } from "lucide-react";
 import type { ServiceContent } from "@/content/defaults";
-import { PillLink, SectionHead, highlight } from "../kit";
+import { getPageContent } from "@/lib/page-content";
+import { PillLink, SectionHead, richTitle } from "../kit";
 import { ServiceCard } from "../service-card";
 import { TileRows } from "../media-tile";
-import copy from "@/content/copy.json";
 
-/** 业务能力 — two wide tiles, then rows of three. */
-export function HomeServices({ services }: { services: ServiceContent[] }) {
-  const t = copy.home.services;
+/** 业务能力 — two wide tiles, then rows of three. Heading from 后台 → 首页 → 业务能力. */
+export async function HomeServices({ services }: { services: ServiceContent[] }) {
+  const t = await getPageContent("home.services");
   return (
     <section className="theme-dark section-y">
       <div className="container-x">
         <SectionHead
           eyebrow={t.eyebrow}
-          title={
-            <>
-              从图纸到整线，
-              <br />
-              {highlight("一条完整的交付链路", "交付链路")}
-            </>
-          }
+          title={richTitle(t.title, t.titleAccent)}
           lead={t.desc}
           action={
             <PillLink href="/services" variant="outline">

@@ -1,11 +1,11 @@
 import { ArrowRight } from "lucide-react";
 import { HeroConstellation } from "./hero-constellation";
-import { Eyebrow, LinkNode, PillLink } from "../kit";
-import copy from "@/content/copy.json";
+import { getPageContent } from "@/lib/page-content";
+import { Eyebrow, LinkNode, PillLink, highlight } from "../kit";
 
-/** 首屏 — headline over the 3D constellation robot cell. */
-export function HomeHero() {
-  const t = copy.home.hero;
+/** 首屏 — headline over the 3D constellation robot cell. Text from 后台 → 首页 → 首屏. */
+export async function HomeHero() {
+  const t = await getPageContent("home.hero");
   return (
     <section className="theme-dark relative isolate flex min-h-svh flex-col justify-end overflow-hidden pt-28 pb-10">
       <div className="absolute inset-0 -z-10" aria-hidden="true">
@@ -15,15 +15,12 @@ export function HomeHero() {
       <div className="container-x">
         <div className="max-w-4xl">
           <div className="intro">
-            <Eyebrow>
-              {t.eyebrow} · {t.badge}
-            </Eyebrow>
+            <Eyebrow>{[t.eyebrow, t.badge].filter(Boolean).join(" · ")}</Eyebrow>
           </div>
           <h1 className="display intro mt-8" style={{ animationDelay: "80ms" }}>
-            {t.titleTop}，
+            {t.titleTop}
             <br />
-            <span className="text-primary">{t.titleBottom.slice(0, 2)}</span>
-            {t.titleBottom.slice(2)}
+            {highlight(t.titleBottom, t.titleAccent, "text-primary")}
           </h1>
           <p className="lead intro mt-8 max-w-xl" style={{ animationDelay: "200ms" }}>
             {t.subtitle}
@@ -44,7 +41,7 @@ export function HomeHero() {
           style={{ animationDelay: "420ms" }}
         >
           {t.ticker.map((item, i) => (
-            <span key={item} className="flex items-center gap-6">
+            <span key={i} className="flex items-center gap-6">
               {i ? <LinkNode className="size-2 opacity-70" /> : null}
               {item}
             </span>

@@ -7,6 +7,9 @@ import { clearSessionCookie, getSession, setSessionCookie, verifyPassword } from
 import { getPrisma, requireDb } from "@/lib/prisma";
 import { deleteObject } from "@/lib/storage";
 import { isBilibiliShortLink, resolveBilibiliShortLink } from "@/lib/bilibili";
+import { describeIssues, pageContentSchema } from "@/lib/page-content";
+import { SECTIONS, type SectionKey } from "@/content/page-sections";
+import type { Prisma } from "@/generated/prisma/client";
 import { slugify } from "@/lib/utils";
 import {
   articleSchema,
@@ -458,13 +461,64 @@ export async function setPartnerActive(id: string, active: boolean): Promise<Act
   return { ok: true };
 }
 
+/** Returns instead of redirecting: the brand list lives in the 首页 editor, whose unsaved edits must survive. */
 export async function deletePartner(_prev: ActionState, form: FormData): Promise<ActionState> {
   const ready = await prepare(idSchema, form);
   if (!ready.ok) return ready.failure;
   const failure = await persist(() => ready.db.partner.delete({ where: { id: ready.data.id } }));
   if (failure) return failure;
   bust();
-  redirect("/admin/partners");
+  return { ok: true };
+}
+
+/* ====================================================================== */
+/* Page content / 页面内容（首页、关于我们、联系我们、列表页页头）          */
+/* ====================================================================== */
+
+const isSectionKey = (key: string): key is SectionKey => Object.hasOwn(SECTIONS, key);
+
+/**
+ * Save one page section from its admin editor. The form sends the section
+ * `key` and its content as JSON in `data`; returns instead of redirecting so
+ * unsaved edits in the editor's other sections are kept.
+ */
+export async function savePageContent(_prev: ActionState, form: FormData): Promise<ActionState> {
+  await guard();
+  const key = String(form.get("key") ?? "");
+  if (!isSectionKey(key)) return { ok: false, message: "未知的页面区块，请刷新后重试" };
+
+  let data: unknown;
+  try {
+    data = JSON.parse(String(form.get("data") ?? ""));
+  } catch {
+    return { ok: false, message: "内容格式无效，请刷新后重试" };
+  }
+  const parsed = pageContentSchema(key).safeParse(data);
+  if (!parsed.success) return { ok: false, ...describeIssues(key, parsed.error.issues) };
+
+  const db = getPrisma();
+  if (!db) return NO_DATABASE;
+  const value = parsed.data as Prisma.InputJsonValue;
+  const failure = await persist(() =>
+    db.pageContent.upsert({ where: { key }, create: { key, data: value }, update: { data: value } })
+  );
+  if (failure) return failure;
+
+  bust();
+  return { ok: true, message: "已保存" };
+}
+
+/** Drop a section's saved content, so the site shows the default text again. */
+export async function resetPageContent(key: string): Promise<ActionState> {
+  await guard();
+  if (!isSectionKey(key)) return { ok: false, message: "未知的页面区块，请刷新后重试" };
+  const db = getPrisma();
+  if (!db) return NO_DATABASE;
+
+  const failure = await persist(() => db.pageContent.deleteMany({ where: { key } }));
+  if (failure) return failure;
+  bust();
+  return { ok: true, message: "已恢复默认内容" };
 }
 
 /* ====================================================================== */

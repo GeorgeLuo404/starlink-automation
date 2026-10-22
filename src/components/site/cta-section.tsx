@@ -3,11 +3,11 @@ import { ctaRobot } from "@/lib/line-art/drawings";
 import { Card } from "@/components/ui/card";
 import { Eyebrow, PillLink } from "./kit";
 import { LineArt } from "./line-art";
-import copy from "@/content/copy.json";
+import { getPageContent } from "@/lib/page-content";
 
-/** 开始合作 — the white card that closes the home page and most inner pages. */
-export function CtaSection() {
-  const t = copy.home.cta;
+/** 开始合作 — the white card that closes the home page and most inner pages. Text from 后台 → 首页 → 行动号召. */
+export async function CtaSection() {
+  const t = await getPageContent("home.cta");
   return (
     <section className="theme-dark py-20 lg:py-28">
       <div className="container-x">
@@ -25,7 +25,7 @@ export function CtaSection() {
                 {t.secondary}
               </PillLink>
             </div>
-            <p className="mt-8 text-xs text-muted-foreground">{t.note}</p>
+            {t.note ? <p className="mt-8 text-xs text-muted-foreground">{t.note}</p> : null}
           </div>
           <LineArt drawing={ctaRobot()} className="text-foreground" />
         </Card>

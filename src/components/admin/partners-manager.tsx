@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { ActionForm, SubmitButton } from "@/components/admin/action-form";
 import { ConfirmAction } from "@/components/admin/confirm-action";
 import { FormField } from "@/components/admin/form-fields";
-import { AdminPageHeader, EmptyState, iconAction, iconDanger } from "@/components/admin/ui";
+import { EmptyState, iconAction, iconDanger } from "@/components/admin/ui";
 import { UploadField } from "@/components/admin/upload-field";
 import { BrandMark } from "@/components/site/brand-mark";
 import { Button } from "@/components/ui/button";
@@ -36,9 +36,9 @@ const LOGO_ACCEPT = "image/svg+xml,image/png,image/webp";
 const LINK_RE = /^(https?:\/\/|\/)\S+$/i;
 
 /**
- * 品牌平台: the brands in the homepage row. Drag the grip to reorder (saved on
- * drop), flip the switch to hide a brand without deleting it, add or edit in
- * a dialog.
+ * 品牌平台: the brands in the homepage row, on the 首页 editor's brands tab.
+ * Drag the grip to reorder (saved on drop), flip the switch to hide a brand
+ * without deleting it, add or edit in a dialog.
  */
 export function PartnersManager({ rows }: { rows: PartnerRow[] }) {
   // Local copy so a drag or a switch shows at once; replaced whenever the server sends fresh rows.
@@ -102,11 +102,13 @@ export function PartnersManager({ rows }: { rows: PartnerRow[] }) {
 
   return (
     <>
-      <AdminPageHeader
-        title="品牌平台"
-        description="首页「支持的品牌与平台」中滚动展示的品牌 Logo 与中文名。"
-        action={items.length ? addButton : null}
-      />
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-base font-semibold text-foreground">品牌列表</h2>
+          <p className="mt-1.5 text-xs text-muted-foreground">首页滚动展示的品牌 Logo 与中文名。</p>
+        </div>
+        {items.length ? addButton : null}
+      </div>
 
       {items.length === 0 ? (
         <EmptyState title="还没有品牌" description="添加品牌与 Logo 后，首页会以跑马灯形式展示。" action={addButton} />

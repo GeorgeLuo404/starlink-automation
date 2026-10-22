@@ -4,6 +4,7 @@ import { getPrisma } from "@/lib/prisma";
 import { COVER_MEDIA, coverOf } from "@/lib/data";
 import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
 import { CasesTable, type CaseRow } from "@/components/admin/tables/cases-table";
+import { ListHeaderButton } from "@/components/admin/page-content/list-header-button";
 import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
@@ -49,12 +50,15 @@ export default async function AdminCasesPage() {
         title="项目案例"
         description="展示交付过的真实项目，含行业、成果指标与现场影像。"
         action={
-          <Button asChild className="px-4">
-            <Link href="/admin/cases/new">
-              <Plus className="size-4" />
-              新建案例
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ListHeaderButton page="cases" />
+            <Button asChild className="px-4">
+              <Link href="/admin/cases/new">
+                <Plus className="size-4" />
+                新建案例
+              </Link>
+            </Button>
+          </div>
         }
       />
 

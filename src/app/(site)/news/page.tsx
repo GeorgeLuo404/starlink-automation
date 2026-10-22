@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
+import { getPageContent } from "@/lib/page-content";
 import { listArticleCategories, listArticles } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,10 @@ import copy from "@/content/copy.json";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = buildMetadata({ title: copy.news.title, description: copy.news.lead, path: "/news" });
+export async function generateMetadata(): Promise<Metadata> {
+  const header = await getPageContent("news.header");
+  return buildMetadata({ title: copy.nav.news, description: header.lead, path: "/news" });
+}
 
 export default async function NewsPage({
   searchParams,
@@ -26,9 +30,10 @@ export default async function NewsPage({
   const category = sp.category?.trim() || undefined;
   const query = sp.q?.trim() || undefined;
 
-  const [{ items, total, totalPages }, categories] = await Promise.all([
+  const [{ items, total, totalPages }, categories, header] = await Promise.all([
     listArticles({ page, pageSize: 9, category, query }),
     listArticleCategories(),
+    getPageContent("news.header"),
   ]);
 
   const buildQuery = (overrides: Record<string, string | undefined>) => {
@@ -46,9 +51,9 @@ export default async function NewsPage({
   return (
     <>
       <PageHero
-        eyebrow={copy.news.eyebrow}
-        title={copy.home.news.title}
-        description={copy.news.lead}
+        eyebrow={header.eyebrow}
+        title={header.title}
+        description={header.lead}
         crumbs={[{ label: copy.nav.news }]}
       >
         <div className="intro mt-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between" style={{ animationDelay: "280ms" }}>

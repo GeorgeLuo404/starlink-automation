@@ -4,6 +4,7 @@ import { getPrisma } from "@/lib/prisma";
 import { COVER_MEDIA, coverOf } from "@/lib/data";
 import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
 import { ServicesTable, type ServiceRow } from "@/components/admin/tables/services-table";
+import { ListHeaderButton } from "@/components/admin/page-content/list-header-button";
 import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
@@ -47,12 +48,15 @@ export default async function AdminServicesPage() {
         title="业务能力"
         description="首页与业务页展示的核心能力。"
         action={
-          <Button asChild className="px-4">
-            <Link href="/admin/services/new">
-              <Plus className="size-4" />
-              新建业务
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ListHeaderButton page="services" />
+            <Button asChild className="px-4">
+              <Link href="/admin/services/new">
+                <Plus className="size-4" />
+                新建业务
+              </Link>
+            </Button>
+          </div>
         }
       />
 

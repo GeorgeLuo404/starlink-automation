@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
+import { getPageContent } from "@/lib/page-content";
 import { listServices } from "@/lib/data";
-import { processSteps } from "@/content/defaults";
 import { PageHero } from "@/components/site/page-hero";
 import { Cover, LinkNode, PillLink } from "@/components/site/kit";
 import { ServiceIcon } from "@/components/site/service-icon";
@@ -14,21 +14,20 @@ import copy from "@/content/copy.json";
 
 export const revalidate = 120;
 
-export const metadata: Metadata = buildMetadata({
-  title: copy.services.title,
-  description: copy.services.lead,
-  path: "/services",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const header = await getPageContent("services.header");
+  return buildMetadata({ title: copy.nav.services, description: header.lead, path: "/services" });
+}
 
 export default async function ServicesPage() {
-  const services = await listServices();
+  const [services, header, process] = await Promise.all([listServices(), getPageContent("services.header"), getPageContent("home.process")]);
 
   return (
     <>
       <PageHero
-        eyebrow={copy.services.eyebrow}
-        title={copy.services.title}
-        description={copy.services.lead}
+        eyebrow={header.eyebrow}
+        title={header.title}
+        description={header.lead}
         crumbs={[{ label: copy.nav.services }]}
       />
 
@@ -84,12 +83,7 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      <HomeProcess
-        eyebrow={copy.home.process.eyebrow}
-        title={copy.home.process.title}
-        lead={copy.home.process.desc}
-        steps={processSteps}
-      />
+      <HomeProcess eyebrow={process.eyebrow} title={process.title} lead={process.desc} steps={process.steps} />
       <CtaSection />
     </>
   );

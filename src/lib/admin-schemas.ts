@@ -278,6 +278,14 @@ export const partnerOrderSchema = z.array(requiredId).min(1).max(500);
 export const partnerActiveSchema = z.object({ id: requiredId, active: z.boolean() });
 
 export const settingsSchema = z.object({
+  companyName: optional("公司全称", 60),
+  companyShort: optional("公司简称", 20),
+  founded: optional("成立年份", 4).refine((value) => !value || /^(19|20)\d{2}$/.test(value), "成立年份请填写 4 位年份，例如 2024"),
+  footerDesc: optional("页脚简介", 300),
+  policeRecord: optional("公安备案号", 60),
+  seoTagline: optional("首页标语", 60),
+  seoDescription: optional("网站描述", 300),
+  seoKeywords: optional("关键词", 300),
   contactPhone: optional("业务电话", 32).refine(
     (value) => !value || PHONE_RE.test(value),
     "业务电话格式不正确"

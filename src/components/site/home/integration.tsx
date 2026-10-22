@@ -1,45 +1,45 @@
 import { Badge } from "@/components/ui/badge";
 import { BrandMark } from "@/components/site/brand-mark";
-import { Eyebrow, SectionHead, highlight } from "../kit";
-import copy from "@/content/copy.json";
+import { Eyebrow, SectionHead, richTitle } from "../kit";
 import type { PartnerContent } from "@/content/defaults";
-
-const PROTOCOLS = ["PROFINET", "EtherCAT", "EtherNet/IP", "Modbus TCP", "CC-Link IE", "OPC UA"];
+import { getPageContent } from "@/lib/page-content";
 
 /** 集成能力 + 支持的品牌与平台 — what we connect, then the brands we work with. */
-export function HomeIntegration({ partners }: { partners: PartnerContent[] }) {
-  const t = copy.home.integration;
+export async function HomeIntegration({ partners }: { partners: PartnerContent[] }) {
+  const [t, brands] = await Promise.all([getPageContent("home.integration"), getPageContent("home.partners")]);
   const row = [...partners, ...partners];
   return (
     <section className="theme-dark section-y overflow-hidden">
       <div className="container-x">
-        <SectionHead eyebrow={t.eyebrow} title={highlight(t.title, "一站式集成")} lead={t.desc} />
+        <SectionHead eyebrow={t.eyebrow} title={richTitle(t.title, t.titleAccent)} lead={t.desc} />
 
         <div className="mt-16 grid gap-px overflow-hidden rounded-(--radius) border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {t.nodes.map((node, i) => (
-            <div key={node} className="reveal flex items-center justify-between bg-background px-6 py-7">
+            <div key={i} className="reveal flex items-center justify-between bg-background px-6 py-7">
               <span className="text-base">{node}</span>
               <span className="text-xs text-muted-foreground tabular-nums">{String(i + 1).padStart(2, "0")}</span>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 flex flex-wrap gap-2.5">
-          {PROTOCOLS.map((p) => (
-            <Badge key={p} variant="outline" size="lg" className="px-4 py-2 text-sm">
-              {p}
-            </Badge>
-          ))}
-        </div>
+        {t.protocols.length ? (
+          <div className="mt-10 flex flex-wrap gap-2.5">
+            {t.protocols.map((p, i) => (
+              <Badge key={i} variant="outline" size="lg" className="px-4 py-2 text-sm">
+                {p}
+              </Badge>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-24">
         <div className="container-x">
-          <Eyebrow>{copy.home.partners.eyebrow}</Eyebrow>
+          <Eyebrow>{brands.eyebrow}</Eyebrow>
         </div>
         <div className="mask-fade-x mt-12 overflow-hidden">
           {/* Hovering pauses the row so a name can be read. */}
-          <ul className="flex w-max animate-marquee gap-12 pr-12 hover:[animation-play-state:paused]">
+          <ul className="flex w-max animate-marquee gap-12 pr-12 hover:paused">
             {row.map((p, i) => (
               <li
                 key={`${p.name}-${i}`}
@@ -56,7 +56,7 @@ export function HomeIntegration({ partners }: { partners: PartnerContent[] }) {
             ))}
           </ul>
         </div>
-        <p className="container-x mt-12 text-xs text-faint">{copy.home.partners.note}</p>
+        {brands.note ? <p className="container-x mt-12 text-xs text-faint">{brands.note}</p> : null}
       </div>
     </section>
   );

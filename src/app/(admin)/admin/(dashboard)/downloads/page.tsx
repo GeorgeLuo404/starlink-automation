@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
 import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
 import { DownloadsTable, type DownloadRow } from "@/components/admin/tables/downloads-table";
+import { ListHeaderButton } from "@/components/admin/page-content/list-header-button";
 import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export default async function AdminDownloadsPage() {
   if (!db) {
     return (
       <>
-        <AdminPageHeader title="下载资料" />
+        <AdminPageHeader title="资料下载" />
         <SetupNotice title="数据库尚未连接">
           <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理下载资料。</p>
         </SetupNotice>
@@ -39,15 +40,18 @@ export default async function AdminDownloadsPage() {
   return (
     <>
       <AdminPageHeader
-        title="下载资料"
+        title="资料下载"
         description="宣传册、白皮书与参数表，前台可统计下载次数。"
         action={
-          <Button asChild className="px-4">
-            <Link href="/admin/downloads/new">
-              <Plus className="size-4" />
-              上传资料
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ListHeaderButton page="downloads" />
+            <Button asChild className="px-4">
+              <Link href="/admin/downloads/new">
+                <Plus className="size-4" />
+                上传资料
+              </Link>
+            </Button>
+          </div>
         }
       />
 

@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { getPrisma } from "@/lib/prisma";
+import copy from "@/content/copy.json";
 import {
   articles as defaultArticles,
   cases as defaultCases,
@@ -29,7 +30,7 @@ import {
 
 export type Paginated<T> = { items: T[]; total: number; page: number; pageSize: number; totalPages: number };
 
-async function fromDb<T>(query: (db: NonNullable<ReturnType<typeof getPrisma>>) => Promise<T>, fallback: T): Promise<T> {
+export async function fromDb<T>(query: (db: NonNullable<ReturnType<typeof getPrisma>>) => Promise<T>, fallback: T): Promise<T> {
   const db = getPrisma();
   if (!db) return fallback;
   try {
@@ -342,19 +343,31 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
 
 /** Values edited under 后台 → 站点设置. Empty strings fall back to the bundled defaults. */
 export type SiteSettings = {
+  companyName: string;
+  companyShort: string;
+  founded: string;
   phone: string;
   email: string;
   address: string;
-  /** null → the placeholder in messages (footer.icp). */
+  footerDesc: string;
+  /** Filing numbers: null until filled in, and then the footer leaves them out. */
   icp: string | null;
+  policeRecord: string | null;
+  seo: { tagline: string; description: string; keywords: string };
   analyticsId: string | null;
 };
 
-const defaultSettings: SiteSettings = {
+export const defaultSettings: SiteSettings = {
+  companyName: copy.meta.siteName,
+  companyShort: copy.meta.siteShort,
+  founded: String(company.founded),
   phone: company.phone,
   email: company.email,
   address: company.address,
+  footerDesc: copy.footer.desc,
   icp: null,
+  policeRecord: null,
+  seo: { tagline: copy.meta.tagline, description: copy.meta.description, keywords: copy.meta.keywords },
   analyticsId: null,
 };
 
@@ -367,11 +380,23 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
       const value = map.get(key);
       return typeof value === "string" && value.trim() ? value.trim() : null;
     };
+    const d = defaultSettings;
     return {
-      phone: read("contactPhone") ?? defaultSettings.phone,
-      email: read("contactEmail") ?? defaultSettings.email,
-      address: read("contactAddress") ?? defaultSettings.address,
-      icp: read("icp"),
+      companyName: read("companyName") ?? d.companyName,
+      companyShort: read("companyShort") ?? d.companyShort,
+      founded: read("founded") ?? d.founded,
+      phone: read("contactPhone") ?? d.phone,
+      email: read("contactEmail") ?? d.email,
+      address: read("contactAddress") ?? d.address,
+      footerDesc: read("footerDesc") ?? d.footerDesc,
+      // An old default stored by the settings form before filing numbers were optional.
+      icp: read("icp") === "粤ICP备00000000号" ? null : read("icp"),
+      policeRecord: read("policeRecord"),
+      seo: {
+        tagline: read("seoTagline") ?? d.seo.tagline,
+        description: read("seoDescription") ?? d.seo.description,
+        keywords: read("seoKeywords") ?? d.seo.keywords,
+      },
       analyticsId: read("analyticsId"),
     };
   }, defaultSettings);

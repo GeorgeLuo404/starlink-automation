@@ -109,6 +109,16 @@
   --faint: var(--stone-500);
   --ghost: var(--ink-400);
 
+  /* Admin navigation (shadcn Sidebar) */
+  --sidebar: var(--ink-900);
+  --sidebar-foreground: var(--stone-400);
+  --sidebar-primary: var(--orange-500);
+  --sidebar-primary-foreground: var(--ink-950);
+  --sidebar-accent: var(--ink-800);
+  --sidebar-accent-foreground: var(--paper-50);
+  --sidebar-border: var(--ink-700);
+  --sidebar-ring: var(--orange-500);
+
   --radius: 1rem;
 }
 
@@ -156,6 +166,14 @@
   --color-subtle: var(--subtle);
   --color-faint: var(--faint);
   --color-ghost: var(--ghost);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @theme {
@@ -184,7 +202,11 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* clip, not hidden: hidden also makes the body a vertical scroll container
+       (overflow-y computes to auto), which throws dnd-kit's keyboard sorting off
+       by the page's scroll offset. hidden stays as the fallback for old Safari. */
     overflow-x: hidden;
+    overflow-x: clip;
   }
   ::selection {
     background: color-mix(in oklab, var(--primary) 30%, transparent);

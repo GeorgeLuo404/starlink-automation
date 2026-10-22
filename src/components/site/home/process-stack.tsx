@@ -20,9 +20,11 @@ export function HomeProcess({
   eyebrow: string;
   title: string;
   lead: string;
-  steps: ProcessStep[];
+  /** Numbered by position ("01", "02" …). */
+  steps: Omit<ProcessStep, "no">[];
 }) {
-  const total = String(steps.length).padStart(2, "0");
+  const no = (i: number) => String(i + 1).padStart(2, "0");
+  const total = no(steps.length - 1);
   // % of the text colour mixed into the black: lightest first, darkest last
   const shadeOf = (i: number) => `color-mix(in oklab, var(--background), var(--foreground) ${18 - i * 2.8}%)`;
 
@@ -37,7 +39,7 @@ export function HomeProcess({
           const Art = stepArt[i];
           return (
             // Each card gets its own wrapper (its sticky containing block); see .process-stack in globals.css.
-            <div key={step.no} className="process-slot" style={{ "--i": i } as CSSProperties}>
+            <div key={i} className="process-slot" style={{ "--i": i } as CSSProperties}>
               <article
                 className="process-step border-t border-border shadow-[0_-24px_40px_-24px_rgba(0,0,0,0.6)]"
                 style={
@@ -52,11 +54,11 @@ export function HomeProcess({
                   {/* The strip that stays visible once the next step folds over this one. */}
                   <div className="flex h-(--strip) items-center justify-between gap-6 border-b border-border">
                     <div className="flex items-baseline gap-5">
-                      <span className="text-sm text-primary tabular-nums">{step.no}</span>
+                      <span className="text-sm text-primary tabular-nums">{no(i)}</span>
                       <h3 className="text-lg font-medium">{step.title}</h3>
                     </div>
                     <span className="text-xs text-muted-foreground tabular-nums">
-                      阶段 {step.no} / {total}
+                      阶段 {no(i)} / {total}
                     </span>
                   </div>
 

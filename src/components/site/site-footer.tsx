@@ -14,7 +14,7 @@ export function SiteFooter({ settings, services }: { settings: SiteSettings; ser
       <div className="container-x grid gap-12 py-20 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Logo size="md" />
-          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">{copy.footer.desc}</p>
+          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">{settings.footerDesc}</p>
           <h3 className="mt-10 text-sm text-foreground">{copy.footer.subscribe}</h3>
           <p className="mt-2 max-w-sm text-xs leading-6 text-muted-foreground">{copy.footer.subscribeDesc}</p>
           <NewsletterForm className="mt-4 max-w-sm" />
@@ -67,14 +67,28 @@ export function SiteFooter({ settings, services }: { settings: SiteSettings; ser
       <div className="border-t border-border">
         <div className="container-x flex flex-col gap-3 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {copy.meta.siteName} · {copy.footer.rights}
+            © {year} {settings.companyName} · {copy.footer.rights}
           </p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer noopener" className="transition-colors hover:text-foreground">
-              {settings.icp ?? copy.footer.icp}
-            </a>
-            <span>{copy.footer.police}</span>
-          </div>
+          {/* Filing numbers appear only once filed (后台 → 站点设置) — never a placeholder. */}
+          {settings.icp || settings.policeRecord ? (
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              {settings.icp ? (
+                <a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer noopener" className="transition-colors hover:text-foreground">
+                  {settings.icp}
+                </a>
+              ) : null}
+              {settings.policeRecord ? (
+                <a
+                  href={`https://beian.mps.gov.cn/#/query/webSearch?code=${settings.policeRecord.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="transition-colors hover:text-foreground"
+                >
+                  {settings.policeRecord}
+                </a>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </footer>

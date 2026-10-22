@@ -256,6 +256,16 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 }
 
+/// Editable page copy (首页、关于我们、联系我们、列表页页头): one row per page
+/// section, e.g. "home.hero" or "about.milestones". `data` is validated against
+/// the section's fields in src/content/page-sections.ts; with no row the site
+/// shows the bundled default text.
+model PageContent {
+  key       String   @id
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
 model Partner {
   id        String   @id @default(cuid())
   name      String
