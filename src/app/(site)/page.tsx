@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
-import { getSiteSettings, listArticles, listCases, listPartners, listServices } from "@/lib/data";
+import { getSiteSettings, listArticles, listHomeCases, listPartners, listServices } from "@/lib/data";
 import { getPageContent } from "@/lib/page-content";
 import { HomeHero } from "@/components/site/home/hero";
 import { HomeStatement } from "@/components/site/home/statement";
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const [services, cases, articles, partners, process] = await Promise.all([
     listServices(),
-    listCases({ limit: 5 }),
+    listHomeCases(),
     listArticles({ page: 1, pageSize: 3 }),
     listPartners(),
     getPageContent("home.process"),

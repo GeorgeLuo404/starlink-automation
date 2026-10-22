@@ -13,7 +13,6 @@ type ArticleRecord = {
   media: MediaRecord[];
   tags: string[];
   status: string;
-  featured: boolean;
   pinned: boolean;
   readMinutes: number;
   seoTitle: string | null;
@@ -73,8 +72,12 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
           <FormField label="标签" name="tags" defaultValue={article?.tags?.join(", ")} placeholder="热压机, 锂电, 交付" description="用逗号分隔" />
         </div>
         <div className="space-y-3 pt-2">
-          <FormCheckbox label="推荐到首页 / 精选" name="featured" defaultChecked={article?.featured} />
-          <FormCheckbox label="置顶" name="pinned" defaultChecked={article?.pinned} />
+          <FormCheckbox
+            label="置顶"
+            name="pinned"
+            defaultChecked={article?.pinned}
+            description="置顶的文章排在新闻列表和首页「新闻动态」的最前面；其余按发布日期从新到旧。"
+          />
         </div>
       </FormSection>
 

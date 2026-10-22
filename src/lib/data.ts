@@ -128,24 +128,33 @@ function toCase(row: Record<string, unknown>): CaseContent {
   };
 }
 
-export async function listCases(options?: { featuredOnly?: boolean; limit?: number }): Promise<CaseContent[]> {
-  const fallback = (() => {
-    let items = defaultCases;
-    if (options?.featuredOnly) items = items.filter((c) => c.featured);
-    if (options?.limit) items = items.slice(0, options.limit);
-    return items;
-  })();
-
+export async function listCases(): Promise<CaseContent[]> {
   return fromDb(async (db) => {
     const rows = await db.project.findMany({
-      where: { status: "PUBLISHED", ...(options?.featuredOnly ? { featured: true } : {}) },
+      where: { status: "PUBLISHED" },
       include: { media: COVER_MEDIA },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-      take: options?.limit,
     });
-    if (!rows.length) return fallback;
+    if (!rows.length) return defaultCases;
     return rows.map((row) => toCase(row as unknown as Record<string, unknown>));
-  }, fallback);
+  }, defaultCases);
+}
+
+/** How many cases the homepage shows at most. */
+export const HOME_CASES = 5;
+
+/**
+ * The homepage's cases, from the published ones in list order: those ticked
+ * 推荐到首页, up to HOME_CASES; when none are ticked, the first ones. The
+ * admin list marks the same cases with 首页.
+ */
+export function pickHomeCases<T extends { featured: boolean }>(published: T[]): T[] {
+  const featured = published.filter((item) => item.featured);
+  return (featured.length ? featured : published).slice(0, HOME_CASES);
+}
+
+export async function listHomeCases(): Promise<CaseContent[]> {
+  return pickHomeCases(await listCases());
 }
 
 export async function getCase(slug: string): Promise<CaseContent | null> {
@@ -158,7 +167,7 @@ export async function getCase(slug: string): Promise<CaseContent | null> {
 
 /* ---------------------------------- 新闻 ---------------------------------- */
 
-export type ArticleView = ArticleContent & { id?: string; views?: number; coverUrl?: string | null };
+export type ArticleView = ArticleContent & { id?: string; views?: number; coverUrl?: string | null; pinned?: boolean };
 
 function toArticle(row: Record<string, unknown>): ArticleView {
   const category = row.category as Record<string, unknown> | undefined | null;
@@ -172,7 +181,7 @@ function toArticle(row: Record<string, unknown>): ArticleView {
     tags: Array.isArray(row.tags) ? (row.tags as string[]) : [],
     publishedAt: row.publishedAt ? new Date(row.publishedAt as string).toISOString() : new Date().toISOString(),
     readMinutes: Number(row.readMinutes ?? 3),
-    featured: Boolean(row.featured),
+    pinned: Boolean(row.pinned),
     views: Number(row.viewCount ?? 0),
     coverUrl: coverOf(row),
   };
@@ -183,14 +192,12 @@ export async function listArticles(options?: {
   pageSize?: number;
   category?: string;
   query?: string;
-  featuredOnly?: boolean;
 }): Promise<Paginated<ArticleView>> {
   const page = Math.max(1, options?.page ?? 1);
   const pageSize = Math.max(1, Math.min(options?.pageSize ?? 9, 50));
 
   const fallbackAll = (() => {
     let items: ArticleView[] = defaultArticles.map((a) => ({ ...a }));
-    if (options?.featuredOnly) items = items.filter((a) => a.featured);
     if (options?.category) items = items.filter((a) => a.category === options.category);
     if (options?.query) {
       const q = options.query.toLowerCase();
@@ -211,7 +218,6 @@ export async function listArticles(options?: {
   return fromDb(async (db) => {
     const where = {
       status: "PUBLISHED" as const,
-      ...(options?.featuredOnly ? { featured: true } : {}),
       ...(options?.query
         ? {
             OR: [

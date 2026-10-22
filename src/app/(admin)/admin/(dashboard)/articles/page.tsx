@@ -26,7 +26,8 @@ export default async function AdminArticlesPage() {
   let articles: ArticleRow[] = [];
   try {
     const records = await db.article.findMany({
-      orderBy: [{ createdAt: "desc" }],
+      // Newest first, as on the site; drafts (no date yet) on top.
+      orderBy: [{ publishedAt: { sort: "desc", nulls: "first" } }, { createdAt: "desc" }],
       include: { media: COVER_MEDIA, _count: { select: { media: true } } },
     });
     articles = records.map((row) => ({
@@ -34,7 +35,6 @@ export default async function AdminArticlesPage() {
       title: row.title,
       slug: row.slug,
       status: row.status,
-      featured: row.featured,
       pinned: row.pinned,
       publishedAt: row.publishedAt,
       viewCount: row.viewCount,

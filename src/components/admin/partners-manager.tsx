@@ -1,23 +1,14 @@
 "use client";
 
-import { startTransition, useId, useState } from "react";
-import {
-  closestCenter,
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type Announcements,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from "@dnd-kit/core";
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { startTransition, useState } from "react";
+import { DndContext } from "@dnd-kit/core";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Edit3, GripVertical, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { deletePartner, reorderPartners, savePartner, setPartnerActive } from "@/lib/admin-actions";
+import { deletePartner, reorderList, savePartner, setPartnerActive } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
+import { useReorder } from "@/components/admin/use-reorder";
 import { ActionForm, SubmitButton } from "@/components/admin/action-form";
 import { ConfirmAction } from "@/components/admin/confirm-action";
 import { FormField } from "@/components/admin/form-fields";
@@ -41,45 +32,14 @@ const LINK_RE = /^(https?:\/\/|\/)\S+$/i;
  * without deleting it, add or edit in a dialog.
  */
 export function PartnersManager({ rows }: { rows: PartnerRow[] }) {
-  // Local copy so a drag or a switch shows at once; replaced whenever the server sends fresh rows.
-  const [items, setItems] = useState(rows);
-  const [synced, setSynced] = useState(rows);
-  if (rows !== synced) {
-    setSynced(rows);
-    setItems(rows);
-  }
+  // A drag or a switch shows at once (local copy, see useReorder).
+  const { items, setItems, dndProps } = useReorder({
+    rows,
+    getId: (row) => row.id,
+    label: (row) => row.name,
+    save: (ids) => reorderList("partner", ids),
+  });
   const [editing, setEditing] = useState<PartnerRow | "new" | null>(null);
-  const dndId = useId();
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
-  const position = (id: UniqueIdentifier) => items.findIndex((item) => item.id === id) + 1;
-  const nameOf = (id: UniqueIdentifier) => items.find((item) => item.id === id)?.name ?? "";
-  const announcements: Announcements = {
-    onDragStart: ({ active }) => `已拿起「${nameOf(active.id)}」，当前第 ${position(active.id)} 位`,
-    onDragOver: ({ active, over }) => (over ? `「${nameOf(active.id)}」移到第 ${position(over.id)} 位` : "不在列表内"),
-    onDragEnd: ({ active, over }) => (over ? `「${nameOf(active.id)}」已放到第 ${position(over.id)} 位` : "已放下"),
-    onDragCancel: () => "已取消拖动，顺序未改变",
-  };
-
-  function onDragEnd({ active, over }: DragEndEvent) {
-    if (!over || active.id === over.id) return;
-    const before = items;
-    const next = arrayMove(items, position(active.id) - 1, position(over.id) - 1);
-    setItems(next);
-    startTransition(async () => {
-      const result = await reorderPartners(next.map((item) => item.id));
-      if (result.ok) {
-        toast.success("顺序已保存");
-      } else {
-        setItems(before);
-        toast.error(result.message ?? "顺序保存失败");
-      }
-    });
-  }
 
   function setActive(id: string, active: boolean) {
     const before = items;
@@ -114,16 +74,7 @@ export function PartnersManager({ rows }: { rows: PartnerRow[] }) {
         <EmptyState title="还没有品牌" description="添加品牌与 Logo 后，首页会以跑马灯形式展示。" action={addButton} />
       ) : (
         <>
-          <DndContext
-            id={dndId}
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={onDragEnd}
-            accessibility={{
-              announcements,
-              screenReaderInstructions: { draggable: "按空格键拿起，用方向键移动，再按空格键放下；按 Esc 取消。" },
-            }}
-          >
+          <DndContext {...dndProps}>
             <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
               <ul className="space-y-2">
                 {items.map((item, index) => (

@@ -16,7 +16,6 @@ type ServiceRecord = {
   deliverables: string[];
   faq: unknown;
   published: boolean;
-  sortOrder: number;
 };
 
 function faqToText(faq: unknown) {
@@ -50,7 +49,6 @@ export function ServiceForm({ record }: { record?: ServiceRecord }) {
               { value: "Flame", label: "Flame — 热压 / 温度" },
             ]}
           />
-          <FormField label="排序" name="sortOrder" type="number" defaultValue={record?.sortOrder ?? 0} />
         </div>
         <FormTextarea label="简介" name="summary" rows={2} defaultValue={record?.summary} />
       </FormSection>

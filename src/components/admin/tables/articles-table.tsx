@@ -14,7 +14,6 @@ export type ArticleRow = {
   title: string;
   slug: string;
   status: string;
-  featured: boolean;
   pinned: boolean;
   publishedAt: Date | null;
   viewCount: number;
@@ -37,9 +36,6 @@ const columns = col.columns([
             {row.original.pinned ? (
               <span className="shrink-0 rounded-full border border-primary/30 px-2 py-0.5 font-mono text-[0.5625rem] text-primary">置顶</span>
             ) : null}
-            {row.original.featured ? (
-              <span className="shrink-0 rounded-full border border-primary/30 px-2 py-0.5 font-mono text-[0.5625rem] text-primary">精选</span>
-            ) : null}
           </div>
           <span className="mt-1 block truncate font-mono text-[0.625rem] text-faint">/{row.original.slug}</span>
         </div>
@@ -56,9 +52,12 @@ const columns = col.columns([
     filterFn: "equalsString",
     cell: ({ getValue }) => <StatusPill status={getValue()} />,
   }),
-  col.accessor("publishedAt", {
+  // Drafts have no date yet: they stay on top whichever way the dates are sorted.
+  col.accessor((row) => row.publishedAt ?? undefined, {
+    id: "publishedAt",
     header: "发布日期",
     sortFn: "datetime",
+    sortUndefined: "first",
     enableGlobalFilter: false,
     cell: ({ getValue }) => formatDate(getValue()) || "—",
     meta: { className: "whitespace-nowrap font-mono text-xs text-muted-foreground" },
@@ -109,6 +108,7 @@ export function ArticlesTable({ rows }: { rows: ArticleRow[] }) {
       getRowId={(row) => row.id}
       searchPlaceholder="搜索标题…"
       filters={[{ column: "status", label: "状态", options: publishStatusOptions }]}
+      initialSorting={[{ id: "publishedAt", desc: true }]}
     />
   );
 }

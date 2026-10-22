@@ -1,5 +1,8 @@
 "use client";
 
+import { DndContext } from "@dnd-kit/core";
+import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   columnFilteringFeature,
   createColumnHelper,
@@ -22,8 +25,10 @@ import {
   type RowData,
   type SortingState,
 } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown, Search } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown, GripVertical, Search } from "lucide-react";
+import type { ActionState } from "@/lib/admin-actions";
 import { cn } from "@/lib/utils";
+import { useReorder } from "@/components/admin/use-reorder";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -33,7 +38,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 /*
  * Admin list table — shadcn/ui's Data Table pattern on TanStack Table v9:
  * search, column filters, sortable headers and pagination, all client-side
- * (the lists are small; the server sends every row).
+ * (the lists are small; the server sends every row). Lists ordered by hand
+ * pass `reorder` and get a drag handle per row (dnd-kit, as in 品牌平台).
  */
 
 export const dataTableFeatures = tableFeatures({
@@ -61,8 +67,18 @@ export type DataTableFilter = {
   options: { value: string; label: string }[];
 };
 
+/** Drag-to-reorder for a list whose order is set by hand (its sortOrder). */
+export type DataTableReorder<TData> = {
+  /** Saves the whole list's order, ids top to bottom. */
+  save: (ids: string[]) => Promise<ActionState>;
+  /** What a row is called in the drag handle's label and the screen-reader announcements. */
+  label: (row: TData) => string;
+};
+
 const ALL = "__all__";
 const PAGE_SIZES = [10, 20, 50];
+/** Reorderable lists show every row on one page — a row can't be dragged onto another page. */
+const ONE_PAGE = 1000;
 
 export function DataTable<TData extends RowData>({
   data,
@@ -71,6 +87,7 @@ export function DataTable<TData extends RowData>({
   searchPlaceholder = "搜索标题…",
   filters = [],
   initialSorting = [],
+  reorder,
 }: {
   data: TData[];
   columns: ColumnDef<Features, TData, any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -78,19 +95,104 @@ export function DataTable<TData extends RowData>({
   searchPlaceholder?: string;
   filters?: DataTableFilter[];
   initialSorting?: SortingState;
+  /** Adds a drag handle to each row; the rows then come in their saved order and on one page. */
+  reorder?: DataTableReorder<TData>;
 }) {
+  const { items, dndProps } = useReorder({ rows: data, getId: getRowId, label: reorder?.label ?? (() => ""), save: reorder?.save });
+
   const table = useTable({
     features: dataTableFeatures,
-    data,
+    data: items,
     columns,
     getRowId: (row) => getRowId(row),
     globalFilterFn: "includesString",
-    initialState: { sorting: initialSorting, pagination: { pageIndex: 0, pageSize: PAGE_SIZES[1] } },
+    initialState: { sorting: initialSorting, pagination: { pageIndex: 0, pageSize: reorder ? ONE_PAGE : PAGE_SIZES[1] } },
   });
 
   const { pageIndex, pageSize } = table.state.pagination;
   const filtered = table.getFilteredRowModel().rows.length;
   const rows = table.getRowModel().rows;
+  // Dragging only makes sense while the table shows the whole list in its saved order.
+  const inOrder = !table.state.globalFilter && table.state.columnFilters.length === 0 && table.state.sorting.length === 0;
+
+  function showInOrder() {
+    table.setGlobalFilter("");
+    table.setColumnFilters([]);
+    table.setSorting([]);
+  }
+
+  const cells = (row: (typeof rows)[number]) =>
+    row.getAllCells().map((cell) => (
+      <TableCell key={cell.id} className={cell.column.columnDef.meta?.className}>
+        <FlexRender cell={cell} />
+      </TableCell>
+    ));
+
+  const card = (
+    <Card>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((group) => (
+            <TableRow key={group.id}>
+              {reorder ? (
+                <TableHead className="w-10">
+                  <span className="sr-only">拖动排序</span>
+                </TableHead>
+              ) : null}
+              {group.headers.map((header) => {
+                const sorted = header.column.getIsSorted();
+                return (
+                  <TableHead
+                    key={header.id}
+                    className={header.column.columnDef.meta?.className}
+                    aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
+                  >
+                    {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                      <button
+                        type="button"
+                        onClick={header.column.getToggleSortingHandler()}
+                        className="-mx-1.5 inline-flex items-center gap-1 rounded px-1.5 py-1 uppercase transition-colors hover:text-foreground"
+                      >
+                        <FlexRender header={header} />
+                        {sorted === "asc" ? (
+                          <ArrowUp className="size-3 text-primary" />
+                        ) : sorted === "desc" ? (
+                          <ArrowDown className="size-3 text-primary" />
+                        ) : (
+                          <ChevronsUpDown className="size-3 opacity-50" />
+                        )}
+                      </button>
+                    ) : (
+                      <FlexRender header={header} />
+                    )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {rows.length ? (
+            rows.map((row) =>
+              reorder ? (
+                <SortableRow key={row.id} id={row.id} label={reorder.label(row.original)} disabled={!inOrder}>
+                  {cells(row)}
+                </SortableRow>
+              ) : (
+                <TableRow key={row.id}>{cells(row)}</TableRow>
+              )
+            )
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length + (reorder ? 1 : 0)} className="h-24 text-center text-sm text-muted-foreground">
+                没有符合条件的记录
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </Card>
+  );
 
   return (
     <div className="space-y-4">
@@ -132,66 +234,31 @@ export function DataTable<TData extends RowData>({
         </p>
       </div>
 
-      <Card>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((group) => (
-              <TableRow key={group.id}>
-                {group.headers.map((header) => {
-                  const sorted = header.column.getIsSorted();
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={header.column.columnDef.meta?.className}
-                      aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
-                    >
-                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                        <button
-                          type="button"
-                          onClick={header.column.getToggleSortingHandler()}
-                          className="-mx-1.5 inline-flex items-center gap-1 rounded px-1.5 py-1 uppercase transition-colors hover:text-foreground"
-                        >
-                          <FlexRender header={header} />
-                          {sorted === "asc" ? (
-                            <ArrowUp className="size-3 text-primary" />
-                          ) : sorted === "desc" ? (
-                            <ArrowDown className="size-3 text-primary" />
-                          ) : (
-                            <ChevronsUpDown className="size-3 opacity-50" />
-                          )}
-                        </button>
-                      ) : (
-                        <FlexRender header={header} />
-                      )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {rows.length ? (
-              rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getAllCells().map((cell) => (
-                    <TableCell key={cell.id} className={cell.column.columnDef.meta?.className}>
-                      <FlexRender cell={cell} />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+      {reorder ? (
+        <>
+          <DndContext {...dndProps}>
+            <SortableContext items={rows.map((row) => row.id)} strategy={verticalListSortingStrategy}>
+              {card}
+            </SortableContext>
+          </DndContext>
+          <p className="text-xs text-faint">
+            {inOrder ? (
+              "拖动左侧手柄调整顺序，松手即保存；前台按这个顺序展示。"
             ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-sm text-muted-foreground">
-                  没有符合条件的记录
-                </TableCell>
-              </TableRow>
+              <>
+                搜索、筛选或按列排序时不能拖动。
+                <button type="button" onClick={showInOrder} className="ml-1 text-primary-text underline-offset-4 hover:underline">
+                  恢复列表顺序
+                </button>
+              </>
             )}
-          </TableBody>
-        </Table>
-      </Card>
+          </p>
+        </>
+      ) : (
+        card
+      )}
 
-      {filtered > PAGE_SIZES[0] ? (
+      {!reorder && filtered > PAGE_SIZES[0] ? (
         <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-3 text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <span>每页</span>
@@ -228,6 +295,34 @@ export function DataTable<TData extends RowData>({
         </div>
       ) : null}
     </div>
+  );
+}
+
+/** A table row with a drag handle in front of its cells. */
+function SortableRow({ id, label, disabled, children }: { id: string; label: string; disabled: boolean; children: React.ReactNode }) {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id, disabled });
+
+  return (
+    <TableRow
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={cn(isDragging && "relative z-10 bg-card shadow-lg")}
+    >
+      <TableCell className="w-10 pr-0">
+        <button
+          ref={setActivatorNodeRef}
+          type="button"
+          {...attributes}
+          {...listeners}
+          disabled={disabled}
+          aria-label={`拖动排序：${label}`}
+          className="inline-flex size-8 cursor-grab touch-none items-center justify-center rounded-md text-faint transition-colors hover:bg-raised hover:text-foreground active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+        >
+          <GripVertical className="size-4" />
+        </button>
+      </TableCell>
+      {children}
+    </TableRow>
   );
 }
 

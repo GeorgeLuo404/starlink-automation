@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { Edit3, Trash2 } from "lucide-react";
-import { deleteService } from "@/lib/admin-actions";
+import { deleteService, reorderList } from "@/lib/admin-actions";
 import { ConfirmAction } from "@/components/admin/confirm-action";
-import { columnsFor, DataTable, RowThumb } from "@/components/admin/data-table";
+import { columnsFor, DataTable, RowThumb, type DataTableReorder } from "@/components/admin/data-table";
 import { iconAction, iconDanger, StatusPill } from "@/components/admin/ui";
 
 export type ServiceRow = {
@@ -12,7 +12,6 @@ export type ServiceRow = {
   title: string;
   slug: string;
   icon: string;
-  sortOrder: number;
   /** PUBLISHED or DRAFT, derived from Service.published. */
   status: string;
   cover: string | null;
@@ -45,10 +44,6 @@ const columns = col.columns([
     cell: ({ getValue }) => getValue() || "—",
     meta: { className: "whitespace-nowrap font-mono text-xs text-muted-foreground" },
   }),
-  col.accessor("sortOrder", {
-    header: "排序",
-    meta: { className: "whitespace-nowrap font-mono text-xs text-muted-foreground" },
-  }),
   col.accessor("status", {
     header: "状态",
     filterFn: "equalsString",
@@ -77,6 +72,8 @@ const columns = col.columns([
   }),
 ]);
 
+const reorder: DataTableReorder<ServiceRow> = { save: (ids) => reorderList("service", ids), label: (row) => row.title };
+
 export function ServicesTable({ rows }: { rows: ServiceRow[] }) {
   return (
     <DataTable
@@ -84,6 +81,7 @@ export function ServicesTable({ rows }: { rows: ServiceRow[] }) {
       columns={columns}
       getRowId={(row) => row.id}
       searchPlaceholder="搜索业务…"
+      reorder={reorder}
       filters={[
         {
           column: "status",

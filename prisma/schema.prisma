@@ -82,7 +82,6 @@ model Article {
   coverUrl   String?
   tags       String[]      @default([])
   status     PublishStatus @default(DRAFT)
-  featured   Boolean       @default(false)
   pinned     Boolean       @default(false)
   viewCount  Int           @default(0)
   readMinutes Int          @default(3)

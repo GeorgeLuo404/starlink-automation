@@ -188,7 +188,6 @@ export const articleSchema = z.object({
   status: publishStatus,
   publishedAt: date("发布日期"),
   readMinutes: int("阅读时长", 1, 240, 3),
-  featured: checkbox,
   pinned: checkbox,
   seoTitle: optional("SEO 标题", 200),
   seoDesc: optional("SEO 描述", 500),
@@ -214,7 +213,6 @@ export const caseSchema = z.object({
   tags: list("标签", 500),
   status: publishStatus,
   featured: checkbox,
-  sortOrder: int("排序", -9999, 9999, 0),
 });
 
 export const serviceSchema = z.object({
@@ -222,7 +220,6 @@ export const serviceSchema = z.object({
   title: required("名称"),
   slug,
   icon: z.enum(SERVICE_ICONS, { error: "请选择有效的图标" }),
-  sortOrder: int("排序", -9999, 9999, 0),
   summary: optional("简介", 2000),
   content: optional("详情", 100_000),
   coverUrl: link("封面图片"),
@@ -247,7 +244,6 @@ export const downloadSchema = z.object({
   fileSize: int("文件大小", 0, 2_147_483_647, 0),
   version: optional("版本", 40),
   status: publishStatus,
-  sortOrder: int("排序", -9999, 9999, 0),
   requiresForm: checkbox,
 });
 
@@ -261,7 +257,6 @@ export const gallerySchema = z.object({
   videoUrl: link("视频文件"),
   album: required("相册", 60),
   status: publishStatus,
-  sortOrder: int("排序", -9999, 9999, 0),
 });
 
 /** A supported brand (Partner table). Order and visibility have their own actions. */
@@ -272,8 +267,12 @@ export const partnerSchema = z.object({
   logoUrl: link("Logo"),
 });
 
-/** Every brand id, top to bottom, after a drag in the admin list. */
-export const partnerOrderSchema = z.array(requiredId).min(1).max(500);
+/** The lists ordered by dragging in the admin (each table has a sortOrder column). */
+export const ORDERED_LISTS = ["partner", "service", "project", "downloadFile", "galleryItem"] as const;
+export type OrderedList = (typeof ORDERED_LISTS)[number];
+
+/** A list's ids, top to bottom, after a drag. */
+export const orderSchema = z.object({ list: z.enum(ORDERED_LISTS), ids: z.array(requiredId).min(1).max(500) });
 
 export const partnerActiveSchema = z.object({ id: requiredId, active: z.boolean() });
 

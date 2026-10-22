@@ -33,7 +33,6 @@ export default async function AdminServicesPage() {
       title: row.title,
       slug: row.slug,
       icon: row.icon ?? "",
-      sortOrder: row.sortOrder,
       status: row.published ? "PUBLISHED" : "DRAFT",
       cover: coverOf(row),
       mediaCount: row._count.media,

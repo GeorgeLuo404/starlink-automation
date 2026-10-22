@@ -9,7 +9,7 @@ import { deleteObject } from "@/lib/storage";
 import { isBilibiliShortLink, resolveBilibiliShortLink } from "@/lib/bilibili";
 import { describeIssues, pageContentSchema } from "@/lib/page-content";
 import { SECTIONS, type SectionKey } from "@/content/page-sections";
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "@/lib/utils";
 import {
   articleSchema,
@@ -21,8 +21,9 @@ import {
   idSchema,
   inquiryUpdateSchema,
   type MediaInput,
+  type OrderedList,
+  orderSchema,
   partnerActiveSchema,
-  partnerOrderSchema,
   partnerSchema,
   serviceSchema,
   settingsSchema,
@@ -100,6 +101,41 @@ async function mediaRows(media: MediaInput[]): Promise<{ rows: (MediaInput & { s
     rows.push({ ...item, url, sortOrder: index });
   }
   return { rows };
+}
+
+/**
+ * The lists ordered by dragging in the admin: where the list currently ends
+ * (new rows go last) and how a drag writes one row's position.
+ */
+const ORDERED: Record<
+  OrderedList,
+  { last: (db: PrismaClient) => Promise<number | null>; place: (db: PrismaClient, id: string, sortOrder: number) => Prisma.PrismaPromise<unknown> }
+> = {
+  partner: {
+    last: async (db) => (await db.partner.aggregate({ _max: { sortOrder: true } }))._max.sortOrder,
+    place: (db, id, sortOrder) => db.partner.update({ where: { id }, data: { sortOrder } }),
+  },
+  service: {
+    last: async (db) => (await db.service.aggregate({ _max: { sortOrder: true } }))._max.sortOrder,
+    place: (db, id, sortOrder) => db.service.update({ where: { id }, data: { sortOrder } }),
+  },
+  project: {
+    last: async (db) => (await db.project.aggregate({ _max: { sortOrder: true } }))._max.sortOrder,
+    place: (db, id, sortOrder) => db.project.update({ where: { id }, data: { sortOrder } }),
+  },
+  downloadFile: {
+    last: async (db) => (await db.downloadFile.aggregate({ _max: { sortOrder: true } }))._max.sortOrder,
+    place: (db, id, sortOrder) => db.downloadFile.update({ where: { id }, data: { sortOrder } }),
+  },
+  galleryItem: {
+    last: async (db) => (await db.galleryItem.aggregate({ _max: { sortOrder: true } }))._max.sortOrder,
+    place: (db, id, sortOrder) => db.galleryItem.update({ where: { id }, data: { sortOrder } }),
+  },
+};
+
+/** The position after the last row, for a new record. */
+async function endOf(db: PrismaClient, list: OrderedList) {
+  return ((await ORDERED[list].last(db)) ?? -1) + 1;
 }
 
 /** Zod parse + DB availability check shared by every form action. */
@@ -239,10 +275,10 @@ export async function saveCase(_prev: ActionState, form: FormData): Promise<Acti
   };
 
   // Nested writes run in one transaction: the old list is replaced as a whole.
-  const failure = await persist(() =>
+  const failure = await persist(async () =>
     id
       ? db.project.update({ where: { id }, data: { ...data, media: { deleteMany: {}, create: prepared.rows } } })
-      : db.project.create({ data: { ...data, media: { create: prepared.rows } } })
+      : db.project.create({ data: { ...data, sortOrder: await endOf(db, "project"), media: { create: prepared.rows } } })
   );
   if (failure) return failure;
 
@@ -278,10 +314,10 @@ export async function saveService(_prev: ActionState, form: FormData): Promise<A
   };
 
   // Nested writes run in one transaction: the old list is replaced as a whole.
-  const failure = await persist(() =>
+  const failure = await persist(async () =>
     id
       ? db.service.update({ where: { id }, data: { ...data, media: { deleteMany: {}, create: prepared.rows } } })
-      : db.service.create({ data: { ...data, media: { create: prepared.rows } } })
+      : db.service.create({ data: { ...data, sortOrder: await endOf(db, "service"), media: { create: prepared.rows } } })
   );
   if (failure) return failure;
 
@@ -315,8 +351,10 @@ export async function saveDownload(_prev: ActionState, form: FormData): Promise<
     fileUrl: input.fileUrl ?? "",
   };
 
-  const failure = await persist(() =>
-    id ? db.downloadFile.update({ where: { id }, data }) : db.downloadFile.create({ data })
+  const failure = await persist(async () =>
+    id
+      ? db.downloadFile.update({ where: { id }, data })
+      : db.downloadFile.create({ data: { ...data, sortOrder: await endOf(db, "downloadFile") } })
   );
   if (failure) return failure;
 
@@ -343,8 +381,10 @@ export async function saveGalleryItem(_prev: ActionState, form: FormData): Promi
   const { db, data: input } = ready;
   const { id, ...data } = input;
 
-  const failure = await persist(() =>
-    id ? db.galleryItem.update({ where: { id }, data }) : db.galleryItem.create({ data })
+  const failure = await persist(async () =>
+    id
+      ? db.galleryItem.update({ where: { id }, data })
+      : db.galleryItem.create({ data: { ...data, sortOrder: await endOf(db, "galleryItem") } })
   );
   if (failure) return failure;
 
@@ -422,8 +462,7 @@ export async function savePartner(_prev: ActionState, form: FormData): Promise<A
 
   const failure = await persist(async () => {
     if (id) return db.partner.update({ where: { id }, data });
-    const last = await db.partner.aggregate({ _max: { sortOrder: true } });
-    return db.partner.create({ data: { ...data, sortOrder: (last._max.sortOrder ?? -1) + 1 } });
+    return db.partner.create({ data: { ...data, sortOrder: await endOf(db, "partner") } });
   });
   if (failure) return failure;
 
@@ -431,17 +470,19 @@ export async function savePartner(_prev: ActionState, form: FormData): Promise<A
   return { ok: true, message: id ? "已保存" : "已添加" };
 }
 
-/** Persist the order after a drag: `ids` is the whole list, top to bottom. */
-export async function reorderPartners(ids: string[]): Promise<ActionState> {
+/**
+ * Persist the order after a drag in one of the ordered lists (业务能力, 项目案例,
+ * 资料下载, 现场图库, 品牌平台): `ids` is the whole list, top to bottom.
+ */
+export async function reorderList(list: OrderedList, ids: string[]): Promise<ActionState> {
   await guard();
-  const parsed = partnerOrderSchema.safeParse(ids);
+  const parsed = orderSchema.safeParse({ list, ids });
   if (!parsed.success) return invalid(parsed.error);
   const db = getPrisma();
   if (!db) return NO_DATABASE;
 
-  const failure = await persist(() =>
-    db.$transaction(parsed.data.map((id, sortOrder) => db.partner.update({ where: { id }, data: { sortOrder } })))
-  );
+  const { place } = ORDERED[parsed.data.list];
+  const failure = await persist(() => db.$transaction(parsed.data.ids.map((id, sortOrder) => place(db, id, sortOrder))));
   if (failure) return failure;
   bust();
   return { ok: true };

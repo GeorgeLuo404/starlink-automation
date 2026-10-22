@@ -13,7 +13,6 @@ type GalleryRecord = {
   videoUrl: string | null;
   album: string;
   status: string;
-  sortOrder: number;
 };
 
 export function GalleryForm({ record }: { record?: GalleryRecord }) {
@@ -41,7 +40,7 @@ export function GalleryForm({ record }: { record?: GalleryRecord }) {
       </FormSection>
 
       <FormSection title="归类与发布">
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2">
           <FormField label="相册" name="album" defaultValue={record?.album ?? "产线现场"} placeholder="产线现场" />
           <FormSelect
             label="状态"
@@ -53,7 +52,6 @@ export function GalleryForm({ record }: { record?: GalleryRecord }) {
               { value: "ARCHIVED", label: "已归档" },
             ]}
           />
-          <FormField label="排序" name="sortOrder" type="number" defaultValue={record?.sortOrder ?? 0} />
         </div>
       </FormSection>
 

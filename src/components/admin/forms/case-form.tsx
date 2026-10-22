@@ -20,7 +20,6 @@ type CaseRecord = {
   scope: string[];
   status: string;
   featured: boolean;
-  sortOrder: number;
 };
 
 function metricsToText(metrics: unknown) {
@@ -79,7 +78,7 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
       </FormSection>
 
       <FormSection title="发布设置">
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2">
           <FormSelect
             label="状态"
             name="status"
@@ -90,10 +89,14 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
               { value: "ARCHIVED", label: "已归档" },
             ]}
           />
-          <FormField label="排序" name="sortOrder" type="number" defaultValue={record?.sortOrder ?? 0} />
           <FormField label="标签" name="tags" defaultValue={record?.tags?.join(", ")} placeholder="S7-1500, MES" />
         </div>
-        <FormCheckbox label="推荐到首页" name="featured" defaultChecked={record?.featured} />
+        <FormCheckbox
+          label="推荐到首页"
+          name="featured"
+          defaultChecked={record?.featured}
+          description="首页按列表顺序显示最多 5 个推荐案例；一个都不勾选时显示列表前 5 个。"
+        />
       </FormSection>
 
       <FormActions cancelHref="/admin/cases" submitLabel={record ? "保存修改" : "创建案例"} />
