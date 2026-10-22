@@ -14,12 +14,15 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ChevronDown, GripVertical, Plus, Trash2 } from "lucide-react";
-import type { Field, ItemField, ListField } from "@/content/page-sections";
+import { Check, ChevronDown, GripVertical, Plus, Trash2 } from "lucide-react";
+import type { Field, IllustrationField, ItemField, ListField } from "@/content/page-sections";
+import { STEP_ART_GROUPS, STEP_ART_OPTIONS } from "@/content/step-art";
 import { cn } from "@/lib/utils";
 import { FieldError, useFieldError, useFormErrors } from "@/components/admin/action-form";
 import { UploadField } from "@/components/admin/upload-field";
+import { stepArtFor } from "@/components/site/home/step-art";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogBody, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -93,6 +96,9 @@ export function FieldInput({
   if (field.kind === "list") {
     return <ListInput field={field} path={path} items={value as Draft[]} onChange={onChange} />;
   }
+  if (field.kind === "illustration") {
+    return <IllustrationInput field={field} value={String(value ?? "")} onChange={onChange} />;
+  }
   if (field.kind === "image") {
     return (
       <div className="sm:col-span-2">
@@ -111,7 +117,17 @@ export function FieldInput({
   return <ScalarInput field={field} path={path} value={String(value ?? "")} onChange={onChange} />;
 }
 
-function ScalarInput({ field, path, value, onChange }: { field: ItemField; path: string; value: string; onChange: (value: string) => void }) {
+function ScalarInput({
+  field,
+  path,
+  value,
+  onChange,
+}: {
+  field: Exclude<ItemField, IllustrationField>;
+  path: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
   const id = useId();
   const error = useFieldError(path);
   const invalid = error ? { "aria-invalid": true, "aria-describedby": `${path}-error` } : {};
@@ -147,6 +163,111 @@ function ScalarInput({ field, path, value, onChange }: { field: ItemField; path:
       <FieldError name={path} />
       {field.hint ? <p className="mt-2 text-xs text-faint">{field.hint}</p> : null}
     </div>
+  );
+}
+
+/* ------------------------------ illustrations ------------------------------ */
+
+/**
+ * The current illustration as a small live preview; 选择插图 opens the whole
+ * library (src/content/step-art.ts), every drawing animating, grouped.
+ */
+function IllustrationInput({ field, value, onChange }: { field: IllustrationField; value: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const Current = stepArtFor(value);
+  const label = STEP_ART_OPTIONS.find((o) => o.key === value)?.label ?? "无插图";
+
+  function pick(key: string) {
+    onChange(key);
+    setOpen(false);
+  }
+
+  return (
+    <div className="sm:col-span-2">
+      <Label>{field.label}</Label>
+      <div className="flex items-center gap-4">
+        <ArtFrame className="w-36 shrink-0">{Current ? <Current /> : <NoArt />}</ArtFrame>
+        <div className="min-w-0">
+          <p className="text-sm text-foreground">{label}</p>
+          <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => setOpen(true)}>
+            选择插图
+          </Button>
+        </div>
+      </div>
+      {field.hint ? <p className="mt-2 text-xs text-faint">{field.hint}</p> : null}
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>选择插图</DialogTitle>
+            <DialogDescription>点一张即可选中。线稿会随网站配色显示，并循环播放动画。</DialogDescription>
+          </DialogHeader>
+          <DialogBody className="max-h-[70dvh] space-y-6 overflow-y-auto">
+            <div role="radiogroup" aria-label={field.label} className="space-y-6">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                <ArtOption label="无插图" selected={!value} onSelect={() => pick("")}>
+                  <NoArt />
+                </ArtOption>
+              </div>
+              {STEP_ART_GROUPS.map((group) => (
+                <section key={group}>
+                  <h3 className="mb-3 font-mono text-[0.625rem] tracking-[0.2em] text-faint uppercase">{group}</h3>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                    {STEP_ART_OPTIONS.filter((o) => o.group === group).map((o) => {
+                      const Art = stepArtFor(o.key)!;
+                      return (
+                        <ArtOption key={o.key} label={o.label} selected={value === o.key} onSelect={() => pick(o.key)}>
+                          <Art />
+                        </ArtOption>
+                      );
+                    })}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </DialogBody>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+/** The illustration as the site shows it: drawn on the dark grid. */
+function ArtFrame({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div
+      className={cn(
+        "theme-dark grid-lines grid-lines-sm flex aspect-3/2 items-center justify-center rounded-md border border-border p-2 text-foreground",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+function NoArt() {
+  return <span className="text-xs text-faint">无插图</span>;
+}
+
+function ArtOption({ label, selected, onSelect, children }: { label: string; selected: boolean; onSelect: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      onClick={onSelect}
+      className={cn(
+        "rounded-(--radius) border p-2 text-left transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/40",
+        selected ? "border-primary bg-primary/6" : "border-border hover:border-foreground/30"
+      )}
+    >
+      <ArtFrame>{children}</ArtFrame>
+      <span className={cn("mt-2 flex items-center justify-between gap-2 text-xs", selected ? "text-primary" : "text-foreground")}>
+        {label}
+        {selected ? <Check className="size-3.5" /> : null}
+      </span>
+    </button>
   );
 }
 

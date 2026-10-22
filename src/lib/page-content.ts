@@ -3,6 +3,7 @@ import { cache } from "react";
 import { z } from "zod";
 import copy from "@/content/copy.json";
 import { aboutValues, certifications, milestones, processSteps, teamComposition, whyItems } from "@/content/defaults";
+import { DEFAULT_STEP_ART, STEP_ART_KEYS, type StepArtKey } from "@/content/step-art";
 import { SECTIONS, type Field, type SectionKey, type SectionState } from "@/content/page-sections";
 import { fromDb } from "@/lib/data";
 
@@ -44,7 +45,7 @@ export const PAGE_DEFAULTS = {
     eyebrow: h.process.eyebrow,
     title: h.process.title,
     desc: h.process.desc,
-    steps: processSteps.map(({ title, desc, outputs }) => ({ title, desc, outputs })),
+    steps: processSteps.map(({ title, desc, outputs }, i) => ({ title, desc, outputs, art: (DEFAULT_STEP_ART[i] ?? "") as StepArtKey | "" })),
   },
   "home.cases": { eyebrow: h.cases.eyebrow, title: h.cases.title, desc: h.cases.desc },
   "home.integration": {
@@ -121,6 +122,12 @@ function fieldSchema(field: Field): z.ZodType {
         .min(min, `${field.label}不能小于 ${min}`)
         .max(max, `${field.label}不能大于 ${max}`);
     }
+    case "illustration":
+      // A step saved before it had this field (or a removed illustration) shows none.
+      return z.preprocess(
+        (value) => (typeof value === "string" && (value === "" || STEP_ART_KEYS.includes(value as StepArtKey)) ? value : ""),
+        z.string()
+      );
     case "image":
       return z
         .string()

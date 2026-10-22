@@ -1,8 +1,9 @@
 import type { CSSProperties } from "react";
 import type { ProcessStep } from "@/content/defaults";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { SectionHead } from "../kit";
-import { stepArt } from "./step-art";
+import { stepArtFor } from "./step-art";
 
 /**
  * 六步交付 · 折叠堆叠 — six equal, short cards, each a shade darker than the one
@@ -20,8 +21,8 @@ export function HomeProcess({
   eyebrow: string;
   title: string;
   lead: string;
-  /** Numbered by position ("01", "02" …). */
-  steps: Omit<ProcessStep, "no">[];
+  /** Numbered by position ("01", "02" …); `art` is the chosen illustration's key ("" for none). */
+  steps: (Omit<ProcessStep, "no"> & { art?: string })[];
 }) {
   const no = (i: number) => String(i + 1).padStart(2, "0");
   const total = no(steps.length - 1);
@@ -36,7 +37,7 @@ export function HomeProcess({
 
       <div className="process-stack" style={{ "--steps": steps.length } as CSSProperties}>
         {steps.map((step, i) => {
-          const Art = stepArt[i];
+          const Art = stepArtFor(step.art);
           return (
             // Each card gets its own wrapper (its sticky containing block); see .process-stack in globals.css.
             <div key={i} className="process-slot" style={{ "--i": i } as CSSProperties}>
@@ -63,28 +64,32 @@ export function HomeProcess({
                   </div>
 
                   <div className="process-step-body grid grid-cols-1 gap-5 py-5 sm:gap-8 sm:py-8 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-7">
-                    <div className="flex flex-col justify-between gap-5 sm:gap-8 lg:col-span-7">
+                    <div className={cn("flex flex-col justify-between gap-5 sm:gap-8", Art ? "lg:col-span-7" : "lg:col-span-12")}>
                       <p className="max-w-xl text-lg leading-[1.55] font-medium sm:text-xl lg:text-[1.625rem]">
                         {step.desc}
                       </p>
-                      <div>
-                        <p className="text-xs tracking-widest text-muted-foreground">输出物</p>
-                        <ul className="mt-2.5 flex flex-wrap gap-2 sm:mt-3">
-                          {step.outputs.map((o) => (
-                            <li key={o}>
-                              <Badge variant="tag" size="lg">
-                                {o}
-                              </Badge>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {step.outputs.length ? (
+                        <div>
+                          <p className="text-xs tracking-widest text-muted-foreground">输出物</p>
+                          <ul className="mt-2.5 flex flex-wrap gap-2 sm:mt-3">
+                            {step.outputs.map((o, j) => (
+                              <li key={j}>
+                                <Badge variant="tag" size="lg">
+                                  {o}
+                                </Badge>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                     </div>
-                    <div className="flex min-h-0 lg:col-span-5 lg:justify-end">
-                      <div className="process-step-art grid-lines grid-lines-sm aspect-3/2 w-full max-w-sm rounded-xl border border-border p-3 text-foreground">
-                        {Art ? <Art /> : null}
+                    {Art ? (
+                      <div className="flex min-h-0 lg:col-span-5 lg:justify-end">
+                        <div className="process-step-art grid-lines grid-lines-sm aspect-3/2 w-full max-w-sm rounded-xl border border-border p-3 text-foreground">
+                          <Art />
+                        </div>
                       </div>
-                    </div>
+                    ) : null}
                   </div>
                 </div>
               </article>

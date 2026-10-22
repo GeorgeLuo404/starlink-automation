@@ -1,11 +1,16 @@
 import type { CSSProperties } from "react";
-import { box, type Stroke, type View } from "@/lib/line-art/geometry";
+import type { StepArtKey } from "@/content/step-art";
+import * as drawings from "@/lib/line-art/drawings";
+import { box, type Drawing, type Stroke, type View } from "@/lib/line-art/geometry";
+import { LineArt } from "../line-art";
 
 /* ==========================================================================
-   流程小动画 / Process step animations
+   流程插图 / Process step illustrations
    --------------------------------------------------------------------------
-   Six small looping CAD-style drawings, one per delivery step. Pure SVG +
-   CSS keyframes (globals.css: art-*), so they need no JavaScript and the global
+   The library each 服务流程 step picks its illustration from (choices and
+   labels: src/content/step-art.ts). Six bespoke looping CAD-style animations,
+   plus the cover line drawings drawn in stroke by stroke. Pure SVG + CSS
+   keyframes (globals.css: art-*), so they need no JavaScript and the global
    reduced-motion rule leaves each one in its finished, fully drawn state.
    ========================================================================== */
 
@@ -250,4 +255,42 @@ export function HandoverArt() {
   );
 }
 
-export const stepArt = [SurveyArt, DesignArt, CircuitArt, ScanCycleArt, TuningArt, HandoverArt];
+/** A cover drawing as an illustration: built once, drawn in on a loop. */
+function drawn(make: () => Drawing) {
+  let drawing: Drawing | undefined;
+  return function DrawnArt() {
+    drawing ??= make();
+    return <LineArt drawing={drawing} animated className="size-full" />;
+  };
+}
+
+/** Every illustration a step can choose, by the key it is saved under. */
+export const STEP_ART: Record<StepArtKey, () => React.JSX.Element> = {
+  survey: SurveyArt,
+  design: DesignArt,
+  circuit: CircuitArt,
+  scan: ScanCycleArt,
+  tuning: TuningArt,
+  handover: HandoverArt,
+  plcRack: drawn(() => drawings.plcRack()),
+  cabinet: drawn(drawings.cabinet),
+  schematic: drawn(() => drawings.schematic()),
+  schematicStack: drawn(drawings.schematicStack),
+  network: drawn(drawings.network),
+  robotArm: drawn(() => drawings.robotArm()),
+  robotCell: drawn(drawings.robotCell),
+  visionLine: drawn(drawings.visionLine),
+  assemblyLine: drawn(() => drawings.assemblyLine()),
+  hotPress: drawn(() => drawings.hotPress()),
+  batteryTray: drawn(() => drawings.batteryTray()),
+  moduleMes: drawn(drawings.moduleMes),
+  floorPlan: drawn(drawings.floorPlan),
+  taktChart: drawn(drawings.taktChart),
+  commissioning: drawn(drawings.commissioning),
+  certificate: drawn(drawings.certificate),
+};
+
+/** The illustration for a saved key; null for 无插图 or a key no longer in the library. */
+export function stepArtFor(key: string | undefined) {
+  return key && Object.hasOwn(STEP_ART, key) ? STEP_ART[key as StepArtKey] : null;
+}
