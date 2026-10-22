@@ -122,7 +122,7 @@ export function TileRows<T>({
           {row.items.map((item, i) => (
             <div
               key={row.start + i}
-              className="md:min-w-0 md:flex-1 lg:transition-[flex-grow] lg:duration-700 lg:ease-[cubic-bezier(0.22,1,0.36,1)] lg:hover:grow-[1.5] lg:has-[:focus-visible]:grow-[1.5]"
+              className="md:min-w-0 md:flex-1 lg:transition-[flex-grow] lg:duration-700 lg:ease-[cubic-bezier(0.22,1,0.36,1)] lg:hover:grow-[1.5] lg:has-focus-visible:grow-[1.5]"
             >
               {render(item, row.start + i, r)}
             </div>
