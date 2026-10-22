@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { getPageContent } from "@/lib/page-content";
 import { listCases } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { CaseCard } from "@/components/site/case-card";
@@ -10,21 +11,20 @@ import copy from "@/content/copy.json";
 
 export const revalidate = 120;
 
-export const metadata: Metadata = buildMetadata({
-  title: copy.cases.title,
-  description: copy.cases.lead,
-  path: "/cases",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const header = await getPageContent("cases.header");
+  return buildMetadata({ title: copy.nav.cases, description: header.lead, path: "/cases" });
+}
 
 export default async function CasesPage() {
-  const cases = await listCases();
+  const [cases, header] = await Promise.all([listCases(), getPageContent("cases.header")]);
 
   return (
     <>
       <PageHero
-        eyebrow={copy.cases.eyebrow}
-        title={copy.home.cases.title}
-        description={copy.cases.lead}
+        eyebrow={header.eyebrow}
+        title={header.title}
+        description={header.lead}
         crumbs={[{ label: copy.nav.cases }]}
       />
 

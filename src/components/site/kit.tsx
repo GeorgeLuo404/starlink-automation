@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -59,16 +60,26 @@ export function SectionHead({
 }
 
 /** Wraps the first occurrence of `phrase` in the accent colour. */
-export function highlight(text: string, phrase: string) {
-  const at = text.indexOf(phrase);
+export function highlight(text: string, phrase: string, className = "text-primary-text") {
+  const at = phrase ? text.indexOf(phrase) : -1;
   if (at < 0) return text;
   return (
     <>
       {text.slice(0, at)}
-      <span className="whitespace-nowrap text-primary-text">{phrase}</span>
+      <span className={cn("whitespace-nowrap", className)}>{phrase}</span>
       {text.slice(at + phrase.length)}
     </>
   );
+}
+
+/** A title edited in the admin: line breaks where they were typed, `accent` (if it occurs) in the brand colour. */
+export function richTitle(text: string, accent = "") {
+  return text.split("\n").map((line, i) => (
+    <Fragment key={i}>
+      {i ? <br /> : null}
+      {highlight(line, accent)}
+    </Fragment>
+  ));
 }
 
 /** Pill button that navigates — shadcn Button rendered as a Next.js Link. */

@@ -47,9 +47,9 @@ export default async function AdminDashboardPage() {
   ]);
 
   const stats = [
-    { label: "文章 / 新闻", value: articles, sub: `${publishedArticles} 篇已发布`, href: "/admin/articles", icon: FileText },
+    { label: "新闻动态", value: articles, sub: `${publishedArticles} 篇已发布`, href: "/admin/articles", icon: FileText },
     { label: "项目案例", value: cases, sub: "案例库总数", href: "/admin/cases", icon: Briefcase },
-    { label: "下载资料", value: downloads, sub: "可下载文件", href: "/admin/downloads", icon: Download },
+    { label: "资料下载", value: downloads, sub: "可下载文件", href: "/admin/downloads", icon: Download },
     { label: "媒体资源", value: media, sub: "图片与视频", href: "/admin/media", icon: ImageIcon },
     { label: "客户询盘", value: inquiries, sub: `${newInquiries} 条待处理`, href: "/admin/inquiries", icon: Inbox },
   ];

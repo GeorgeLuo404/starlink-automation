@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getPrisma } from "@/lib/prisma";
@@ -23,10 +24,14 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
     }
   }
 
+  // shadcn's Sidebar remembers collapsed / expanded in this cookie.
+  const sidebarOpen = (await cookies()).get("sidebar_state")?.value !== "false";
+
   return (
     <AdminShell
       session={{ name: session.name, email: session.email, role: session.role }}
       counts={{ inquiries: newInquiries }}
+      defaultOpen={sidebarOpen}
     >
       {children}
     </AdminShell>

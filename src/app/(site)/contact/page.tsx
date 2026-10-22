@@ -3,6 +3,7 @@ import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { services as defaultServices } from "@/content/defaults";
 import { getSiteSettings, listServices } from "@/lib/data";
+import { getPageContent } from "@/lib/page-content";
 import { Card } from "@/components/ui/card";
 import { PageHero } from "@/components/site/page-hero";
 import { ContactForm } from "@/components/site/contact-form";
@@ -11,11 +12,15 @@ import copy from "@/content/copy.json";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = buildMetadata({ title: copy.contact.title, description: copy.contact.lead, path: "/contact" });
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getPageContent("contact.page");
+  return buildMetadata({ title: copy.contact.title, description: t.lead, path: "/contact" });
+}
 
+/** 联系我们 — page text from 后台 → 联系我们; phone, email and address from 站点设置. */
 export default async function ContactPage() {
   const t = copy.contact;
-  const settings = await getSiteSettings();
+  const [settings, page, extra] = await Promise.all([getSiteSettings(), getPageContent("contact.page"), getPageContent("contact.info")]);
 
   let serviceNames: string[];
   try {
@@ -28,19 +33,19 @@ export default async function ContactPage() {
     { icon: Phone, label: t.phoneLabel, value: settings.phone, href: `tel:${settings.phone}` },
     { icon: Mail, label: t.emailLabel, value: settings.email, href: `mailto:${settings.email}` },
     { icon: MapPin, label: t.address, value: settings.address, href: undefined as string | undefined },
-    { icon: Clock, label: t.hoursLabel, value: t.hoursValue, href: undefined },
-    { icon: Zap, label: t.urgentLabel, value: t.urgentValue, href: undefined },
-  ];
+    { icon: Clock, label: extra.hoursLabel, value: extra.hoursValue, href: undefined },
+    { icon: Zap, label: extra.urgentLabel, value: extra.urgentValue, href: undefined },
+  ].filter((row) => row.value);
 
   return (
     <>
-      <PageHero eyebrow={t.title} title={copy.home.cta.title} description={t.lead} crumbs={[{ label: copy.nav.contact }]} />
+      <PageHero eyebrow={t.title} title={page.title} description={page.lead} crumbs={[{ label: copy.nav.contact }]} />
 
       <section className="theme-light section-y">
         <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
           <Card className="reveal p-7 sm:p-10 lg:col-span-7 lg:p-12">
-            <h2 className="title-3 text-2xl">{t.formTitle}</h2>
-            <p className="mt-3 text-sm text-muted-foreground">{t.formDesc}</p>
+            <h2 className="title-3 text-2xl">{page.formTitle}</h2>
+            {page.formDesc ? <p className="mt-3 text-sm text-muted-foreground">{page.formDesc}</p> : null}
             <div className="mt-10">
               <ContactForm services={serviceNames} />
             </div>

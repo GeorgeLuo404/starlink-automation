@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { getPageContent } from "@/lib/page-content";
 import { listGallery } from "@/lib/data";
 import { PageHero } from "@/components/site/page-hero";
 import { GalleryGrid } from "@/components/site/gallery-grid";
@@ -8,25 +9,24 @@ import copy from "@/content/copy.json";
 
 export const revalidate = 120;
 
-export const metadata: Metadata = buildMetadata({
-  title: copy.gallery.title,
-  description: copy.gallery.lead,
-  path: "/gallery",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const header = await getPageContent("gallery.header");
+  return buildMetadata({ title: copy.nav.gallery, description: header.lead, path: "/gallery" });
+}
 
 export default async function GalleryPage({ searchParams }: { searchParams: Promise<{ album?: string }> }) {
   const { album } = await searchParams;
 
-  const all = await listGallery();
+  const [all, header] = await Promise.all([listGallery(), getPageContent("gallery.header")]);
   const albums = [...new Set(all.map((item) => item.album))];
   const items = album ? all.filter((item) => item.album === album) : all;
 
   return (
     <>
       <PageHero
-        eyebrow={copy.gallery.eyebrow}
-        title={copy.home.gallery.title}
-        description={copy.gallery.lead}
+        eyebrow={header.eyebrow}
+        title={header.title}
+        description={header.lead}
         crumbs={[{ label: copy.nav.gallery }]}
       >
         <nav className="intro mt-10 flex flex-wrap items-center gap-2" aria-label={copy.gallery.albums} style={{ animationDelay: "280ms" }}>

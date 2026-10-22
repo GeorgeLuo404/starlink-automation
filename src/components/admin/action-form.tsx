@@ -17,6 +17,11 @@ export function useFieldError(name: string) {
   return useContext(FormContext).fieldErrors?.[name]?.[0];
 }
 
+/** Every validation error of the enclosing <ActionForm>, keyed by field name or path. */
+export function useFormErrors() {
+  return useContext(FormContext).fieldErrors;
+}
+
 export function useFormPending() {
   return useContext(FormContext).pending;
 }

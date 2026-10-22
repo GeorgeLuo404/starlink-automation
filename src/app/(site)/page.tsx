@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
-import { listArticles, listCases, listPartners, listServices } from "@/lib/data";
-import { processSteps, whyItems } from "@/content/defaults";
+import { getSiteSettings, listArticles, listCases, listPartners, listServices } from "@/lib/data";
+import { getPageContent } from "@/lib/page-content";
 import { HomeHero } from "@/components/site/home/hero";
 import { HomeStatement } from "@/components/site/home/statement";
 import { HomeServices } from "@/components/site/home/services";
@@ -11,15 +11,13 @@ import { HomeIntegration } from "@/components/site/home/integration";
 import { HomeWhy } from "@/components/site/home/why";
 import { HomeNews } from "@/components/site/home/news";
 import { CtaSection } from "@/components/site/cta-section";
-import copy from "@/content/copy.json";
 
 export const revalidate = 120;
 
-export const metadata: Metadata = buildMetadata({
-  title: `${copy.meta.siteName} | ${copy.meta.tagline}`,
-  description: copy.meta.description,
-  path: "/",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { companyName, seo } = await getSiteSettings();
+  return buildMetadata({ title: `${companyName} | ${seo.tagline}`, description: seo.description, path: "/" });
+}
 
 /**
  * 首页 / Home. Rhythm: black hero → white statement → black services and
@@ -27,11 +25,12 @@ export const metadata: Metadata = buildMetadata({
  * the closing card.
  */
 export default async function HomePage() {
-  const [services, cases, articles, partners] = await Promise.all([
+  const [services, cases, articles, partners, process] = await Promise.all([
     listServices(),
     listCases({ limit: 5 }),
     listArticles({ page: 1, pageSize: 3 }),
     listPartners(),
+    getPageContent("home.process"),
   ]);
 
   return (
@@ -39,15 +38,10 @@ export default async function HomePage() {
       <HomeHero />
       <HomeStatement />
       <HomeServices services={services} />
-      <HomeProcess
-        eyebrow={copy.home.process.eyebrow}
-        title={copy.home.process.title}
-        lead={copy.home.process.desc}
-        steps={processSteps}
-      />
+      <HomeProcess eyebrow={process.eyebrow} title={process.title} lead={process.desc} steps={process.steps} />
       <HomeCases cases={cases} />
       <HomeIntegration partners={partners} />
-      <HomeWhy items={whyItems} />
+      <HomeWhy />
       <HomeNews articles={articles.items} />
       <CtaSection />
     </>

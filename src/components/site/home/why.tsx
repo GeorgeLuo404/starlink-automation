@@ -1,18 +1,20 @@
-import type { WhyItem } from "@/content/defaults";
+import { getPageContent } from "@/lib/page-content";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { SectionHead } from "../kit";
-import copy from "@/content/copy.json";
 
 /**
- * 选择理由 — the heading beside a list of the six reasons. Each row shows its
+ * 选择理由 — the heading beside a list of the reasons. Each row shows its
  * title; the round + button opens it to the explanation (one at a time).
+ * Text from 后台 → 首页 → 选择理由.
  */
-export function HomeWhy({ items }: { items: WhyItem[] }) {
+export async function HomeWhy() {
+  const t = await getPageContent("home.why");
+  const items = t.items.map((item, i) => ({ ...item, no: String(i + 1).padStart(2, "0") }));
   return (
     <section className="theme-white section-y">
       <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-5">
-          <SectionHead eyebrow={copy.home.why.eyebrow} title={copy.home.why.title} className="lg:sticky lg:top-28" />
+          <SectionHead eyebrow={t.eyebrow} title={t.title} className="lg:sticky lg:top-28" />
         </div>
 
         <Accordion type="single" collapsible defaultValue={items[0]?.no} className="reveal border-t border-border lg:col-span-7">

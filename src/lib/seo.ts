@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import copy from "@/content/copy.json";
+import { getSiteSettings } from "@/lib/data";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.starlink-auto.com";
 
-export function buildMetadata({
+/** Page metadata; the site name in share cards comes from 站点设置. */
+export async function buildMetadata({
   title,
   description,
   path = "",
@@ -18,7 +19,8 @@ export function buildMetadata({
   images?: string[];
   type?: "website" | "article";
   publishedTime?: string;
-}): Metadata {
+}): Promise<Metadata> {
+  const { companyName } = await getSiteSettings();
   const url = `${siteUrl}${path === "/" ? "" : path}`;
   const ogImage = images?.[0] ?? "/media/og.svg";
 
@@ -31,7 +33,7 @@ export function buildMetadata({
       url,
       title,
       description,
-      siteName: copy.meta.siteName,
+      siteName: companyName,
       locale: "zh_CN",
       images: [{ url: ogImage, width: 1600, height: 1000, alt: title }],
       ...(publishedTime ? { publishedTime } : {}),

@@ -1,18 +1,20 @@
 import { ArrowRight } from "lucide-react";
 import type { ArticleView } from "@/lib/data";
+import { getPageContent } from "@/lib/page-content";
 import { PillLink, SectionHead } from "../kit";
 import { ArticleCard } from "../article-card";
 import copy from "@/content/copy.json";
 
 /** 新闻动态 — the latest three. */
-export function HomeNews({ articles }: { articles: ArticleView[] }) {
+export async function HomeNews({ articles }: { articles: ArticleView[] }) {
   if (!articles.length) return null;
+  const t = await getPageContent("home.news");
   return (
     <section className="theme-light section-y">
       <div className="container-x">
         <SectionHead
-          eyebrow={copy.home.news.eyebrow}
-          title={copy.home.news.title}
+          eyebrow={t.eyebrow}
+          title={t.title}
           action={
             <PillLink href="/news" variant="outline">
               {copy.common.viewAll}

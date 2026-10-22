@@ -18,20 +18,24 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: `${copy.meta.siteName} | ${copy.meta.tagline}`,
-    template: `%s | ${copy.meta.siteShort}`,
-  },
-  description: copy.meta.description,
-  keywords: copy.meta.keywords.split(","),
-  applicationName: copy.meta.siteName,
-  authors: [{ name: copy.meta.siteName }],
-  creator: copy.meta.siteName,
-  formatDetection: { telephone: true, address: true, email: true },
-  robots: { index: true, follow: true },
-};
+/** Site-wide defaults; names, tagline, description and keywords come from 后台 → 站点设置. */
+export async function generateMetadata(): Promise<Metadata> {
+  const { companyName, companyShort, seo } = await getSiteSettings();
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: `${companyName} | ${seo.tagline}`,
+      template: `%s | ${companyShort}`,
+    },
+    description: seo.description,
+    keywords: seo.keywords.split(/[,，]/).map((k) => k.trim()).filter(Boolean),
+    applicationName: companyName,
+    authors: [{ name: companyName }],
+    creator: companyName,
+    formatDetection: { telephone: true, address: true, email: true },
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const [settings, services] = await Promise.all([getSiteSettings(), listServices()]);

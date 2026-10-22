@@ -5,6 +5,7 @@ import { deleteGalleryItem } from "@/lib/admin-actions";
 import { Button } from "@/components/ui/button";
 import { ConfirmAction } from "@/components/admin/confirm-action";
 import { AdminPageHeader, EmptyState, SetupNotice, StatusPill } from "@/components/admin/ui";
+import { ListHeaderButton } from "@/components/admin/page-content/list-header-button";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export default async function AdminGalleryPage() {
   if (!db) {
     return (
       <>
-        <AdminPageHeader title="图库" />
+        <AdminPageHeader title="现场图库" />
         <SetupNotice title="数据库尚未连接">
           <p>配置 DATABASE_URL 并执行 pnpm db:deploy 后即可管理图库。</p>
         </SetupNotice>
@@ -31,15 +32,18 @@ export default async function AdminGalleryPage() {
   return (
     <>
       <AdminPageHeader
-        title="图库"
+        title="现场图库"
         description="现场照片与视频，按相册归类后展示在前台图库页。"
         action={
-          <Button asChild className="px-4">
-            <Link href="/admin/gallery/new">
-              <Plus className="size-4" />
-              添加图片
-            </Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ListHeaderButton page="gallery" />
+            <Button asChild className="px-4">
+              <Link href="/admin/gallery/new">
+                <Plus className="size-4" />
+                添加图片
+              </Link>
+            </Button>
+          </div>
         }
       />
 

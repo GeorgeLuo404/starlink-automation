@@ -1,14 +1,15 @@
 import { ArrowRight } from "lucide-react";
 import type { CaseContent } from "@/content/defaults";
+import { getPageContent } from "@/lib/page-content";
 import { PillLink, SectionHead } from "../kit";
 import { CaseCard } from "../case-card";
 import { TileRows } from "../media-tile";
 import copy from "@/content/copy.json";
 
 /** 项目案例 — the lead project wide, the rest two by two. */
-export function HomeCases({ cases }: { cases: CaseContent[] }) {
+export async function HomeCases({ cases }: { cases: CaseContent[] }) {
   if (!cases.length) return null;
-  const t = copy.home.cases;
+  const t = await getPageContent("home.cases");
   return (
     <section className="theme-light section-y">
       <div className="container-x">
