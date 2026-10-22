@@ -128,9 +128,6 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 
 **备案期间**主域名不要解析到未备案或境外的服务器。
 
-**沿用 `starlinkautomation.space` 备案时**：先到工信部网站确认 `.space` 仍在批复的顶级域名列表中；域名注册满 60 天后从 Vercel
-转入阿里云并完成实名认证；提交备案前把域名从 Vercel 项目移除或改为不解析，MVP 改用 `*.vercel.app` 地址。
-
 **通过后**
 
 1. 后台「站点设置 → ICP 备案号」填入备案号，页脚自动显示并链接到 `beian.miit.gov.cn`
