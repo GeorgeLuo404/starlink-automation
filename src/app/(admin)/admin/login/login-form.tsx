@@ -30,8 +30,10 @@ export function LoginForm() {
             type="email"
             required
             autoComplete="username"
-            defaultValue="admin@starlink-auto.com"
-            placeholder="admin@starlink-auto.com"
+            // Prefilled with the seeded admin (.env.example) in development only:
+            // the public login page must not reveal the account.
+            defaultValue={process.env.NODE_ENV !== "production" ? "admin@starlink-auto.com" : undefined}
+            placeholder="name@example.com"
           />
         </div>
 

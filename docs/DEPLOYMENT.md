@@ -73,6 +73,9 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 # 重置线上管理员密码
 (set -a && source .env.supabase.local && set +a && ADMIN_PASSWORD='新的强密码' pnpm admin:create)
 
+# 解除后台登录锁定（清空登录失败记录）
+(set -a && source .env.supabase.local && set +a && docker run --rm postgres:17-alpine psql "$DIRECT_URL" -c 'DELETE FROM "LoginAttempt"')
+
 # 备份到本地文件（使用 Docker 里的 pg_dump 17）
 (set -a && source .env.supabase.local && set +a && docker run --rm postgres:17-alpine pg_dump "$DIRECT_URL" --schema=public --no-owner --no-privileges) > backup-$(date +%F).sql
 ```
@@ -171,6 +174,9 @@ curl -s http://127.0.0.1:3000/api/health
 
 **HTTPS**：把证书放到 `deploy/certs/fullchain.pem` 与 `deploy/certs/privkey.pem`（`chmod 600`），
 `docker compose -f docker-compose.prod.yml restart nginx`。`deploy/nginx.conf` 已包含 HTTP→HTTPS 跳转、HSTS、安全响应头、gzip 与静态资源长缓存。
+
+**客户端 IP**：后台登录限流按 nginx 设置的 `X-Real-IP` 区分访客。若在 nginx 前再加 CDN 或 SLB，需用 nginx 的
+`set_real_ip_from` / `real_ip_header` 还原真实 IP，否则所有访客会被当作同一个 IP。
 
 **`/uploads` 与 OSS**：`STORAGE_DRIVER=s3` 时，把 `deploy/nginx.conf` 中的 `location /uploads/` 改为代理到存储桶
 （文件内有注释示例，同地域用 `-internal` 内网地址），或在 CDN 上为 `/uploads/` 配置回源到 OSS。

@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { clearSessionCookie, getSession, setSessionCookie, verifyPassword } from "@/lib/auth";
+import { clearSessionCookie, getSession, hashPassword, setSessionCookie, verifyPassword } from "@/lib/auth";
+import { clearLoginAttempts, recordLoginAttempt } from "@/lib/login-throttle";
 import { getPrisma, requireDb } from "@/lib/prisma";
 import { deleteObject } from "@/lib/storage";
 import { isBilibiliShortLink, resolveBilibiliShortLink } from "@/lib/bilibili";
 import { describeIssues, pageContentSchema } from "@/lib/page-content";
 import { SECTIONS, type SectionKey } from "@/content/page-sections";
+import copy from "@/content/copy.json";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "@/lib/utils";
 import {
@@ -154,14 +156,29 @@ async function prepare<T extends z.ZodType>(schema: T, form: FormData) {
 
 export type LoginState = { error: string | null };
 
+/**
+ * An unknown email is checked against this stand-in hash, so it costs the same
+ * scrypt as a wrong password and the response time doesn't reveal which
+ * accounts exist.
+ */
+let standIn: Promise<string> | undefined;
+const standInHash = () => (standIn ??= hashPassword(crypto.randomUUID()));
+
 export async function loginAction(_prev: LoginState, form: FormData): Promise<LoginState> {
   const email = String(form.get("email") ?? "").trim().toLowerCase();
   const password = String(form.get("password") ?? "");
 
-  if (!email || !password) return { error: "invalid" };
+  // 254 characters is the longest valid address.
+  if (!email || !password || email.length > 254) return { error: "invalid" };
 
   let user: { id: string; email: string; name: string; role: "ADMIN" | "EDITOR"; passwordHash: string } | null = null;
   try {
+    // Counted before the password is checked (src/lib/login-throttle.ts).
+    const lockedUntil = await recordLoginAttempt(email);
+    if (lockedUntil) {
+      const minutes = Math.max(1, Math.ceil((lockedUntil.getTime() - Date.now()) / 60_000));
+      return { error: copy.admin.tooManyAttempts.replace("{minutes}", String(minutes)) };
+    }
     const db = requireDb();
     user = await db.user.findUnique({
       where: { email },
@@ -174,11 +191,10 @@ export async function loginAction(_prev: LoginState, form: FormData): Promise<Lo
     };
   }
 
-  if (!user) return { error: "invalid" };
+  const valid = await verifyPassword(password, user?.passwordHash ?? (await standInHash()));
+  if (!user || !valid) return { error: "invalid" };
 
-  const valid = await verifyPassword(password, user.passwordHash);
-  if (!valid) return { error: "invalid" };
-
+  await clearLoginAttempts(email);
   await setSessionCookie({ sub: user.id, email: user.email, name: user.name, role: user.role });
 
   try {

@@ -352,6 +352,7 @@
     "signingIn": "登录中…",
     "signOut": "退出登录",
     "invalidCredentials": "邮箱或密码不正确",
+    "tooManyAttempts": "登录失败次数过多，请 {minutes} 分钟后再试",
     "dashboard": "概览",
     "content": "内容管理",
     "articles": "文章 / 新闻",
