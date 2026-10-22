@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { Edit3, Trash2 } from "lucide-react";
-import { deleteDownload } from "@/lib/admin-actions";
+import { deleteDownload, reorderList } from "@/lib/admin-actions";
 import { ConfirmAction } from "@/components/admin/confirm-action";
-import { columnsFor, DataTable } from "@/components/admin/data-table";
+import { columnsFor, DataTable, type DataTableReorder } from "@/components/admin/data-table";
 import { iconAction, iconDanger, publishStatusOptions, StatusPill } from "@/components/admin/ui";
 import { formatBytes } from "@/lib/utils";
 
@@ -75,6 +75,8 @@ const columns = col.columns([
   }),
 ]);
 
+const reorder: DataTableReorder<DownloadRow> = { save: (ids) => reorderList("downloadFile", ids), label: (row) => row.title };
+
 export function DownloadsTable({ rows }: { rows: DownloadRow[] }) {
   return (
     <DataTable
@@ -82,6 +84,7 @@ export function DownloadsTable({ rows }: { rows: DownloadRow[] }) {
       columns={columns}
       getRowId={(row) => row.id}
       searchPlaceholder="搜索资料…"
+      reorder={reorder}
       filters={[
         { column: "fileType", label: "类型", options: [...new Set(rows.map((row) => row.fileType))].map((type) => ({ value: type, label: type })) },
         { column: "status", label: "状态", options: publishStatusOptions },

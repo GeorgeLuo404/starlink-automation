@@ -129,7 +129,6 @@ async function main() {
         coverUrl: `/media/article-${article.slug}.svg`,
         tags: article.tags,
         status: "PUBLISHED" as const,
-        featured: article.featured,
         pinned: index === 0,
         readMinutes: article.readMinutes,
         publishedAt: new Date(article.publishedAt),

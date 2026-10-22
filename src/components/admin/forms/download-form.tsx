@@ -15,7 +15,6 @@ type DownloadRecord = {
   version: string | null;
   requiresForm: boolean;
   status: string;
-  sortOrder: number;
 };
 
 export function DownloadForm({ record }: { record?: DownloadRecord }) {
@@ -55,7 +54,6 @@ export function DownloadForm({ record }: { record?: DownloadRecord }) {
               { value: "ARCHIVED", label: "已归档" },
             ]}
           />
-          <FormField label="排序" name="sortOrder" type="number" defaultValue={record?.sortOrder ?? 0} />
         </div>
         <FormCheckbox
           label="下载前需要填写联系方式"

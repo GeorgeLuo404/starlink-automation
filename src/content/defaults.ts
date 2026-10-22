@@ -64,7 +64,6 @@ export type ArticleContent = {
   tags: string[];
   publishedAt: string;
   readMinutes: number;
-  featured: boolean;
   /** 详情页轮播；为空时详情页显示封面图。 */
   media?: MediaContent[];
 };
@@ -500,7 +499,6 @@ export const articles: ArticleContent[] = [
     tags: ["热压机", "交付", "锂电"],
     publishedAt: "2026-01-18",
     readMinutes: 4,
-    featured: true,
   },
   {
     slug: "iso9001-certified",
@@ -511,7 +509,6 @@ export const articles: ArticleContent[] = [
     tags: ["质量体系", "认证"],
     publishedAt: "2026-01-06",
     readMinutes: 3,
-    featured: false,
   },
   {
     slug: "battery-inspection-methods",
@@ -522,7 +519,6 @@ export const articles: ArticleContent[] = [
     tags: ["锂电池检测", "Hi-pot", "OCV", "机器视觉"],
     publishedAt: "2025-12-20",
     readMinutes: 7,
-    featured: true,
   },
   {
     slug: "plc-communication-troubleshooting",
@@ -533,7 +529,6 @@ export const articles: ArticleContent[] = [
     tags: ["PLC", "通信", "故障排查", "Profinet"],
     publishedAt: "2025-12-02",
     readMinutes: 8,
-    featured: false,
   },
   {
     slug: "robot-team-expansion",
@@ -544,7 +539,6 @@ export const articles: ArticleContent[] = [
     tags: ["团队", "机器人"],
     publishedAt: "2025-11-15",
     readMinutes: 2,
-    featured: false,
   },
   {
     slug: "electrical-drawing-standard-v2",
@@ -555,7 +549,6 @@ export const articles: ArticleContent[] = [
     tags: ["电气设计", "规范", "EPLAN"],
     publishedAt: "2025-10-28",
     readMinutes: 3,
-    featured: false,
   },
 ];
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { getPrisma } from "@/lib/prisma";
-import { COVER_MEDIA, coverOf } from "@/lib/data";
+import { COVER_MEDIA, coverOf, HOME_CASES, pickHomeCases } from "@/lib/data";
 import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
 import { CasesTable, type CaseRow } from "@/components/admin/tables/cases-table";
 import { ListHeaderButton } from "@/components/admin/page-content/list-header-button";
@@ -28,6 +28,8 @@ export default async function AdminCasesPage() {
       orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       include: { media: COVER_MEDIA, _count: { select: { media: true } } },
     });
+    // Same rule as the homepage, so the 首页 badge marks exactly what it shows.
+    const onHome = new Set(pickHomeCases(records.filter((row) => row.status === "PUBLISHED")).map((row) => row.id));
     rows = records.map((row) => ({
       id: row.id,
       title: row.title,
@@ -35,8 +37,14 @@ export default async function AdminCasesPage() {
       industry: row.industry ?? "",
       year: row.year ?? 0,
       status: row.status,
-      featured: row.featured,
-      sortOrder: row.sortOrder,
+      onHome: onHome.has(row.id),
+      // Ticked but not on the homepage: say why.
+      homeNote:
+        row.featured && !onHome.has(row.id)
+          ? row.status === "PUBLISHED"
+            ? `首页最多显示 ${HOME_CASES} 个推荐案例，这个排在后面`
+            : "已勾选推荐到首页，发布后才会显示"
+          : null,
       cover: coverOf(row),
       mediaCount: row._count.media,
     }));
