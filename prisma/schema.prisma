@@ -58,6 +58,17 @@ model User {
   articles Article[]
 }
 
+/// 后台登录的失败计数（防暴力破解）：每个邮箱、每个客户端 IP 各一行，
+/// key 为 "email:<邮箱>" 或 "ip:<地址>"。登录成功即删除；规则见 src/lib/login-throttle.ts。
+model LoginAttempt {
+  key           String    @id
+  failures      Int       @default(0)
+  lockedUntil   DateTime?
+  lastFailureAt DateTime  @default(now())
+
+  @@index([lastFailureAt])
+}
+
 model Category {
   id        String       @id @default(cuid())
   slug      String
