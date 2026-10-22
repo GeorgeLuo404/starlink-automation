@@ -389,8 +389,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
       email: read("contactEmail") ?? d.email,
       address: read("contactAddress") ?? d.address,
       footerDesc: read("footerDesc") ?? d.footerDesc,
-      // An old default stored by the settings form before filing numbers were optional.
-      icp: read("icp") === "粤ICP备00000000号" ? null : read("icp"),
+      icp: read("icp"),
       policeRecord: read("policeRecord"),
       seo: {
         tagline: read("seoTagline") ?? d.seo.tagline,
