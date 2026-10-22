@@ -59,7 +59,6 @@ CREATE TABLE "Article" (
     "coverUrl" TEXT,
     "tags" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "status" "PublishStatus" NOT NULL DEFAULT 'DRAFT',
-    "featured" BOOLEAN NOT NULL DEFAULT false,
     "pinned" BOOLEAN NOT NULL DEFAULT false,
     "viewCount" INTEGER NOT NULL DEFAULT 0,
     "readMinutes" INTEGER NOT NULL DEFAULT 3,
