@@ -18,7 +18,8 @@
 | 项 | 值 |
 | --- | --- |
 | Vercel 项目 | 团队 Staro AI（`staroai`）· 项目 `starlink-automation`，关联 GitHub `GeorgeLuo404/starlink-automation`，生产分支 `main` |
-| 线上地址 | <https://starlink-automation.vercel.app>（公开）；预览部署需登录 Vercel 查看（Standard Protection） |
+| 线上地址 | <https://starlinkautomation.space>（公开；`www.` 永久跳转到主域名，原 `starlink-automation.vercel.app` 仍可访问）；预览部署需登录 Vercel 查看（Standard Protection） |
+| 域名 | `starlinkautomation.space`，在 Vercel 购买，DNS 由 Vercel 托管（记录与 HTTPS 证书自动维护）；到期前在 Vercel → Domains 续费 |
 | 构建 | `vercel.json`：构建命令 `pnpm vercel-build`，函数区域 `sin1`；Node.js 24.x |
 | Supabase 项目 | 组织 Staro AI · 项目 `starlink-automation`（ref 见控制台项目设置，下文记作 `<project-ref>`），`ap-southeast-1`，PostgreSQL 17，Free 计划 |
 | 数据库用户 | `prisma`（应用与迁移都使用它；所有表归它所有） |
@@ -45,7 +46,7 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 | `DIRECT_URL` | 同上，端口改为 `5432` | 敏感 |
 | `DATABASE_CA_CERT` | Supabase Root 2021 CA（PEM，有效期至 2031-04-26；控制台 Database Settings → SSL 可下载） | |
 | `AUTH_SECRET` | `openssl rand -base64 32` | 敏感 |
-| `NEXT_PUBLIC_SITE_URL` | `https://starlink-automation.vercel.app` | |
+| `NEXT_PUBLIC_SITE_URL` | `https://starlinkautomation.space` | |
 | `SITE_NOINDEX` | `true` | |
 | `STORAGE_DRIVER` | `s3` | |
 | `S3_ENDPOINT` | `https://<project-ref>.storage.supabase.co/storage/v1/s3` | |
@@ -102,8 +103,8 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 
 ### 1.7 当前方案的限制
 
-- **中国大陆访问**：`*.vercel.app` 在大陆通常无法直接打开。需要时给 Vercel 项目绑定一个自有域名的**子域名**
-  （Vercel → Settings → Domains，按提示添加 CNAME）。注意准备备案的主域名在备案期间不要解析到境外服务器。
+- **中国大陆访问**：`*.vercel.app` 在大陆通常无法直接打开，因此绑定了 `starlinkautomation.space`。自有域名一般可以访问，
+  但 Vercel 在大陆没有节点，速度与稳定性不作保证，请在大陆网络下实测。
 - **Free 计划**：一周内数据库访问过少的项目会被暂停（Supabase 会提前约一周发邮件提醒）；暂停后 90 天内可在控制台
   点 Resume project 恢复。暂停期间前台显示内置的默认内容，后台不可用。数据库 500 MB、存储 1 GB。
   付费计划的项目不会被暂停。备份请定期按 1.4 节导出。
@@ -119,13 +120,16 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 
 **前提**
 
-- 域名已实名认证，认证主体与备案主体一致；不在阿里云注册的域名需先转入
+- 域名已实名认证，认证主体与备案主体一致；不在阿里云注册的域名需先转入（顶级域名与注册商都须在工信部批复名单内）
 - 阿里云中国大陆地域的服务器（ECS 或轻量应用服务器），**包年包月且剩余时长 ≥ 3 个月**
 - 营业执照、法定代表人及网站负责人身份证（非法人负责人需授权书）、阿里云 App 人脸核验、真实性核验单（系统生成，盖章上传）、域名证书
 
 **填写要点**：网站名称 `深圳市星链自动化有限公司`；主办单位性质「企业」；服务内容「企业官网」；网站语言「中文简体」。
 
 **备案期间**主域名不要解析到未备案或境外的服务器。
+
+**沿用 `starlinkautomation.space` 备案时**：先到工信部网站确认 `.space` 仍在批复的顶级域名列表中；域名注册满 60 天后从 Vercel
+转入阿里云并完成实名认证；提交备案前把域名从 Vercel 项目移除或改为不解析，MVP 改用 `*.vercel.app` 地址。
 
 **通过后**
 
