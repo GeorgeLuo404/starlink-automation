@@ -106,7 +106,7 @@ DATABASE_URL="<云端连接串>" pnpm db:seed
 3. 解析域名：`A` 记录指向 ECS 公网 IP，`www` 与裸域都要解析。
 4. **公安备案**：备案通过后 30 日内在
    [全国互联网安全管理服务平台](https://beian.mps.gov.cn/) 提交公安联网备案，
-   拿到公安备案号后同样填到页脚（本项目模板中已预留位置）。
+   拿到公安备案号后填到后台「站点设置 → 公安备案号」，页脚会显示并链接到查询页。
 5. 申请 HTTPS 证书（阿里云免费 DV 证书即可），配置到 Nginx。
 
 ---
@@ -231,6 +231,9 @@ echo "0 3 * * 1 docker compose -f /opt/starlink/docker-compose.prod.yml exec ngi
 所有结构变更都通过 `prisma/migrations` 中的迁移文件完成，不要使用 `prisma db push`
 （它不记录迁移历史，会导致本地与生产库结构漂移）。
 
+**迁移只增不改**：一旦某个共享的库（Vercel 预览库、RDS）应用过迁移，已有的迁移文件就不要再修改、合并或删除，
+结构变更一律新增迁移。（首次部署前的迁移历史已合并为 `20261022000000_init`。）
+
 ```bash
 # 修改 prisma/schema.prisma 后，在本地生成并应用迁移文件，然后提交到 Git
 pnpm db:migrate --name add_something
@@ -272,6 +275,7 @@ echo "30 3 * * * /opt/starlink/scripts/backup.sh" | crontab -
 - [ ] `STORAGE_DRIVER=s3` 且 OSS 读写验证通过（后台上传一张图试试）
 - [ ] 页脚 ICP 备案号已填写且链接正确
 - [ ] 公安备案号已填写
+- [ ] 「站点设置」里的联系电话、邮箱、地址已换成真实信息（seed 写入的电话是占位号码）
 - [ ] HTTPS 证书有效，HTTP 自动跳转
 - [ ] `/robots.txt` 正常，`/sitemap.xml` 可访问并已提交到百度搜索资源平台
 - [ ] RDS 自动备份 + 异地备份任务已配置并**验证过恢复流程**

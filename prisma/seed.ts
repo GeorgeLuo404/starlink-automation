@@ -188,7 +188,6 @@ async function main() {
     contactPhone: "138-0000-0000",
     contactEmail: "info@starlink-auto.com",
     contactAddress: "深圳市光明区凤凰街道甲子塘社区力缆科技大楼九层E区",
-    icp: "粤ICP备00000000号",
   };
   for (const [key, value] of Object.entries(settings)) {
     await db.siteSetting.upsert({ where: { key }, create: { key, value }, update: {} });

@@ -1,3 +1,8 @@
+-- 初始结构 / Initial schema — generated from schema.prisma
+-- (prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script).
+-- Earlier migrations were merged into this one before the first deploy; from
+-- now on, schema changes are new migrations added after this one.
+
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
 
@@ -79,8 +84,6 @@ CREATE TABLE "Project" (
     "summary" TEXT,
     "content" TEXT,
     "coverUrl" TEXT,
-    "gallery" TEXT[] DEFAULT ARRAY[]::TEXT[],
-    "videoUrl" TEXT,
     "tags" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "scope" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "metrics" JSONB,
@@ -96,6 +99,23 @@ CREATE TABLE "Project" (
 );
 
 -- CreateTable
+CREATE TABLE "ContentMedia" (
+    "id" TEXT NOT NULL,
+    "kind" "MediaKind" NOT NULL,
+    "url" TEXT NOT NULL,
+    "posterUrl" TEXT,
+    "alt" TEXT,
+    "caption" TEXT,
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
+    "projectId" TEXT,
+    "articleId" TEXT,
+    "serviceId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "ContentMedia_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Service" (
     "id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -104,7 +124,6 @@ CREATE TABLE "Service" (
     "content" TEXT,
     "icon" TEXT,
     "coverUrl" TEXT,
-    "videoUrl" TEXT,
     "features" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "deliverables" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "faq" JSONB,
@@ -206,6 +225,15 @@ CREATE TABLE "SiteSetting" (
 );
 
 -- CreateTable
+CREATE TABLE "PageContent" (
+    "key" TEXT NOT NULL,
+    "data" JSONB NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "PageContent_pkey" PRIMARY KEY ("key")
+);
+
+-- CreateTable
 CREATE TABLE "Partner" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -240,6 +268,15 @@ CREATE UNIQUE INDEX "Project_slug_key" ON "Project"("slug");
 CREATE INDEX "Project_status_sortOrder_idx" ON "Project"("status", "sortOrder");
 
 -- CreateIndex
+CREATE INDEX "ContentMedia_projectId_sortOrder_idx" ON "ContentMedia"("projectId", "sortOrder");
+
+-- CreateIndex
+CREATE INDEX "ContentMedia_articleId_sortOrder_idx" ON "ContentMedia"("articleId", "sortOrder");
+
+-- CreateIndex
+CREATE INDEX "ContentMedia_serviceId_sortOrder_idx" ON "ContentMedia"("serviceId", "sortOrder");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Service_slug_key" ON "Service"("slug");
 
 -- CreateIndex
@@ -267,5 +304,17 @@ ALTER TABLE "Article" ADD CONSTRAINT "Article_authorId_fkey" FOREIGN KEY ("autho
 ALTER TABLE "Article" ADD CONSTRAINT "Article_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ContentMedia" ADD CONSTRAINT "ContentMedia_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ContentMedia" ADD CONSTRAINT "ContentMedia_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ContentMedia" ADD CONSTRAINT "ContentMedia_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "DownloadFile" ADD CONSTRAINT "DownloadFile_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- 每条媒体只属于一个案例、一篇文章或一项业务。schema.prisma 写不出 CHECK 约束，
+-- 由这里手写 / A CHECK constraint, which schema.prisma can't express.
+ALTER TABLE "ContentMedia" ADD CONSTRAINT "ContentMedia_one_owner" CHECK (num_nonnulls("projectId", "articleId", "serviceId") = 1);
