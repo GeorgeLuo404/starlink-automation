@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Analytics } from "@/components/site/analytics";
 import { getSiteSettings, listServices } from "@/lib/data";
-import { siteUrl } from "@/lib/seo";
+import { siteNoindex, siteUrl } from "@/lib/seo";
 import { THEME_COLOR } from "@/lib/theme-color";
 import copy from "@/content/copy.json";
 
@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: companyName }],
     creator: companyName,
     formatDetection: { telephone: true, address: true, email: true },
-    robots: { index: true, follow: true },
+    robots: siteNoindex ? { index: false, follow: false } : { index: true, follow: true },
   };
 }
 

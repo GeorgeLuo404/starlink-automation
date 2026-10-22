@@ -1,4 +1,5 @@
 import { getPrisma } from "@/lib/prisma";
+import { maxUploadBytes } from "@/lib/storage";
 import { AdminPageHeader, EmptyState, SetupNotice } from "@/components/admin/ui";
 import { MediaUploader } from "@/components/admin/media-uploader";
 import { MediaGrid, type MediaRow } from "@/components/admin/media-grid";
@@ -67,7 +68,7 @@ export default async function AdminMediaPage({
         description="上传后的文件会出现在这里，可复制链接后用于文章封面、案例图片或图库。"
       />
 
-      <MediaUploader folder={folder ?? "general"} />
+      <MediaUploader folder={folder ?? "general"} maxMb={Math.round(maxUploadBytes() / 1024 / 1024)} />
 
       <div className="mt-10">
         {assets.length === 0 ? (

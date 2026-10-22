@@ -4,11 +4,13 @@
   "private": true,
   "description": "深圳市星链自动化有限公司官网",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "24.x"
   },
+  "packageManager": "pnpm@10.31.0",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && node scripts/check-tokens.mjs && next build",
+    "vercel-build": "node scripts/vercel-migrate.mjs && pnpm build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
@@ -25,7 +27,8 @@
     "check": "pnpm typecheck && pnpm check:tokens"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1149.0",
+    "@aws-sdk/client-s3": "^3.1155.0",
+    "@aws-sdk/s3-request-presigner": "^3.1155.0",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
@@ -53,7 +56,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.6.5",
+    "@types/node": "^24.19.2",
     "@types/pg": "^8.23.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",

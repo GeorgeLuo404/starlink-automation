@@ -1,18 +1,15 @@
 # 后台使用说明
 
-后台地址：`https://你的域名/admin`
-（本地开发：<http://localhost:3000/admin>）
+后台地址：`<网站地址>/admin`
+（当前线上：<https://starlink-automation.vercel.app/admin>；本地开发：<http://localhost:3000/admin>）
 
 ---
 
 ## 登录
 
-默认账号见 `.env` 的 `ADMIN_EMAIL` / `ADMIN_PASSWORD`。
-**上线前必须修改**：
-
-```bash
-ADMIN_EMAIL=admin@your-domain.com ADMIN_PASSWORD='强密码' pnpm admin:create
-```
+- **线上**：管理员账号在部署时创建，账号与初始密码保存在开发者本机的 `.env.supabase.local`。首次登录后请重置为自己的密码，
+  方法见 [部署文档 1.4](DEPLOYMENT.md#14-在本机操作线上数据库)。
+- **本地**：账号取自 `.env` 的 `ADMIN_EMAIL` / `ADMIN_PASSWORD`，可用 `pnpm admin:create` 重置。
 
 登录状态保存在 HttpOnly Cookie 中，有效期 7 天。
 
@@ -53,7 +50,7 @@ ADMIN_EMAIL=admin@your-domain.com ADMIN_PASSWORD='强密码' pnpm admin:create
 前台显示的就是对应题材的线稿占位图，版式与真实照片完全相同。拍到现场照片后，在该条目上传封面
 替换这个地址即可，无需改代码。建议照片横向、比例约 16:10，宽度不小于 1600 像素。
 
-**限制**：单文件 200MB（`MAX_UPLOAD_MB` 可调）；支持 jpg/png/webp/gif/avif/svg、
+**限制**：单文件上限显示在上传区（当前线上 50 MB，本地默认 200 MB，由 `MAX_UPLOAD_MB` 设置）；支持 jpg/png/webp/gif/avif/svg、
 mp4/webm/mov、pdf/zip/docx/xlsx/pptx/csv/txt。
 
 ---
@@ -202,7 +199,7 @@ mp4/webm/mov、pdf/zip/docx/xlsx/pptx/csv/txt。
   **加粗**   `行内代码`
   ```
 
-  段落之间**空一行**。多个网段会被合并为一个 `<p>`，用单个换行即可换行。
+  段落之间**空一行**；在同一段内直接回车（单个换行）会在段内换行。
 - **状态**：草稿不会出现在前台；已发布才会。
 - **置顶**：置顶的文章排在新闻列表和首页「新闻动态」的最前面，卡片上标「置顶」；其余按发布日期从新到旧。
 
@@ -284,5 +281,6 @@ mp4/webm/mov、pdf/zip/docx/xlsx/pptx/csv/txt。
 | 每月 | 发布 1–2 篇新闻或技术文章（对 SEO 有明显帮助） |
 | 每月 | 检查一次媒体库，清理没用到的素材 |
 | 每季度 | 核对「关于我们」与首页「交付数据」里的数字是否需要更新 |
-| 每季度 | 备份验证：从 RDS 备份恢复到测试库确认可用 |
+| 每月 | 导出一次数据库备份（方法见 [部署文档](DEPLOYMENT.md)） |
+| 每季度 | 备份验证：把备份恢复到测试库，确认可用 |
 | 每半年 | 更新依赖：`pnpm outdated` → 谨慎升级 → 本地验证后发布 |

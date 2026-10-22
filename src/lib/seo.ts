@@ -4,6 +4,9 @@ import { getSiteSettings } from "@/lib/data";
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.starlink-auto.com";
 
+/** SITE_NOINDEX=true keeps search engines out — for preview/MVP deployments. */
+export const siteNoindex = process.env.SITE_NOINDEX === "true";
+
 /** Page metadata; the site name in share cards comes from 站点设置. */
 export async function buildMetadata({
   title,

@@ -39,13 +39,30 @@ export function getPrisma(): PrismaClient | null {
     void stale.$disconnect().catch(() => {});
   }
 
-  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+  const adapter = new PrismaPg(poolConfig(process.env.DATABASE_URL));
   cached = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {
     globalForPrisma.__starlinkPrisma = { client: cached, generated: PrismaClient };
   }
   return cached;
+}
+
+/**
+ * node-postgres settings for DATABASE_URL.
+ *
+ * Managed PostgreSQL (Supabase, Aliyun RDS) signs its server certificates with
+ * its own root CA, which Node does not trust. With that CA's PEM in
+ * DATABASE_CA_CERT the connection is encrypted and the server verified against
+ * it. `sslmode` is then dropped from the URL, because node-postgres would let
+ * it override the CA. Without DATABASE_CA_CERT the URL is used as-is.
+ */
+function poolConfig(url: string) {
+  const ca = process.env.DATABASE_CA_CERT?.replace(/\\n/g, "\n");
+  if (!ca) return { connectionString: url };
+  const parsed = new URL(url);
+  parsed.searchParams.delete("sslmode");
+  return { connectionString: parsed.toString(), ssl: { ca, rejectUnauthorized: true } };
 }
 
 /** Use in admin routes where a database is genuinely required. */

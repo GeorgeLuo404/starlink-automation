@@ -9,7 +9,7 @@ import { Dropzone } from "@/components/admin/dropzone";
 
 type QueueItem = { name: string; progress: number; status: "uploading" | "done" | "error" };
 
-export function MediaUploader({ folder = "general" }: { folder?: string }) {
+export function MediaUploader({ folder = "general", maxMb }: { folder?: string; maxMb: number }) {
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const router = useRouter();
 
@@ -50,7 +50,7 @@ export function MediaUploader({ folder = "general" }: { folder?: string }) {
         accept="image/*,video/*,.pdf,.zip,.docx,.xlsx,.pptx,.csv,.txt"
         onFiles={(files) => void handleFiles(files)}
         title="拖拽文件到此处，或点击选择"
-        hint="图片 / 视频 / PDF / Office · 单文件不超过 200MB"
+        hint={`图片 / 视频 / PDF / Office · 单文件不超过 ${maxMb}MB`}
         className="py-12"
       />
 

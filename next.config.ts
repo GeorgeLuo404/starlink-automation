@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
       { source: "/:locale(zh|en)/:path*", destination: "/:path*", permanent: true },
     ];
   },
+  // Uploaded files are always addressed as /uploads/<key> on this domain (see
+  // src/lib/storage.ts). With the s3 driver, proxy that path to the bucket so
+  // visitors never reach the storage host directly. Rewrites are resolved at
+  // build time — on Vercel both variables are set for the build; on ECS nginx
+  // proxies /uploads instead (docs/DEPLOYMENT.md).
+  async rewrites() {
+    const bucket = process.env.S3_PUBLIC_BASE_URL?.replace(/\/$/, "");
+    if (process.env.STORAGE_DRIVER !== "s3" || !bucket) return [];
+    return [{ source: "/uploads/:path*", destination: `${bucket}/:path*` }];
+  },
   images: {
     remotePatterns: [
       // 阿里云 OSS / Aliyun OSS
