@@ -16,7 +16,9 @@ export type TextareaField = Base & { kind: "textarea"; max?: number; rows?: numb
 export type LinesField = Base & { kind: "lines"; maxItems?: number; max?: number };
 export type NumberField = Base & { kind: "number"; min?: number; max?: number; half?: boolean };
 export type ImageField = Base & { kind: "image"; folder?: string };
-export type ItemField = TextField | TextareaField | LinesField | NumberField;
+/** One of the process illustrations (src/content/step-art.ts), or none. */
+export type IllustrationField = Base & { kind: "illustration" };
+export type ItemField = TextField | TextareaField | LinesField | NumberField | IllustrationField;
 /** Repeatable cards (milestones, steps …), reorderable by drag. */
 export type ListField = Base & { kind: "list"; itemLabel: string; fields: ItemField[]; min?: number; max?: number };
 export type Field = ItemField | ImageField | ListField;
@@ -109,7 +111,7 @@ const home: PageDef = {
     {
       key: "home.process",
       title: "服务流程",
-      description: "同时显示在「业务能力」列表页。前 6 步配有线稿插图。",
+      description: "同时显示在「业务能力」列表页。每一步可以从插图库里选一张线稿动画。",
       fields: [
         eyebrow,
         title,
@@ -125,6 +127,7 @@ const home: PageDef = {
             { kind: "text", name: "title", label: "名称", required: true, max: 20 },
             { kind: "textarea", name: "desc", label: "说明", required: true, max: 300, rows: 3 },
             { kind: "lines", name: "outputs", label: "交付物", hint: "每行一个。", maxItems: 8, max: 30 },
+            { kind: "illustration", name: "art", label: "插图", hint: "显示在这一步右侧的线稿动画；新步骤默认不配插图。" },
           ],
         },
       ],

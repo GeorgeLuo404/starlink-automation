@@ -414,6 +414,7 @@ pnpm check:tokens   # 已接入 pnpm build，违反时构建直接失败
 | 五项业务、案例、新闻等初始内容 | `src/content/defaults.ts`（然后 `pnpm db:seed --force`，会覆盖后台对这些记录的修改） |
 | 占位图换成真实照片 | 在后台对应条目上传「封面图片」即可（见第 6.5 节）；图库在后台「现场图库」里替换 |
 | 导航结构 | `src/components/site/nav-items.ts` |
+| 服务流程的插图库 | 新插图加到 `src/components/site/home/step-art.tsx` 的 `STEP_ART`，并在 `src/content/step-art.ts` 列出，后台即可选择 |
 
 ---
 
