@@ -2,12 +2,14 @@ import path from "node:path";
 import { defineConfig } from "prisma/config";
 
 /**
- * Prisma 7 configuration.
+ * Prisma 7 configuration — read by the CLI only (migrate, seed, studio).
+ * The app connects through @prisma/adapter-pg with DATABASE_URL (src/lib/prisma.ts).
  *
- * Two things changed in Prisma 7 and are handled here:
- *  1. The datasource URL moved out of schema.prisma into this file.
- *  2. .env is no longer loaded automatically — we load it explicitly for the CLI.
- *     (The Next.js runtime loads .env on its own; this file is only for the CLI.)
+ *  · The datasource URL lives here, not in schema.prisma (Prisma 7).
+ *  · .env is loaded explicitly; variables already set in the shell win.
+ *  · DIRECT_URL, when set, is used instead of DATABASE_URL: migrations need a
+ *    session-level connection, while a serverless app connects through a
+ *    transaction-mode pooler (Supabase: port 6543 for the app, 5432 here).
  */
 try {
   process.loadEnvFile(path.join(process.cwd(), ".env"));
@@ -23,7 +25,7 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env.DATABASE_URL ?? "",
+    url: process.env.DIRECT_URL || process.env.DATABASE_URL || "",
     shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL,
   },
 });

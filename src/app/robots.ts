@@ -1,7 +1,10 @@
 import type { MetadataRoute } from "next";
-import { siteUrl } from "@/lib/seo";
+import { siteNoindex, siteUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
+  if (siteNoindex) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
   return {
     rules: [
       {

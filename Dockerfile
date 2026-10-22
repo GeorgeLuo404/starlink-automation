@@ -7,7 +7,7 @@
 # 使用 Next.js standalone 输出，最终镜像只包含被追踪到的运行时依赖。
 # Uses Next.js standalone output so the final image only ships traced runtime deps.
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 RUN corepack enable && apk add --no-cache libc6-compat tini
 WORKDIR /app
 

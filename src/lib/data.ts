@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { getPrisma } from "@/lib/prisma";
+import { folderOfKey, mediaKindOf, publicUrlFor } from "@/lib/storage";
 import copy from "@/content/copy.json";
 import {
   articles as defaultArticles,
@@ -453,6 +454,43 @@ export async function createInquiry(input: InquiryInput): Promise<{ ok: boolean;
     console.error("[inquiry] failed to persist:", error);
     return { ok: false, stored: false };
   }
+}
+
+/* --------------------------------- 媒体库 --------------------------------- */
+
+export type UploadedAsset = { id: string | null; key: string; url: string; kind: "IMAGE" | "VIDEO" | "DOCUMENT"; size: number; name: string };
+
+/** Index a stored file in the media library and describe it for the uploader. */
+export async function recordUpload(input: { key: string; name: string; mimeType: string; size: number }): Promise<UploadedAsset> {
+  const asset: UploadedAsset = {
+    id: null,
+    key: input.key,
+    url: publicUrlFor(input.key),
+    kind: mediaKindOf(input.mimeType),
+    size: input.size,
+    name: input.name,
+  };
+  const db = getPrisma();
+  if (!db) return asset;
+  try {
+    const row = await db.mediaAsset.create({
+      data: {
+        filename: input.key.split("/").pop() ?? input.key,
+        originalName: input.name,
+        mimeType: input.mimeType,
+        kind: asset.kind,
+        size: input.size,
+        url: asset.url,
+        storageKey: input.key,
+        folder: folderOfKey(input.key),
+      },
+    });
+    asset.id = row.id;
+  } catch (error) {
+    // The file is stored; failing to index it should not fail the upload.
+    console.error("[upload] could not index asset:", error);
+  }
+  return asset;
 }
 
 export async function incrementArticleViews(slug: string) {
