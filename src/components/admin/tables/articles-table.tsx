@@ -52,7 +52,8 @@ const columns = col.columns([
     filterFn: "equalsString",
     cell: ({ getValue }) => <StatusPill status={getValue()} />,
   }),
-  // Drafts have no date yet: they stay on top whichever way the dates are sorted.
+  // Rows arrive newest first (see the admin page). Drafts have no date yet:
+  // they stay on top whichever way the dates are sorted here.
   col.accessor((row) => row.publishedAt ?? undefined, {
     id: "publishedAt",
     header: "发布日期",
@@ -108,7 +109,6 @@ export function ArticlesTable({ rows }: { rows: ArticleRow[] }) {
       getRowId={(row) => row.id}
       searchPlaceholder="搜索标题…"
       filters={[{ column: "status", label: "状态", options: publishStatusOptions }]}
-      initialSorting={[{ id: "publishedAt", desc: true }]}
     />
   );
 }
