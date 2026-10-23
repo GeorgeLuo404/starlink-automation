@@ -41,20 +41,77 @@ export function glowSprite(color: RGB, size = 64) {
 }
 
 /**
- * requestAnimationFrame loop that only runs while `el` is on screen.
- * `frame` receives elapsed seconds (paused time excluded) and a clamped delta.
+ * Dots or lines grouped by opacity, each group drawn as a single path.
+ * WebKit's canvas (Safari, and every browser on iOS) pays for each draw call
+ * rather than each shape, so thousands of separate fillRect / stroke calls a
+ * frame stall it — and the page with it. Opacity is rounded to `steps` levels
+ * between 0 and `max`.
  */
-export function startLoop(el: Element, frame: (t: number, dt: number) => void) {
+export function alphaBatch(max: number, steps = 8) {
+  const groups: number[][] = Array.from({ length: steps }, () => []);
+  const scale = max > 0 ? steps / max : 0;
+  const group = (alpha: number) => groups[Math.min(steps - 1, Math.floor(alpha * scale))];
+  const level = (i: number) => (max * (i + 0.5)) / steps;
+  return {
+    /** Queue a line from (x1, y1) to (x2, y2). */
+    line(alpha: number, x1: number, y1: number, x2: number, y2: number) {
+      if (alpha > max * 0.02) group(alpha).push(x1, y1, x2, y2);
+    },
+    /** Queue a square dot of side `s` centred on (x, y). */
+    dot(alpha: number, x: number, y: number, s: number) {
+      if (alpha > max * 0.02) group(alpha).push(x - s / 2, y - s / 2, s);
+    },
+    stroke(ctx: CanvasRenderingContext2D, color: RGB) {
+      groups.forEach((g, i) => {
+        if (!g.length) return;
+        ctx.strokeStyle = rgba(color, level(i));
+        ctx.beginPath();
+        for (let k = 0; k < g.length; k += 4) {
+          ctx.moveTo(g[k], g[k + 1]);
+          ctx.lineTo(g[k + 2], g[k + 3]);
+        }
+        ctx.stroke();
+      });
+    },
+    fill(ctx: CanvasRenderingContext2D, color: RGB) {
+      ctx.fillStyle = rgba(color, 1);
+      groups.forEach((g, i) => {
+        if (!g.length) return;
+        ctx.globalAlpha = Math.min(1, level(i));
+        ctx.beginPath();
+        for (let k = 0; k < g.length; k += 3) ctx.rect(g[k], g[k + 1], g[k + 2], g[k + 2]);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    },
+  };
+}
+
+/**
+ * requestAnimationFrame loop that only runs while `el` is on screen, drawing
+ * at most `maxFps` frames a second. `frame` receives elapsed seconds (paused
+ * time excluded) and the time since the last drawn frame — at most 0.1 s, so a
+ * slow device still keeps roughly real time and a resumed loop does not jump.
+ */
+export function startLoop(el: Element, frame: (t: number, dt: number) => void, { maxFps = 60 } = {}) {
   let raf = 0;
   let last = 0;
   let t = 0;
+  let stopped = false;
+  // 2 ms of slack, so a 60 Hz display still lands every other refresh at 30 fps.
+  const gap = 1000 / maxFps - 2;
 
   const tick = (now: number) => {
-    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+    if (last && now - last < gap) {
+      raf = requestAnimationFrame(tick);
+      return;
+    }
+    const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
     last = now;
     t += dt;
     frame(t, dt);
-    raf = requestAnimationFrame(tick);
+    // `frame` may have stopped the loop.
+    if (!stopped) raf = requestAnimationFrame(tick);
   };
 
   const observer = new IntersectionObserver(([entry]) => {
@@ -69,6 +126,7 @@ export function startLoop(el: Element, frame: (t: number, dt: number) => void) {
   observer.observe(el);
 
   return () => {
+    stopped = true;
     observer.disconnect();
     cancelAnimationFrame(raf);
   };
