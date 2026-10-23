@@ -41,11 +41,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
   });
 
   const filename = `${slug}-${item.version || "v1"}.pdf`;
+  // Header values must be Latin-1 and slugs may be Chinese: send an ASCII
+  // fallback plus the real name in RFC 5987 form.
+  const asciiName = filename.replace(/[^\x20-\x7e]|["\\]/g, "_");
 
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Disposition": `attachment; filename="${asciiName}"; filename*=UTF-8''${encodeURIComponent(filename)}`,
       "Cache-Control": "no-store",
     },
   });

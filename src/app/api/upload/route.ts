@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { recordUpload } from "@/lib/data";
-import { buildKey, isAllowedType, maxUploadBytes, putObject } from "@/lib/storage";
+import { buildKey, isAllowedUpload, maxUploadBytes, putObject } from "@/lib/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   if (file.size > maxBytes) {
     return NextResponse.json({ ok: false, error: "file_too_large", maxBytes }, { status: 413 });
   }
-  if (!isAllowedType(file.type)) {
+  if (!isAllowedUpload(file.name, file.type)) {
     return NextResponse.json({ ok: false, error: "unsupported_type", type: file.type }, { status: 415 });
   }
 

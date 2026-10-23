@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth";
-import { buildKey, isAllowedType, maxUploadBytes, presignUpload, storageDriver } from "@/lib/storage";
+import { buildKey, isAllowedUpload, maxUploadBytes, presignUpload, storageDriver } from "@/lib/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   if (size > maxBytes) {
     return NextResponse.json({ ok: false, error: "file_too_large", maxBytes }, { status: 413 });
   }
-  if (!isAllowedType(type)) {
+  if (!isAllowedUpload(name, type)) {
     return NextResponse.json({ ok: false, error: "unsupported_type", type }, { status: 415 });
   }
 

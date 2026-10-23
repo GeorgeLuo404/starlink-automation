@@ -13,6 +13,7 @@
  * never clobbers content edited in the admin. Pass --force to overwrite the
  * seeded rows (matched by slug) with the bundled defaults.
  */
+import { randomBytes } from "node:crypto";
 import path from "node:path";
 import { getPrisma } from "../src/lib/prisma";
 import { hashPassword } from "../src/lib/password";
@@ -198,7 +199,9 @@ async function main() {
   if (existingAdmin) {
     console.log(`  · administrator already exists: ${email}`);
   } else {
-    const password = process.env.ADMIN_PASSWORD || "Starlink@2026";
+    // No fixed fallback: the repository is public, so a built-in password would be known to everyone.
+    const generated = !process.env.ADMIN_PASSWORD;
+    const password = process.env.ADMIN_PASSWORD || randomBytes(12).toString("base64url");
     await db.user.create({
       data: {
         email,
@@ -207,7 +210,11 @@ async function main() {
         role: "ADMIN",
       },
     });
-    console.log(`  · created administrator ${email} with password "${password}" — change it after first login`);
+    console.log(
+      generated
+        ? `  · created administrator ${email} with generated password "${password}" — store it now, it is not shown again`
+        : `  · created administrator ${email} with the password from ADMIN_PASSWORD`
+    );
   }
 
   console.log("\n✓ Seed complete. 后台地址：http://localhost:3000/admin\n");
