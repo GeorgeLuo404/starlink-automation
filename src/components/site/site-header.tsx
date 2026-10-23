@@ -42,11 +42,9 @@ export function SiteHeader({ services }: { services: NavService[] }) {
     <header
       className={cn(
         "theme-dark fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300",
-        // Phones keep a solid bar (no backdrop blur), so it stays legible even while the
-        // page is still loading or busy; from lg it is clear over the hero until scrolled.
         scrolled
-          ? "border-b border-border bg-background/95 lg:backdrop-blur-xl"
-          : "border-b border-transparent bg-background lg:bg-transparent"
+          ? "border-b border-border bg-background/95 backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
       )}
     >
       {/* Three columns (1fr · auto · 1fr) so the nav is centred on the page, whatever the logo and button widths. */}

@@ -540,11 +540,8 @@
 .intro {
   animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-/* Scroll reveals are for mouse-and-keyboard screens only. On phones content is
-   simply there: WebKit runs these timelines on the main thread, and a busy one
-   left whole sections invisible on iPhones. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
     .reveal {
       animation: rise linear both;
       animation-timeline: view();
