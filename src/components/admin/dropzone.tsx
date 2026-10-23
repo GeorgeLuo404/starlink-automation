@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { useDropzone, type Accept, type FileRejection } from "react-dropzone";
 import { Loader2, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
@@ -70,6 +71,9 @@ export function Dropzone({
   children?: React.ReactNode;
 }) {
   const wraps = children !== undefined;
+  // An id rather than a name: a named file input inside a form would be
+  // submitted along with it.
+  const inputId = useId();
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
     accept: accept ? toAccept(accept) : undefined,
     multiple,
@@ -84,7 +88,7 @@ export function Dropzone({
   if (wraps) {
     return (
       <div {...getRootProps({ className: cn("relative", className) })}>
-        <input {...getInputProps()} />
+        <input {...getInputProps({ id: inputId })} />
         {children}
         {isDragActive ? (
           <div
@@ -116,7 +120,7 @@ export function Dropzone({
         ),
       })}
     >
-      <input {...getInputProps()} />
+      <input {...getInputProps({ id: inputId })} />
       <span
         className={cn(
           "inline-flex size-11 items-center justify-center rounded-full border bg-raised transition-colors",

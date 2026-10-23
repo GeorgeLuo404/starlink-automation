@@ -100,6 +100,8 @@ export function MediaFields({
   const imageInput = useRef<HTMLInputElement>(null);
   const videoInput = useRef<HTMLInputElement>(null);
   const dndId = useId();
+  // Every control gets an id: Chrome flags form fields with neither id nor name.
+  const fieldId = useId();
 
   const nextId = () => `m${seq.current++}`;
   const busy = pending.length > 0 || posterBusy.length > 0;
@@ -223,10 +225,13 @@ export function MediaFields({
         description="用于列表卡片、首页与分享卡片。留空时自动使用下方第一张图片（或视频封面）。"
       />
 
-      <div>
+      <div role="group" aria-labelledby={`${fieldId}-label`}>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <Label className="mb-0">图片与视频</Label>
+            {/* A caption for the whole group, not one control, so not a <label>. */}
+            <Label asChild className="mb-0">
+              <span id={`${fieldId}-label`}>图片与视频</span>
+            </Label>
             <p className="mt-1.5 text-xs text-faint">
               {shownIn}按此顺序轮播；拖动 <GripVertical className="inline size-3 align-[-2px]" /> 调整顺序。{whenEmpty}
             </p>
@@ -240,6 +245,7 @@ export function MediaFields({
         {busy ? (
           // Blocks submit until uploads finish; the browser shows the message.
           <input
+            id={`${fieldId}-busy`}
             aria-hidden
             tabIndex={-1}
             required
@@ -323,6 +329,7 @@ export function MediaFields({
           {bilibiliOpen ? (
             <div className="mt-3 flex flex-col gap-2 sm:flex-row">
               <Input
+                id={`${fieldId}-bilibili`}
                 autoFocus
                 value={bilibiliUrl}
                 onChange={(e) => setBilibiliUrl(e.target.value)}
@@ -350,6 +357,7 @@ export function MediaFields({
 
         <input
           ref={imageInput}
+          id={`${fieldId}-images`}
           type="file"
           accept="image/*"
           multiple
@@ -361,6 +369,7 @@ export function MediaFields({
         />
         <input
           ref={videoInput}
+          id={`${fieldId}-videos`}
           type="file"
           accept="video/*"
           multiple
@@ -410,6 +419,7 @@ function MediaCard({
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: item.id });
   const videoRef = useRef<HTMLVideoElement>(null);
   const posterInput = useRef<HTMLInputElement>(null);
+  const fieldId = useId();
   const bilibili = item.kind === "VIDEO" && isBilibiliUrl(item.url);
   const coverCandidate = item.kind === "IMAGE" ? item.url : item.posterUrl;
   const n = String(index + 1).padStart(2, "0");
@@ -516,6 +526,7 @@ function MediaCard({
 
       <div className="flex flex-1 flex-col gap-2 p-3">
         <Input
+          id={`${fieldId}-caption`}
           value={item.caption}
           onChange={(e) => onChange({ caption: e.target.value })}
           placeholder="说明（选填，显示在轮播下方）"
@@ -525,6 +536,7 @@ function MediaCard({
         />
         {item.kind === "IMAGE" ? (
           <Input
+            id={`${fieldId}-alt`}
             value={item.alt}
             onChange={(e) => onChange({ alt: e.target.value })}
             placeholder="替代文本（选填，默认使用说明）"
@@ -551,6 +563,7 @@ function MediaCard({
             ) : null}
             <input
               ref={posterInput}
+              id={`${fieldId}-poster`}
               type="file"
               accept="image/*"
               className="hidden"

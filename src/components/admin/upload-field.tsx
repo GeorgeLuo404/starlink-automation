@@ -146,6 +146,7 @@ export function UploadField({
 
       <input
         ref={inputRef}
+        id={`${name}-file`}
         type="file"
         accept={accept}
         className="hidden"

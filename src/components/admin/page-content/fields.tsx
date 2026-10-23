@@ -174,6 +174,7 @@ function ScalarInput({
  */
 function IllustrationInput({ field, value, onChange }: { field: IllustrationField; value: string; onChange: (value: string) => void }) {
   const [open, setOpen] = useState(false);
+  const labelId = useId();
   const Current = stepArtFor(value);
   const label = STEP_ART_OPTIONS.find((o) => o.key === value)?.label ?? "无插图";
 
@@ -183,8 +184,11 @@ function IllustrationInput({ field, value, onChange }: { field: IllustrationFiel
   }
 
   return (
-    <div className="sm:col-span-2">
-      <Label>{field.label}</Label>
+    <div role="group" aria-labelledby={labelId} className="sm:col-span-2">
+      {/* Captions a picker, not a form control, so not a <label>. */}
+      <Label asChild>
+        <span id={labelId}>{field.label}</span>
+      </Label>
       <div className="flex items-center gap-4">
         <ArtFrame className="w-36 shrink-0">{Current ? <Current /> : <NoArt />}</ArtFrame>
         <div className="min-w-0">
@@ -279,6 +283,7 @@ function ArtOption({ label, selected, onSelect, children }: { label: string; sel
  */
 function ListInput({ field, path, items, onChange }: { field: ListField; path: string; items: Draft[]; onChange: (items: Draft[]) => void }) {
   const dndId = useId();
+  const labelId = useId();
   const errors = useFormErrors();
   const listError = useFieldError(path);
   // Cards start folded when there are many, so the order is visible at a glance.
@@ -316,10 +321,13 @@ function ListInput({ field, path, items, onChange }: { field: ListField; path: s
     });
 
   return (
-    <div className="sm:col-span-2">
+    <div role="group" aria-labelledby={labelId} className="sm:col-span-2">
       <div className="flex items-baseline justify-between gap-3">
-        <Label>
-          {field.label} <span className="text-faint normal-case">· {items.length} / {max}</span>
+        {/* Captions the whole list, not one control, so not a <label>. */}
+        <Label asChild>
+          <span id={labelId}>
+            {field.label} <span className="text-faint normal-case">· {items.length} / {max}</span>
+          </span>
         </Label>
         {items.length > 1 ? (
           <button

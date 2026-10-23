@@ -200,6 +200,8 @@ export function DataTable<TData extends RowData>({
         <div className="relative sm:w-72">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-faint" />
           <Input
+            name="search"
+            autoComplete="off"
             value={String(table.state.globalFilter ?? "")}
             onChange={(e) => table.setGlobalFilter(e.target.value)}
             placeholder={searchPlaceholder}
