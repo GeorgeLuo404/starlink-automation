@@ -37,6 +37,9 @@ export default function RichTextEditor({ defaultValue, onChange, placeholder, la
     ...(invalid ? { "aria-invalid": "true" } : {}),
   };
   const editor = useEditor({
+    // <FormRichText> loads this with `ssr: false`, so there is no server render
+    // to mismatch: create the editor on the first render instead of the next.
+    immediatelyRender: true,
     extensions: editorExtensions(placeholder),
     content: defaultValue.replace(/\r\n?/g, "\n"),
     contentType: "markdown",
@@ -46,7 +49,7 @@ export default function RichTextEditor({ defaultValue, onChange, placeholder, la
 
   // Validation errors arrive after the editor exists; keep its ARIA state in step.
   useEffect(() => {
-    editor?.setOptions({ editorProps: { attributes } });
+    editor.setOptions({ editorProps: { attributes } });
   }, [editor, labelledBy, describedBy, invalid]); // `attributes` derives from these
 
   return (
@@ -57,7 +60,7 @@ export default function RichTextEditor({ defaultValue, onChange, placeholder, la
         invalid && "border-destructive ring-destructive/20"
       )}
     >
-      {editor ? <Toolbar editor={editor} /> : null}
+      <Toolbar editor={editor} />
       <EditorContent editor={editor} className="max-h-[70vh] overflow-y-auto px-5 py-4" />
     </div>
   );
