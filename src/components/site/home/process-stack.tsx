@@ -56,25 +56,26 @@ export function HomeProcess({
                   <div className="flex h-(--strip) items-center justify-between gap-6 border-b border-border">
                     <div className="flex items-baseline gap-5">
                       <span className="text-sm text-primary tabular-nums">{no(i)}</span>
-                      <h3 className="text-lg font-medium">{step.title}</h3>
+                      <h3 className="text-base font-medium sm:text-lg">{step.title}</h3>
                     </div>
                     <span className="text-xs text-muted-foreground tabular-nums">
                       阶段 {no(i)} / {total}
                     </span>
                   </div>
 
-                  <div className="process-step-body grid grid-cols-1 gap-5 py-5 sm:gap-8 sm:py-8 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-7">
-                    <div className={cn("flex flex-col justify-between gap-5 sm:gap-8", Art ? "lg:col-span-7" : "lg:col-span-12")}>
-                      <p className="max-w-xl text-lg leading-[1.55] font-medium sm:text-xl lg:text-[1.625rem]">
+                  {/* Phones: compact text and one row of small tags, so the drawing keeps most of the card. */}
+                  <div className="process-step-body grid grid-cols-1 gap-4 py-4 sm:gap-8 sm:py-8 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-7">
+                    <div className={cn("flex flex-col justify-between gap-4 sm:gap-8", Art ? "lg:col-span-7" : "lg:col-span-12")}>
+                      <p className="max-w-xl text-base leading-[1.6] font-medium sm:text-xl sm:leading-[1.55] lg:text-[1.625rem]">
                         {step.desc}
                       </p>
                       {step.outputs.length ? (
                         <div>
                           <p className="text-xs tracking-widest text-muted-foreground">输出物</p>
-                          <ul className="mt-2.5 flex flex-wrap gap-2 sm:mt-3">
+                          <ul className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
                             {step.outputs.map((o, j) => (
                               <li key={j}>
-                                <Badge variant="tag" size="lg">
+                                <Badge variant="tag" size="md" className="sm:px-3.5 sm:py-1.5 sm:text-[0.8125rem]">
                                   {o}
                                 </Badge>
                               </li>

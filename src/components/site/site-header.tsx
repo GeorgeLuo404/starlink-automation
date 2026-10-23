@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Dialog } from "radix-ui";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
@@ -10,7 +9,7 @@ import { useScrolled } from "@/components/motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "./logo";
-import { navItems, type NavService } from "./nav-items";
+import { navItems, usePagePath, type NavService } from "./nav-items";
 import { ServicesMenu } from "./services-menu";
 import copy from "@/content/copy.json";
 
@@ -24,7 +23,7 @@ const fade = {
 };
 
 export function SiteHeader({ services }: { services: NavService[] }) {
-  const pathname = usePathname() ?? "";
+  const pathname = usePagePath();
   const scrolled = useScrolled(24);
   const [menuOpen, setMenuOpen] = useState(false);
 

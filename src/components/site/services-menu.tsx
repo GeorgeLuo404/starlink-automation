@@ -3,12 +3,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { coverSrc, cn } from "@/lib/utils";
 import { LinkNode } from "./kit";
-import type { NavService } from "./nav-items";
+import { usePagePath, type NavService } from "./nav-items";
 import copy from "@/content/copy.json";
 
 /**
@@ -19,7 +18,7 @@ import copy from "@/content/copy.json";
  */
 export function ServicesMenu({ services, active }: { services: NavService[]; active: boolean }) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const pathname = usePagePath();
   const panelId = useId();
   const triggerRef = useRef<HTMLAnchorElement>(null);
   const closeTimer = useRef<number | undefined>(undefined);

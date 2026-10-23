@@ -34,7 +34,7 @@ export function PageHero({
       <div className="grid-lines grid-lines-lg mask-fade-b absolute inset-0 -z-10 opacity-70" aria-hidden="true" />
       <div className="absolute top-0 right-[6%] -z-10 size-160 -translate-y-1/2 rounded-full bg-primary/8 blur-[140px]" aria-hidden="true" />
 
-      <div className="container-x pt-32 pb-16 md:pt-40 md:pb-20">
+      <div className="container-x pt-28 pb-12 sm:pt-32 sm:pb-16 md:pt-40 md:pb-20">
         <nav aria-label="Breadcrumb" className="intro flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <Link href="/" className="transition-colors hover:text-foreground">
             首页
@@ -58,18 +58,18 @@ export function PageHero({
         <div className={cn(aside && "lg:grid lg:grid-cols-12 lg:items-end lg:gap-14")}>
           <div className={cn(aside && "lg:col-span-6")}>
             {eyebrow ? (
-              <div className="intro mt-12" style={{ animationDelay: "60ms" }}>
+              <div className="intro mt-8 sm:mt-12" style={{ animationDelay: "60ms" }}>
                 <Eyebrow>{eyebrow}</Eyebrow>
               </div>
             ) : null}
             <h1
-              className={cn(size === "lg" ? "title-1" : "title-2", "intro max-w-4xl", eyebrow ? "mt-6" : "mt-12")}
+              className={cn(size === "lg" ? "title-1" : "title-2", "intro max-w-4xl", eyebrow ? "mt-4 sm:mt-6" : "mt-8 sm:mt-12")}
               style={{ animationDelay: "120ms" }}
             >
               {title}
             </h1>
             {description ? (
-              <p className="lead intro mt-6 max-w-2xl" style={{ animationDelay: "200ms" }}>
+              <p className="lead intro mt-4 max-w-2xl sm:mt-6" style={{ animationDelay: "200ms" }}>
                 {description}
               </p>
             ) : null}
