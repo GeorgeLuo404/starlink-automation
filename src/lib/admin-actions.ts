@@ -27,6 +27,7 @@ import {
   orderSchema,
   partnerActiveSchema,
   partnerSchema,
+  passwordSchema,
   serviceSchema,
   settingsSchema,
 } from "@/lib/admin-schemas";
@@ -209,6 +210,41 @@ export async function loginAction(_prev: LoginState, form: FormData): Promise<Lo
 export async function logoutAction() {
   await clearSessionCookie();
   redirect("/admin/login");
+}
+
+/**
+ * Change the signed-in administrator's own password. A wrong current password
+ * counts as a failed login (src/lib/login-throttle.ts), so a stolen session
+ * cannot be used to guess it. A forgotten password is reset from the command
+ * line instead: pnpm admin:create (docs/DEPLOYMENT.md).
+ *
+ * Returns instead of redirecting, so the form can clear itself.
+ */
+export async function changePassword(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const session = await guard();
+  const parsed = passwordSchema.safeParse(formObject(form));
+  if (!parsed.success) return invalid(parsed.error);
+  const { currentPassword, newPassword } = parsed.data;
+
+  try {
+    const lockedUntil = await recordLoginAttempt(session.email);
+    if (lockedUntil) {
+      const minutes = Math.max(1, Math.ceil((lockedUntil.getTime() - Date.now()) / 60_000));
+      return { ok: false, message: `尝试次数过多，请 ${minutes} 分钟后再试` };
+    }
+    const db = requireDb();
+    const user = await db.user.findUnique({ where: { id: session.sub }, select: { passwordHash: true } });
+    if (!user || !(await verifyPassword(currentPassword, user.passwordHash))) {
+      return { ok: false, message: "当前密码不正确", fieldErrors: { currentPassword: ["当前密码不正确"] } };
+    }
+    await db.user.update({ where: { id: session.sub }, data: { passwordHash: await hashPassword(newPassword) } });
+    await clearLoginAttempts(session.email);
+  } catch (error) {
+    console.error("[admin] password change failed:", error);
+    return { ok: false, message: "保存失败：数据库暂时不可用，请稍后重试" };
+  }
+
+  return { ok: true, message: "密码已修改，下次登录请使用新密码" };
 }
 
 /* ====================================================================== */

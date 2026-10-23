@@ -56,6 +56,7 @@ export function FormField({
   placeholder,
   type = "text",
   required,
+  autoComplete,
   description,
   className,
 }: {
@@ -65,6 +66,7 @@ export function FormField({
   placeholder?: string;
   type?: string;
   required?: boolean;
+  autoComplete?: string;
   description?: string;
   className?: string;
 }) {
@@ -79,6 +81,7 @@ export function FormField({
         name={name}
         type={type}
         required={required}
+        autoComplete={autoComplete}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
         {...errorProps(name, error)}

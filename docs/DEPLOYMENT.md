@@ -71,8 +71,9 @@ Vercel → 项目 Settings → Environment Variables，Production 与 Preview �
 # 查看 / 应用迁移（生产部署会自动执行，一般不需要手动）
 (set -a && source .env.supabase.local && set +a && pnpm exec prisma migrate status)
 
-# 重置线上管理员密码
-(set -a && source .env.supabase.local && set +a && ADMIN_PASSWORD='新的强密码' pnpm admin:create)
+# 重置线上管理员密码（忘记密码时用；记得密码直接在后台「修改密码」）
+# 密码在提示后输入，不回显，也不会留在 shell 历史里（zsh 写法，macOS 默认终端即 zsh）。改完把 .env.supabase.local 里的 ADMIN_PASSWORD 一并更新
+(set -a && source .env.supabase.local && set +a && read -rs "ADMIN_PASSWORD?新密码: " && echo && export ADMIN_PASSWORD && pnpm admin:create)
 
 # 解除后台登录锁定（清空登录失败记录）
 (set -a && source .env.supabase.local && set +a && docker run --rm postgres:17-alpine psql "$DIRECT_URL" -c 'DELETE FROM "LoginAttempt"')
