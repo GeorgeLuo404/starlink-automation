@@ -1,6 +1,6 @@
 import { saveArticle } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
-import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
+import { FormActions, FormCheckbox, FormField, FormRichText, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { MediaFields, type MediaRecord } from "@/components/admin/media-fields";
 
 type ArticleRecord = {
@@ -50,9 +50,9 @@ export function ArticleForm({ article }: { article?: ArticleRecord }) {
 
       <FormSection
         title="正文"
-        description="支持轻量标记：## 二级标题、### 三级标题、- 无序列表、1. 有序列表、> 引用、**加粗**、`代码`"
+        description="在工具栏排版，所见即所得。行首输入 ##、-、1.、> 再加空格，可快速变为标题、列表、引用；Shift+回车 换行不分段。"
       >
-        <FormTextarea label="正文" name="content" rows={16} required defaultValue={article?.content} mono />
+        <FormRichText label="正文" name="content" required defaultValue={article?.content} placeholder="从这里开始写正文…" />
       </FormSection>
 
       <FormSection title="发布设置">

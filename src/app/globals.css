@@ -521,6 +521,14 @@
   }
   .rich-text th { color: var(--foreground); font-weight: 500; }
   .rich-text hr { border: none; height: 1px; background: var(--border); }
+  /* Admin editor (Tiptap): placeholder on an empty body. */
+  .rich-text p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    color: var(--faint);
+  }
 }
 
 /* ------------------------------- motion -------------------------------- */

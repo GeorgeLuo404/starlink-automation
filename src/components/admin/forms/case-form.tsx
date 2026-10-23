@@ -1,6 +1,6 @@
 import { saveCase } from "@/lib/admin-actions";
 import { ActionForm } from "@/components/admin/action-form";
-import { FormActions, FormCheckbox, FormField, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
+import { FormActions, FormCheckbox, FormField, FormRichText, FormSection, FormSelect, FormTextarea } from "@/components/admin/form-fields";
 import { MediaFields, type MediaRecord } from "@/components/admin/media-fields";
 
 type CaseRecord = {
@@ -53,8 +53,8 @@ export function CaseForm({ record }: { record?: CaseRecord }) {
         <MediaFields folder="cases" cover={record?.coverUrl} media={record?.media} />
       </FormSection>
 
-      <FormSection title="项目详情" description="支持 ## 标题、- 列表、**加粗** 等轻量标记。">
-        <FormTextarea label="详情" name="content" rows={12} defaultValue={record?.content} mono />
+      <FormSection title="项目详情" description="在工具栏排版，所见即所得。行首输入 ##、-、1.、> 再加空格，可快速变为标题、列表、引用；Shift+回车 换行不分段。">
+        <FormRichText label="详情" name="content" defaultValue={record?.content} />
         <FormTextarea
           label="服务范围"
           name="scope"
