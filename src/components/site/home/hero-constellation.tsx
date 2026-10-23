@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
-import { glowSprite, lerp, readCssColor, rgba, smooth, startLoop, trackPointer, type RGB } from "@/lib/canvas";
+import { alphaBatch, glowSprite, lerp, readCssColor, rgba, smooth, startLoop, trackPointer, type RGB } from "@/lib/canvas";
 
 /* ==========================================================================
    首屏背景 · 星座立体 + 现场总线 / Hero background: 3D constellation
@@ -18,6 +18,11 @@ import { glowSprite, lerp, readCssColor, rgba, smooth, startLoop, trackPointer, 
    Depth drives dot size and fog; the pointer steers the camera. Canvas 2D
    with a hand-rolled projection, no three.js. Colours come from the CSS
    palette; reduced motion gets a single still frame.
+
+   Cost: dots and lines are batched by opacity (alphaBatch), so a frame is a
+   few dozen draw calls — WebKit, i.e. Safari and every iOS browser, pays per
+   call. Phones draw at 30 fps and 1.5× resolution, and a device that still
+   cannot keep up gets the still frame, so the page around it stays responsive.
    ========================================================================== */
 
 type V3 = { x: number; y: number; z: number };
@@ -381,6 +386,8 @@ export function HeroConstellation() {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
+    // Reduced motion, or a device too slow for the loop (see `frame` below): one still frame.
+    let still = reduced;
 
     let W = 0;
     let H = 0;
@@ -459,14 +466,15 @@ export function HeroConstellation() {
 
     function init() {
       const rect = canvas!.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Wide: the cell sits right of the headline. Narrow: a band above it, drawn
+      // at 1.5× — it sits behind a scrim, and phones pay for every pixel.
+      wide = rect.width >= 1024;
+      dpr = Math.min(window.devicePixelRatio || 1, wide ? 2 : 1.5);
       W = Math.max(1, Math.round(rect.width * dpr));
       H = Math.max(1, Math.round(rect.height * dpr));
       canvas!.width = W;
       canvas!.height = H;
 
-      // Wide: the cell sits right of the headline. Narrow: a band above it.
-      wide = rect.width >= 1024;
       const bw = wide ? Math.min(rect.width * 0.56, rect.height * 0.8 * 1.55) : Math.min(rect.width * 0.98, rect.height * 0.4 * 1.55);
       boxW = bw * dpr;
       boxH = (bw / 1.55) * dpr;
@@ -525,32 +533,32 @@ export function HeroConstellation() {
     function render(t: number, dt: number) {
       if (!colors) return;
       const { accent, ink, muted } = colors;
-      const c = reduced ? 9 : t % CYCLE;
-      const intro = reduced ? 1 : Math.min(1, t / 1.5);
+      const c = still ? 9 : t % CYCLE;
+      const intro = still ? 1 : Math.min(1, t / 1.5);
       const master = (wide ? 1 : 0.62) * intro;
-      const hud = reduced
+      const hud = still
         ? 1
         : smooth((c - ASSEMBLE_AT - ASSEMBLE_SPREAD - ASSEMBLE_FOR + 0.3) / 0.7) * (1 - smooth((c - RELEASE_AT + 0.2) / 0.6));
 
       // Camera: slow orbit, dolly in while the cell assembles, pointer steers it.
-      const ptr = reduced ? null : pointer.read(dpr);
-      const ease = reduced ? 1 : Math.min(1, dt * 2.5);
+      const ptr = still ? null : pointer.read(dpr);
+      const ease = still ? 1 : Math.min(1, dt * 2.5);
       const px = ptr?.active ? ptr.x / W - 0.5 : 0;
       const py = ptr?.active ? ptr.y / H - 0.5 : 0;
       yawOffset += (px * 0.5 - yawOffset) * ease;
       pitchOffset += (py * 0.18 - pitchOffset) * ease;
-      const yaw = (reduced ? 0.42 : 0.42 + 0.2 * Math.sin(t * 0.09)) + yawOffset;
-      const pitch = (reduced ? 0.36 : 0.36 + 0.05 * Math.sin(t * 0.13)) + pitchOffset;
+      const yaw = (still ? 0.42 : 0.42 + 0.2 * Math.sin(t * 0.09)) + yawOffset;
+      const pitch = (still ? 0.36 : 0.36 + 0.05 * Math.sin(t * 0.13)) + pitchOffset;
       cam.cy = Math.cos(yaw);
       cam.sy = Math.sin(yaw);
       cam.cp = Math.cos(pitch);
       cam.sp = Math.sin(pitch);
-      cam.dist = reduced
+      cam.dist = still
         ? 260
         : // dolly in for the build, back out to the same distance before the loop wraps
           lerp(380, 260, smooth((c - ASSEMBLE_AT + 0.3) / 2.4)) + 120 * smooth((c - RELEASE_AT) / 3.2);
 
-      const { polys, mc } = buildScene(reduced ? 8.2 : t);
+      const { polys, mc } = buildScene(still ? 8.2 : t);
 
       // targets
       byPoly.forEach((ids, pi) => {
@@ -568,9 +576,9 @@ export function HeroConstellation() {
       });
 
       const R = 150 * dpr;
-      const pushEase = reduced ? 1 : Math.min(1, dt * 8);
+      const pushEase = still ? 1 : Math.min(1, dt * 8);
       for (const part of parts) {
-        if (!reduced) {
+        if (!still) {
           part.hx += part.vx * dt;
           part.hy += part.vy * dt;
           part.hz += part.vz * dt;
@@ -584,7 +592,7 @@ export function HeroConstellation() {
         part.p =
           part.poly < 0
             ? 0
-            : reduced
+            : still
               ? 1
               : smooth((c - ASSEMBLE_AT - part.delay) / ASSEMBLE_FOR) *
                 (1 - smooth((c - RELEASE_AT - part.rdelay) / RELEASE_FOR));
@@ -623,7 +631,7 @@ export function HeroConstellation() {
       // 1 · constellation lines between bright stars (screen space) ---------
       const bright = parts.filter((part) => part.bright && part.p < 0.6 && part.s > 0);
       const starR = 150 * dpr;
-      ctx!.lineWidth = 0.8 * dpr;
+      const starLinks = alphaBatch(0.2 * master);
       for (let i = 0; i < bright.length; i++) {
         for (let j = i + 1; j < bright.length; j++) {
           const a = bright[i];
@@ -631,16 +639,14 @@ export function HeroConstellation() {
           const d = Math.hypot(a.x - b.x, a.y - b.y);
           if (d > starR) continue;
           const alpha = 0.2 * (1 - d / starR) * (1 - Math.max(a.p, b.p)) * Math.min(a.fog, b.fog) * master;
-          ctx!.strokeStyle = rgba(ink, alpha);
-          ctx!.beginPath();
-          ctx!.moveTo(a.x, a.y);
-          ctx!.lineTo(b.x, b.y);
-          ctx!.stroke();
+          starLinks.line(alpha, a.x, a.y, b.x, b.y);
         }
       }
+      ctx!.lineWidth = 0.8 * dpr;
+      starLinks.stroke(ctx!, ink);
 
       // 2 · floor shadows: the robot and parts drop dots onto y = 0 ----------
-      ctx!.fillStyle = rgba(accent, 1);
+      const shadows = alphaBatch(0.16 * master);
       byPoly.forEach((ids, pi) => {
         if (!polys[pi].shadow) return;
         for (const id of ids) {
@@ -648,15 +654,13 @@ export function HeroConstellation() {
           const alpha = part.p * part.a * 0.16;
           if (alpha < 0.02) continue;
           const q = project(part.tx, 0, part.tz);
-          ctx!.globalAlpha = alpha * fogAt(q.d) * master;
-          const s = Math.max(0.6, 0.55 * q.s * (260 / focal) * dpr * 1.2);
-          ctx!.fillRect(q.x - s / 2, q.y - s / 2, s, s);
+          shadows.dot(alpha * fogAt(q.d) * master, q.x, q.y, Math.max(0.6, 0.55 * q.s * (260 / focal) * dpr * 1.2));
         }
       });
-      ctx!.globalAlpha = 1;
+      shadows.fill(ctx!, accent);
 
-      // 3 · outline links, batched by alpha (formation × depth fog) ---------
-      const buckets: number[][] = [[], [], [], [], []];
+      // 3 · outline links (formation × depth fog) ----------------------------
+      const outline = alphaBatch(0.6 * master, 5);
       byPoly.forEach((ids, pi) => {
         const closed = polys[pi].closed;
         const count = closed ? ids.length : ids.length - 1;
@@ -671,60 +675,52 @@ export function HeroConstellation() {
           if (alpha < 0.04) continue;
           if (Math.hypot(a.tx - b.tx, a.ty - b.ty, a.tz - b.tz) > max) continue;
           if (Math.hypot(a.x - b.x, a.y - b.y) > max * Math.max(a.s, b.s) * 2.5 + 6 * dpr) continue;
-          buckets[Math.min(4, Math.floor(alpha * 5))].push(a.x, a.y, b.x, b.y);
+          outline.line(alpha * 0.6 * master, a.x, a.y, b.x, b.y);
         }
       });
       ctx!.lineWidth = 1 * dpr;
-      buckets.forEach((segs, level) => {
-        if (!segs.length) return;
-        ctx!.strokeStyle = rgba(accent, ((level + 1) / 5) * 0.6 * master);
-        ctx!.beginPath();
-        for (let i = 0; i < segs.length; i += 4) {
-          ctx!.moveTo(segs[i], segs[i + 1]);
-          ctx!.lineTo(segs[i + 2], segs[i + 3]);
-        }
-        ctx!.stroke();
-      });
+      outline.stroke(ctx!, accent);
 
       // 4 · pointer links ----------------------------------------------------
       if (ptr?.active) {
         const reach = 170 * dpr;
+        const toCell = alphaBatch(0.3 * master);
+        const toStar = alphaBatch(0.3 * master);
         let drawn = 0;
         for (const part of parts) {
           if (drawn > 36) break;
           if (!part.bright && part.p < 0.5) continue;
           const d = Math.hypot(part.x - ptr.x, part.y - ptr.y);
           if (d > reach) continue;
-          ctx!.strokeStyle = rgba(part.p > 0.5 ? accent : ink, 0.3 * (1 - d / reach) * part.fog * master);
-          ctx!.beginPath();
-          ctx!.moveTo(ptr.x, ptr.y);
-          ctx!.lineTo(part.x, part.y);
-          ctx!.stroke();
+          (part.p > 0.5 ? toCell : toStar).line(0.3 * (1 - d / reach) * part.fog * master, ptr.x, ptr.y, part.x, part.y);
           drawn++;
         }
+        toStar.stroke(ctx!, ink);
+        toCell.stroke(ctx!, accent);
       }
 
       // 5 · particles: size and brightness follow depth ----------------------
+      // A star (ink) as it drifts, the cell's colour as it lands; both fade across the flight.
       const unit = (260 / focal) * dpr; // so a dot at the orbit distance is ~1 css px
-      for (const pass of [ink, accent]) {
-        ctx!.fillStyle = rgba(pass, 1);
-        const isAccent = pass === accent;
-        for (const part of parts) {
-          if (part.s <= 0) continue;
-          const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * part.tws + part.tw));
-          const star = (part.bright ? 0.95 : 0.55) * twinkle;
-          const alpha = (isAccent ? part.p * lerp(1, part.a, part.p) : star * (1 - part.p)) * part.fog;
-          if (alpha < 0.02) continue;
-          ctx!.globalAlpha = Math.min(1, alpha * master);
-          const base = isAccent ? 1.35 : part.bright ? 1.6 : 1;
-          const s = Math.min(4 * dpr, Math.max(0.6 * dpr, base * part.s * unit));
-          ctx!.fillRect(part.x - s / 2, part.y - s / 2, s, s);
-        }
+      const size = (base: number, part: Particle) => Math.min(4 * dpr, Math.max(0.6 * dpr, base * part.s * unit));
+      const stars = alphaBatch(1, 12);
+      const cell = alphaBatch(1, 12);
+      for (const part of parts) {
+        if (part.s <= 0) continue;
+        const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * part.tws + part.tw));
+        const star = (part.bright ? 0.95 : 0.55) * twinkle * (1 - part.p) * part.fog;
+        stars.dot(Math.min(1, star * master), part.x, part.y, size(part.bright ? 1.6 : 1, part));
+        const landed = part.p * lerp(1, part.a, part.p) * part.fog;
+        cell.dot(Math.min(1, landed * master), part.x, part.y, size(1.35, part));
       }
+      stars.fill(ctx!, ink);
+      cell.fill(ctx!, accent);
 
       // 6 · glows: stars, joints, stack light, grasp / place flashes, pulses -
       ctx!.globalCompositeOperation = "lighter";
-      for (const part of bright) {
+      // Every bright star glows on wide screens, one in three on narrow ones.
+      for (let i = 0; i < bright.length; i += wide ? 1 : 3) {
+        const part = bright[i];
         const twinkle = 0.5 + 0.5 * Math.sin(t * part.tws + part.tw);
         glow(accentGlow, part.x, part.y, 7 * part.s * unit, 0.22 * twinkle * (1 - part.p) * part.fog * master);
       }
@@ -764,7 +760,7 @@ export function HeroConstellation() {
 
       // Fieldbus: an arc exists only while a telegram is in flight on it ------
       const busActivity = BUSES.map(() => 0);
-      ctx!.fillStyle = rgba(accent, 1);
+      const arcs = alphaBatch(0.45 * master);
       ctx!.strokeStyle = rgba(accent, 1);
       ctx!.lineWidth = 1 * dpr;
       BUSES.forEach((bus, bi) => {
@@ -784,9 +780,7 @@ export function HeroConstellation() {
             for (let i = 0; i <= 36; i++) {
               const p = at(i / 36);
               const q = project(p.x, p.y, p.z);
-              ctx!.globalAlpha = (tg.small ? 0.22 : 0.45) * vis * fogAt(q.d) * master;
-              const size = Math.max(0.8 * dpr, 1.1 * q.s * unit);
-              ctx!.fillRect(q.x - size / 2, q.y - size / 2, size, size);
+              arcs.dot((tg.small ? 0.22 : 0.45) * vis * fogAt(q.d) * master, q.x, q.y, Math.max(0.8 * dpr, 1.1 * q.s * unit));
             }
             // telegram head + trail
             if (s >= 0 && s <= 1.12) {
@@ -815,6 +809,8 @@ export function HeroConstellation() {
           }
         }
       });
+
+      arcs.fill(ctx!, accent);
 
       // 7 · HUD: anchored labels, axis triad, frame brackets ----------------
       ctx!.globalCompositeOperation = "source-over";
@@ -908,12 +904,28 @@ export function HeroConstellation() {
     init();
     const resize = new ResizeObserver(() => {
       init();
-      if (reduced) render(0, 0);
+      if (still) render(0, 0);
     });
     resize.observe(canvas);
 
-    const stopLoop = reduced ? () => {} : startLoop(canvas, render);
-    if (reduced) render(0, 0);
+    // Watchdog: if frames keep arriving slower than 20 fps (a busy or weak
+    // device), stop and leave the finished cell up rather than crawl along.
+    // The first 2 s are ignored: page load is allowed a few long frames.
+    let slow = 0;
+    const frame = (t: number, dt: number) => {
+      if (t > 2) slow = dt > 1 / 20 ? slow + 1 : Math.max(0, slow - 0.5);
+      if (slow > 40) {
+        stopLoop();
+        still = true;
+        render(0, 0);
+        return;
+      }
+      render(t, dt);
+    };
+    // Touch screens draw every other refresh; nothing in the scene moves fast.
+    const maxFps = window.matchMedia("(pointer: coarse)").matches ? 30 : 60;
+    const stopLoop = still ? () => {} : startLoop(canvas, frame, { maxFps });
+    if (still) render(0, 0);
 
     return () => {
       stopLoop();
@@ -924,8 +936,9 @@ export function HeroConstellation() {
 
   return (
     <div className="relative size-full overflow-hidden bg-background">
+      {/* Ambient glow as a plain gradient: a CSS blur this large costs iOS a huge offscreen layer. */}
       <div
-        className="absolute top-1/2 right-[10%] size-176 -translate-y-1/2 rounded-full bg-primary/6 blur-[140px]"
+        className="absolute top-1/2 right-[calc(10%-13rem)] size-[70rem] -translate-y-1/2 bg-radial from-primary/6 to-transparent to-70%"
         aria-hidden="true"
       />
       <canvas ref={canvasRef} className="absolute inset-0 size-full font-mono" />

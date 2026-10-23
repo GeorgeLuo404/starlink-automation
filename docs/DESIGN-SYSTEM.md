@@ -62,9 +62,19 @@
 | `theme-white` | 白色区块，卡片为浅纸色（正文、表单） |
 
 - 字号：`display`（首页大标题）、`title-1`（内页标题）、`title-2`（区块标题）、`title-3`（卡片标题）、`lead`（导语）、`eyebrow`（小标）
-- 区块上下留白：`section-y`；滚动显现：`reveal`；首屏入场：`intro`
-- 各页共用的基础件在 `src/components/site/kit.tsx`（基于 shadcn）：`Eyebrow`、`SectionHead`、`PillLink`、`FilterLink`、`Cover`、`CornerArrow`、`EmptyState`
+- 区块上下留白：`section-y`；滚动显现：`reveal`（只在鼠标设备上播放，手机上内容直接显示）；首屏入场：`intro`
+- 各页共用的基础件在 `src/components/site/kit.tsx`（基于 shadcn）：`Eyebrow`、`SectionHead`、`PillLink`、`FilterLink`、`Cover`、`EmptyState`
 - 字体全部自托管：Inter / JetBrains Mono 在 `src/app/fonts/`，中文用 `@fontsource-variable/noto-sans-sc`（按 unicode-range 切片），不依赖 Google Fonts
+
+### 动效与手机性能
+
+手机（尤其 iPhone 上的 Safari / Chrome，都是 WebKit）主线程弱，以下几条保证页面在慢设备上也始终可读、可滚动：
+
+- **内容不依赖动画才可见**：`reveal` 只在 `(hover: hover) and (pointer: fine)` 下生效；`intro` 是一次性的入场，不随滚动
+- **不用大尺寸 CSS 模糊**：氛围光用 `bg-radial` 渐变，不用 `blur-[…]`——大面积 `filter: blur()` 在 iOS 上会生成巨大的离屏图层
+- **画布按透明度批量绘制**：`src/lib/canvas.ts` 的 `alphaBatch` 把成千上万个点、线合并成几十次绘制调用（WebKit 按调用次数计费）
+- **首屏动画有预算**：触屏 30 fps、窄屏 1.5 倍分辨率；连续掉到 20 fps 以下时自动停在静止画面（与「减少动态效果」相同）
+- **手机页头始终是实色**，不依赖脚本判断滚动位置
 
 ---
 
