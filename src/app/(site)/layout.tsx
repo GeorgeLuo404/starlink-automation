@@ -32,7 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: companyName,
     authors: [{ name: companyName }],
     creator: companyName,
-    formatDetection: { telephone: true, address: true, email: true },
+    // No automatic phone / email / address links: iOS would insert them into the
+    // page before React hydrates it, and the changed markup breaks hydration.
+    // Phone and email are real links in the footer and on the contact page.
+    formatDetection: { telephone: false, address: false, email: false },
     robots: siteNoindex ? { index: false, follow: false } : { index: true, follow: true },
   };
 }

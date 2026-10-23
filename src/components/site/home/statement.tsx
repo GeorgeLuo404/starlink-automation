@@ -9,9 +9,9 @@ export async function HomeStatement() {
     <section className="theme-white section-y">
       <div className="container-x">
         <Eyebrow>{t.eyebrow}</Eyebrow>
-        {/* One line per clause, so the sentence breaks at the comma. Plain wrapping (not
-            balance) and a size that fits ten characters on a 360px phone keep words whole. */}
-        <p className="title-2 reveal mt-8 max-w-5xl text-wrap max-sm:text-[1.875rem]">
+        {/* One line per clause, so the sentence breaks at the comma; plain wrapping (not
+            balance) keeps the words of a clause whole on phones. */}
+        <p className="title-2 reveal mt-8 max-w-5xl text-wrap">
           {t.text.split(/(?<=，)/).map((clause, i) => (
             <span key={i} className="block">
               {highlight(clause, t.accent)}

@@ -367,22 +367,24 @@
   /* --------------------------- typography ----------------------------- */
   /* Medium weight, big sizes, no letter-spacing tricks — CJK needs air.
      In the components layer, so a text-* utility can still resize one. */
+  /* The minimums are phone sizes: a real phone shows ~680px of page under the
+     browser bars (not the 850px of a DevTools preset), so headings stay modest. */
   .display {
     font-weight: 500;
-    font-size: clamp(2.75rem, 6vw, 5.75rem);
+    font-size: clamp(2.25rem, 6vw, 5.75rem);
     line-height: 1.08;
     letter-spacing: -0.012em;
   }
   .title-1 {
     font-weight: 500;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2rem, 5vw, 4.5rem);
     line-height: 1.1;
     letter-spacing: -0.012em;
     text-wrap: balance;
   }
   .title-2 {
     font-weight: 500;
-    font-size: clamp(2.125rem, 4.2vw, 4rem);
+    font-size: clamp(1.75rem, 4.2vw, 4rem);
     line-height: 1.14;
     letter-spacing: -0.01em;
     text-wrap: balance;
@@ -393,9 +395,15 @@
     line-height: 1.35;
   }
   .lead {
-    font-size: 1.0625rem;
-    line-height: 1.85;
+    font-size: 1rem;
+    line-height: 1.75;
     color: var(--muted-foreground);
+  }
+  @media (min-width: 640px) {
+    .lead {
+      font-size: 1.0625rem;
+      line-height: 1.85;
+    }
   }
   .eyebrow {
     display: inline-flex;
@@ -613,8 +621,13 @@
    takes the height that remains. Off on screens too short to hold the stack. */
 .process-stack {
   --header: 72px;
-  --strip: 44px;
+  --strip: 40px;
   --band: clamp(21rem, 100svh - var(--header) - (var(--steps) - 1) * var(--strip) - 1.25rem, 32rem);
+}
+@media (min-width: 640px) {
+  .process-stack {
+    --strip: 44px;
+  }
 }
 @media (min-width: 1024px) {
   .process-stack {
