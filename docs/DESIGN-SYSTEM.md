@@ -94,7 +94,7 @@
 ## 开发约定
 
 - **优先使用现成组件库**：shadcn/ui（`npx shadcn@latest add <component>`）及其生态，轮播用 Embla、拖动排序用 dnd-kit、表格用 TanStack Table，不手写同类控件。
-- **正文标记**由 `src/components/site/rich-text.tsx` 解析（`##`、`###`、列表、引用、`**加粗**`、`` `代码` ``），不引入 Markdown 库；需要表格等更强排版时，替换这一个组件即可。
+- **正文**以 Markdown 存库：后台用 Tiptap 编辑（`src/components/admin/rich-text-editor/`，按需加载，只在后台），前台由 `src/components/site/rich-text.tsx` 用 react-markdown + GFM 在服务端渲染，访客端不下载解析器。两边共用 `.rich-text` 样式；给编辑器加新格式时，要保证它能经 Markdown 往返不变。
 - **`next/image` 的 `fill`**：父元素必须是 `relative`（条件 className 里也不能漏），否则图片相对更外层定位，控制台逐张报警。
 - **装饰层**（`absolute inset-0` 的网格、光晕、渐变）加 `pointer-events-none`，否则会盖住其后未定位的内容、吞掉点击；`opacity-0` 的悬停工具条同样需要 `pointer-events-none group-hover:pointer-events-auto`（或用 `hidden`）。
 - **`h-full` 链条**：只有父元素高度确定时才生效。从网格项到使用 `h-full` 的元素，中间每一层都要传递高度（`h-full` 或 `flex-1`）。

@@ -22,6 +22,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[+()\-\s\d]{6,20}$/;
 
 const blank = (value: unknown) => (typeof value === "string" && value.trim() === "" ? undefined : value);
+/** Browsers post <textarea> text with CRLF line endings; bodies are stored with LF. */
+const lf = (value: unknown) => (typeof value === "string" ? value.replace(/\r\n?/g, "\n") : value);
 
 /* ------------------------------ field builders ------------------------------ */
 
@@ -181,7 +183,7 @@ export const articleSchema = z.object({
   title: required("标题"),
   slug,
   excerpt: optional("摘要", 500),
-  content: required("正文", 100_000),
+  content: z.preprocess(lf, required("正文", 100_000)),
   coverUrl: link("封面图片"),
   media: mediaList,
   tags: list("标签", 500),
@@ -202,7 +204,7 @@ export const caseSchema = z.object({
   year: int("交付年份", 1990, 2100, new Date().getFullYear()),
   location: optional("项目地点", 200),
   summary: optional("项目简介", 2000),
-  content: optional("详情", 100_000),
+  content: z.preprocess(lf, optional("详情", 100_000)),
   coverUrl: link("封面图片"),
   media: mediaList,
   scope: lines("服务范围", 5000),
@@ -221,7 +223,7 @@ export const serviceSchema = z.object({
   slug,
   icon: z.enum(SERVICE_ICONS, { error: "请选择有效的图标" }),
   summary: optional("简介", 2000),
-  content: optional("详情", 100_000),
+  content: z.preprocess(lf, optional("详情", 100_000)),
   coverUrl: link("封面图片"),
   media: mediaList,
   features: lines("服务内容"),

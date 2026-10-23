@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -7,8 +9,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldError, SubmitButton, useFieldError } from "@/components/admin/action-form";
+
+// The editor (Tiptap + ProseMirror) is the heaviest thing in the admin, so it
+// loads on its own after the rest of the form.
+const RichTextEditor = dynamic(() => import("@/components/admin/rich-text-editor/editor"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[22.5rem]" />,
+});
 
 /*
  * Field components for admin forms. They are client components so they can read
@@ -72,6 +82,48 @@ export function FormField({
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
         {...errorProps(name, error)}
+      />
+      <FieldError name={name} />
+      {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
+    </div>
+  );
+}
+
+/**
+ * Rich-text body field, stored as Markdown. The value is posted from a hidden
+ * input that holds the original text until the editor changes it, so saving
+ * before the editor has loaded never blanks the body.
+ */
+export function FormRichText({
+  label,
+  name,
+  defaultValue,
+  placeholder,
+  required,
+  description,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: string | null;
+  placeholder?: string;
+  required?: boolean;
+  description?: string;
+}) {
+  const error = useFieldError(name);
+  const [value, setValue] = useState(defaultValue ?? "");
+  return (
+    <div>
+      <Label id={`${name}-label`}>
+        {label} {required ? <span className="text-destructive">*</span> : null}
+      </Label>
+      <input type="hidden" name={name} value={value} />
+      <RichTextEditor
+        defaultValue={defaultValue ?? ""}
+        onChange={setValue}
+        placeholder={placeholder}
+        labelledBy={`${name}-label`}
+        describedBy={error ? `${name}-error` : undefined}
+        invalid={Boolean(error)}
       />
       <FieldError name={name} />
       {description ? <p className="mt-2 text-xs text-faint">{description}</p> : null}
