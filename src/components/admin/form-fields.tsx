@@ -56,6 +56,7 @@ export function FormField({
   placeholder,
   type = "text",
   required,
+  autoComplete,
   description,
   className,
 }: {
@@ -65,6 +66,7 @@ export function FormField({
   placeholder?: string;
   type?: string;
   required?: boolean;
+  autoComplete?: string;
   description?: string;
   className?: string;
 }) {
@@ -79,6 +81,7 @@ export function FormField({
         name={name}
         type={type}
         required={required}
+        autoComplete={autoComplete}
         defaultValue={defaultValue ?? ""}
         placeholder={placeholder}
         {...errorProps(name, error)}
@@ -113,8 +116,11 @@ export function FormRichText({
   const [value, setValue] = useState(defaultValue ?? "");
   return (
     <div>
-      <Label id={`${name}-label`}>
-        {label} {required ? <span className="text-destructive">*</span> : null}
+      {/* The editor is a contenteditable, which a <label> cannot point at; it is named through aria-labelledby. */}
+      <Label asChild>
+        <span id={`${name}-label`}>
+          {label} {required ? <span className="text-destructive">*</span> : null}
+        </span>
       </Label>
       <input type="hidden" name={name} value={value} />
       <RichTextEditor

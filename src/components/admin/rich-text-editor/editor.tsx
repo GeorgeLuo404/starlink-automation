@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import { Bold, Code, Heading2, Heading3, Italic, Link as LinkIcon, List, ListOrdered, Minus, Quote, Redo2, Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -169,6 +169,7 @@ function Tool({
 function LinkTool({ editor, active }: { editor: Editor; active: boolean }) {
   const [open, setOpen] = useState(false);
   const [href, setHref] = useState("");
+  const hrefId = useId();
 
   function apply() {
     const url = href.trim();
@@ -212,6 +213,7 @@ function LinkTool({ editor, active }: { editor: Editor; active: boolean }) {
         }}
       >
         <Input
+          id={hrefId}
           autoFocus
           value={href}
           onChange={(event) => setHref(event.target.value)}

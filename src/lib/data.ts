@@ -105,6 +105,8 @@ export async function getService(slug: string): Promise<ServiceContent | null> {
   return fromDb(async (db) => {
     const row = await db.service.findUnique({ where: { slug }, include: { media: ALL_MEDIA } });
     if (!row) return defaultServices.find((s) => s.slug === slug) ?? null;
+    // Unpublished records stay private even to visitors who know the slug.
+    if (!row.published) return null;
     return { ...toService(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultServices.find((s) => s.slug === slug) ?? null);
 }
@@ -162,6 +164,7 @@ export async function getCase(slug: string): Promise<CaseContent | null> {
   return fromDb(async (db) => {
     const row = await db.project.findUnique({ where: { slug }, include: { media: ALL_MEDIA } });
     if (!row) return defaultCases.find((c) => c.slug === slug) ?? null;
+    if (row.status !== "PUBLISHED") return null;
     return { ...toCase(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultCases.find((c) => c.slug === slug) ?? null);
 }
@@ -256,6 +259,7 @@ export async function getArticle(slug: string): Promise<ArticleView | null> {
   return fromDb(async (db) => {
     const row = await db.article.findUnique({ where: { slug }, include: { category: true, media: ALL_MEDIA } });
     if (!row) return defaultArticles.find((a) => a.slug === slug) ?? null;
+    if (row.status !== "PUBLISHED") return null;
     return { ...toArticle(row as unknown as Record<string, unknown>), media: toMedia(row.media) };
   }, defaultArticles.find((a) => a.slug === slug) ?? null);
 }
@@ -330,6 +334,7 @@ export async function getDownload(slug: string): Promise<DownloadView | null> {
   return fromDb(async (db) => {
     const r = await db.downloadFile.findUnique({ where: { slug } });
     if (!r) return defaultDownloads.find((d) => d.slug === slug) ?? null;
+    if (r.status !== "PUBLISHED") return null;
     return {
       id: r.id,
       slug: r.slug,
@@ -497,7 +502,7 @@ export async function incrementArticleViews(slug: string) {
   const db = getPrisma();
   if (!db) return;
   try {
-    await db.article.update({ where: { slug }, data: { viewCount: { increment: 1 } } });
+    await db.article.update({ where: { slug, status: "PUBLISHED" }, data: { viewCount: { increment: 1 } } });
   } catch {
     /* view counting must never break a page render */
   }

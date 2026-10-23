@@ -243,7 +243,10 @@ function PartnerForm({ record, onSaved }: { record: PartnerRow | null; onSaved: 
         />
 
         <div>
-          <Label>首页效果</Label>
+          {/* Captions a preview, not a form control, so not a <label>. */}
+          <Label asChild>
+            <span>首页效果</span>
+          </Label>
           <div className="theme-dark flex min-h-36 flex-col items-center justify-center gap-4 rounded-(--radius) border border-border px-6 py-8">
             <BrandMark name={name.trim() || "品牌名称"} logoUrl={LINK_RE.test(logoUrl) ? logoUrl : null} />
             {nameZh.trim() ? <span className="text-base text-muted-foreground">{nameZh.trim()}</span> : null}

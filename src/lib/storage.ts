@@ -42,6 +42,8 @@ export function buildKey(originalName: string, folder = "general") {
     .replace(/[^\w.-]+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
+    // Lower-case extension, so header rules matching ".svg" (next.config.ts) catch ".SVG" too.
+    .replace(/\.[^.]+$/, (ext) => ext.toLowerCase())
     .slice(-80) || "file";
   const rand = Math.random().toString(36).slice(2, 10);
   const cleanFolder = folder.replace(/[^\w/-]/g, "") || "general";
@@ -199,5 +201,21 @@ export function mediaKindOf(mimeType: string): "IMAGE" | "VIDEO" | "DOCUMENT" {
 
 export function isAllowedType(mimeType: string) {
   const allowed = [...IMAGE_TYPES, ...VIDEO_TYPES, ...DOC_TYPES];
-  return allowed.includes(mimeType) || mimeType.startsWith("video/") || mimeType.startsWith("image/");
+  if (allowed.includes(mimeType)) return true;
+  // Other plain image / video types (HEIC, MKV…), but nothing a browser would render as a document.
+  return /^(image|video)\/[\w.+-]+$/.test(mimeType) && !/svg|xml|html/i.test(mimeType);
+}
+
+/** Extensions that browsers open as documents (which can run scripts) rather than as plain media. */
+const DOCUMENT_EXTENSIONS = /\.(html?|xhtml?|xht|shtml|xml|svgz?|m?js|css)$/i;
+
+/**
+ * Files are served from the site's own origin (/uploads), so a file must not be
+ * able to pass for a page: the type must be allowed, an SVG must be named .svg
+ * (next.config.ts sandboxes those) and nothing else may carry a document extension.
+ */
+export function isAllowedUpload(name: string, mimeType: string) {
+  if (!isAllowedType(mimeType)) return false;
+  if (mimeType === "image/svg+xml") return /\.svg$/i.test(name);
+  return !DOCUMENT_EXTENSIONS.test(name);
 }

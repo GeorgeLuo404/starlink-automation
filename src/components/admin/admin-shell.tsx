@@ -16,6 +16,7 @@ import {
   Images,
   Image as ImageIcon,
   Inbox,
+  KeyRound,
   LogOut,
   PhoneCall,
   Settings,
@@ -111,6 +112,9 @@ function navGroups(inquiries: number): { title: string; items: NavEntry[] }[] {
     },
   ];
 }
+
+/** Reached from the account menu at the foot of the sidebar, not from the nav. */
+const PASSWORD_PAGE = { href: "/admin/password", label: "修改密码" };
 
 const matches = (pathname: string, href: string) =>
   href === "/admin" ? pathname === "/admin" : pathname === href || pathname.startsWith(`${href}/`);
@@ -306,7 +310,7 @@ function AdminSidebar({ groups, session }: { groups: ReturnType<typeof navGroups
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <UserMenu session={session} />
+            <UserMenu session={session} onNavigate={follow} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
@@ -335,7 +339,13 @@ function AdminSidebar({ groups, session }: { groups: ReturnType<typeof navGroups
   );
 }
 
-function UserMenu({ session }: { session: { name: string; email: string } }) {
+function UserMenu({
+  session,
+  onNavigate,
+}: {
+  session: { name: string; email: string };
+  onNavigate: (event: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
+}) {
   const { isMobile } = useSidebar();
   return (
     <DropdownMenu>
@@ -357,6 +367,12 @@ function UserMenu({ session }: { session: { name: string; email: string } }) {
           <p className="truncate font-mono text-[0.625rem] text-faint">{session.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={PASSWORD_PAGE.href} onClick={(e) => onNavigate(e, PASSWORD_PAGE.href)}>
+            <KeyRound />
+            {PASSWORD_PAGE.label}
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => void logoutAction()} className="text-destructive-soft focus:text-destructive-soft">
           <LogOut />
           退出登录
@@ -373,13 +389,14 @@ function AdminTopBar({ groups }: { groups: ReturnType<typeof navGroups> }) {
   const entry = groups.flatMap((g) => g.items).find((item) => matches(pathname, item.href));
   const section = entry?.page && pathname === entry.href ? currentSection(entry.page, params.get("section")) : null;
   const sectionTitle = section ? entry?.page?.sections.find((s) => s.key === section)?.title : null;
+  const title = entry?.label ?? (matches(pathname, PASSWORD_PAGE.href) ? PASSWORD_PAGE.label : "管理后台");
 
   return (
     <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/90 px-4 backdrop-blur-xl lg:px-6">
       <SidebarTrigger className="-ml-1 text-muted-foreground hover:text-foreground" />
       <Separator orientation="vertical" className="h-4!" />
       <nav aria-label="当前位置" className="flex min-w-0 items-center gap-2 text-sm">
-        <span className={sectionTitle ? "truncate text-muted-foreground" : "truncate text-foreground"}>{entry?.label ?? "管理后台"}</span>
+        <span className={sectionTitle ? "truncate text-muted-foreground" : "truncate text-foreground"}>{title}</span>
         {sectionTitle ? (
           <>
             <ChevronRight className="size-3.5 shrink-0 text-faint" />

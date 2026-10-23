@@ -303,6 +303,22 @@ export const settingsSchema = z.object({
   ),
 });
 
+/** 修改密码. Not trimmed: a space in a password is a character like any other. */
+export const passwordSchema = z
+  .object({
+    currentPassword: z.string({ error: "请填写当前密码" }).min(1, "请填写当前密码").max(200, "当前密码不正确"),
+    newPassword: z.string({ error: "请填写新密码" }).min(8, "新密码至少 8 个字符").max(200, "新密码不能超过 200 个字符"),
+    confirmPassword: z.string({ error: "请再次输入新密码" }),
+  })
+  .refine((value) => value.confirmPassword === value.newPassword, {
+    message: "两次输入的新密码不一致",
+    path: ["confirmPassword"],
+  })
+  .refine((value) => value.newPassword !== value.currentPassword, {
+    message: "新密码不能与当前密码相同",
+    path: ["newPassword"],
+  });
+
 export const idSchema = z.object({ id: requiredId });
 
 export const articleStatusSchema = z.object({ id: requiredId, status: publishStatus });

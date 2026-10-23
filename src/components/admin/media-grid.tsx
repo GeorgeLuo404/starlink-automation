@@ -87,6 +87,8 @@ export function MediaGrid({ rows }: { rows: MediaRow[] }) {
         <div className="relative w-full max-w-xs">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-faint" />
           <Input
+            name="search"
+            autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="搜索文件名…"

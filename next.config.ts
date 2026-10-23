@@ -23,6 +23,27 @@ const nextConfig: NextConfig = {
     if (process.env.STORAGE_DRIVER !== "s3" || !bucket) return [];
     return [{ source: "/uploads/:path*", destination: `${bucket}/:path*` }];
   },
+  // deploy/nginx.conf sets the same on ECS.
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // Keeps the admin from being framed by other sites (clickjacking).
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+      {
+        // An uploaded SVG opened on its own would run any script inside it on
+        // this origin. Sandboxed, it renders as a picture only; <img> tags are
+        // unaffected.
+        source: "/uploads/:path(.+\\.svgz?)",
+        headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; img-src data:; style-src 'unsafe-inline'; sandbox" }],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       // 阿里云 OSS / Aliyun OSS

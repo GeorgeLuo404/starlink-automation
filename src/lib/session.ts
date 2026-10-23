@@ -44,12 +44,12 @@ export async function verifySessionToken(
 ): Promise<SessionPayload | null> {
   if (!token) return null;
   try {
-    const { payload } = await jwtVerify(token, secret(), { issuer: ISSUER });
+    const { payload } = await jwtVerify(token, secret(), { issuer: ISSUER, algorithms: ["HS256"] });
     return {
       sub: String(payload.sub ?? ""),
       email: String(payload.email ?? ""),
       name: String(payload.name ?? ""),
-      role: (payload.role as "ADMIN" | "EDITOR") ?? "EDITOR",
+      role: payload.role === "ADMIN" ? "ADMIN" : "EDITOR",
     };
   } catch {
     return null;
