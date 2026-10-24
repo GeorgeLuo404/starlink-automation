@@ -30,6 +30,8 @@ type Poly = { pts: V3[]; closed?: boolean; density?: number; alpha?: number; sha
 
 const V = (x: number, y: number, z: number): V3 => ({ x, y, z });
 
+const HEADER = 76; // px of site header over the top of the hero
+
 // World space: y up, floor at y = 0, roughly centimetre-ish units.
 const TARGET = V(-4, 22, -14); // camera orbits around this
 const CYCLE = 21; // s — stars → assemble → run → release → stars
@@ -466,20 +468,23 @@ export function HeroConstellation() {
 
     function init() {
       const rect = canvas!.getBoundingClientRect();
-      // Wide: the cell sits right of the headline. Narrow: a band above it, drawn
-      // at 1.5× — it sits behind a scrim, and phones pay for every pixel.
-      wide = rect.width >= 1024;
+      // Wide: the canvas fills the hero and the cell sits right of the headline.
+      // Narrow: the canvas is the band above the copy (see HomeHero) and the cell
+      // fills it below the header, drawn at 1.5× — phones pay for every pixel.
+      // Same breakpoint as the CSS (lg), so canvas and layout always agree.
+      wide = window.matchMedia("(min-width: 1024px)").matches;
       dpr = Math.min(window.devicePixelRatio || 1, wide ? 2 : 1.5);
       W = Math.max(1, Math.round(rect.width * dpr));
       H = Math.max(1, Math.round(rect.height * dpr));
       canvas!.width = W;
       canvas!.height = H;
 
-      const bw = wide ? Math.min(rect.width * 0.56, rect.height * 0.8 * 1.55) : Math.min(rect.width * 0.98, rect.height * 0.4 * 1.55);
+      const band = Math.max(rect.height - HEADER - 16, 96);
+      const bw = wide ? Math.min(rect.width * 0.56, rect.height * 0.8 * 1.55) : Math.min(rect.width * 0.9, band * 1.55);
       boxW = bw * dpr;
       boxH = (bw / 1.55) * dpr;
       cx = (wide ? rect.width - bw / 2 - rect.width * 0.03 : rect.width / 2) * dpr;
-      cy = (wide ? rect.height * 0.5 : Math.max(rect.height * 0.1, 76) + bw / 1.55 / 2) * dpr;
+      cy = (wide ? rect.height * 0.5 : HEADER + band / 2) * dpr;
       focal = (boxW * 260) / 158;
 
       // One particle per `spacing` units of outline, always including the vertices.
@@ -534,8 +539,7 @@ export function HeroConstellation() {
       if (!colors) return;
       const { accent, ink, muted } = colors;
       const c = still ? 9 : t % CYCLE;
-      const intro = still ? 1 : Math.min(1, t / 1.5);
-      const master = (wide ? 1 : 0.62) * intro;
+      const master = still ? 1 : Math.min(1, t / 1.5); // fade in
       const hud = still
         ? 1
         : smooth((c - ASSEMBLE_AT - ASSEMBLE_SPREAD - ASSEMBLE_FOR + 0.3) / 0.7) * (1 - smooth((c - RELEASE_AT + 0.2) / 0.6));
@@ -935,18 +939,17 @@ export function HeroConstellation() {
   }, [reduced]);
 
   return (
-    <div className="relative size-full overflow-hidden bg-background">
+    <div className="absolute inset-0 overflow-hidden bg-background">
       {/* Ambient glow as a plain gradient: a CSS blur this large costs iOS a huge offscreen layer. */}
       <div
         className="absolute top-1/2 right-[calc(10%-13rem)] size-[70rem] -translate-y-1/2 bg-radial from-primary/6 to-transparent to-70%"
         aria-hidden="true"
       />
       <canvas ref={canvasRef} className="absolute inset-0 size-full font-mono" />
-      {/* Legibility: darken behind the headline, fade into the next section. */}
-      <div className="absolute inset-0 bg-linear-to-r from-background/80 via-background/25 via-45% to-transparent to-70%" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-background to-transparent" />
-      {/* Narrow screens: the copy spans the full width, so scrim from the bottom instead. */}
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-background via-background/70 to-transparent lg:hidden" />
+      {/* Wide screens: darken behind the headline, which sits over the scene. */}
+      <div className="absolute inset-0 bg-linear-to-r from-background/80 via-background/25 via-45% to-transparent to-70% max-lg:hidden" />
+      {/* Fade out the floor: into the next section (wide), or above the copy (narrow). */}
+      <div className="absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-background to-transparent lg:h-40" />
     </div>
   );
 }
